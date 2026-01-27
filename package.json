@@ -27,6 +27,7 @@
     "dependencies": {
         "@inertiajs/svelte": "^2.3.11",
         "@sveltejs/vite-plugin-svelte": "^6.2.4",
+        "fabric": "^7.1.0",
         "lucide": "^0.563.0",
         "svelte": "^5.48.3"
     }
