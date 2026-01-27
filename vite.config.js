@@ -36,10 +36,14 @@ export default defineConfig({
             command: 'php artisan wayfinder:generate',
             routes: true,
             actions: false,
-
+            // patterns
         }),
-        svelte(),
         tailwindcss(),
+        svelte({
+            compilerOptions: {
+                dev: process.env.NODE_ENV !== 'production',
+            },
+        }),
     ],
     resolve: {
         alias: {

@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
     import '../../css/app.css';
     let {children} = $props();
 </script>
