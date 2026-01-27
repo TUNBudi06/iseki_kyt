@@ -9,32 +9,39 @@
         FieldGroup,
         Field,
         FieldLabel,
+        FieldError,
     } from "$shadcn/components/ui/field/index.js";
     import LoginLayouts from "$/Layouts/LoginLayouts.svelte";
     let form = useForm({
-        email: '',
+        username: '',
         password: '',
-    });
+    }).dontRemember('password');
 
     function onsubmit(e: Event) {
         e.preventDefault();
-        $form.submit(route(login()))
+        $form.submit(route(login()),{
+            onSuccess: (e) => {
+                console.log('Login successful', e);
+            },
+        });
     }
-
 </script>
 
 <LoginLayouts>
     <Card.Root class="mx-auto w-full max-w-sm">
         <Card.Header>
             <Card.Title class="text-2xl">Login</Card.Title>
-            <Card.Description>Enter your email below to login to your account</Card.Description>
+            <Card.Description>Enter your username below to login to your account</Card.Description>
         </Card.Header>
         <Card.Content>
             <form {onsubmit}>
                 <FieldGroup>
                     <Field>
-                        <FieldLabel for="email">Email</FieldLabel>
-                        <Input id="username" bind:value={$form.email} type="text" placeholder="johndoe" required />
+                        <FieldLabel for="email">Username</FieldLabel>
+                        <Input id="username" bind:value={$form.username} type="text" placeholder="johndoe" required />
+                        {#if $form.hasErrors}
+                            <FieldError>{$form.errors.username}</FieldError>
+                        {/if}
                     </Field>
                     <Field>
                         <div class="flex items-center">

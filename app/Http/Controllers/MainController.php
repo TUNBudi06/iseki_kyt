@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class MainController extends Controller
@@ -12,8 +14,30 @@ class MainController extends Controller
         return Inertia::render('Auth/LoginPage');
     }
 
-    public function login()
+    public function login(Request $request)
     {
+        $data = $request->validate([
+            'username' => 'required',
+            'password' => 'required|string',
+        ]);
 
+
+        $user = User::where('username', $data['username'])->first();
+        if (!$user){
+            return back()->withErrors(['username' => 'Username not found.']);
+        }
+
+        if ($user->password !== $data['password']){
+            return back()->withErrors(['password' => 'Incorrect password.']);
+        }
+        Auth::login($user);
+
+        return back()->with('success', 'Login successful!');
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/')->with('success', 'Logged out successfully.');
     }
 }

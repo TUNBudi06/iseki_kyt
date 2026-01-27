@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../wayfinder'
 /**
 * @see \App\Http\Controllers\MainController::index
- * @see app/Http/Controllers/MainController.php:10
+ * @see app/Http/Controllers/MainController.php:12
  * @route '/'
  */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ index.definition = {
 
 /**
 * @see \App\Http\Controllers\MainController::index
- * @see app/Http/Controllers/MainController.php:10
+ * @see app/Http/Controllers/MainController.php:12
  * @route '/'
  */
 index.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\MainController::index
- * @see app/Http/Controllers/MainController.php:10
+ * @see app/Http/Controllers/MainController.php:12
  * @route '/'
  */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -34,7 +34,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\MainController::index
- * @see app/Http/Controllers/MainController.php:10
+ * @see app/Http/Controllers/MainController.php:12
  * @route '/'
  */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -44,7 +44,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\MainController::login
- * @see app/Http/Controllers/MainController.php:15
+ * @see app/Http/Controllers/MainController.php:17
  * @route '/login'
  */
 export const login = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -59,7 +59,7 @@ login.definition = {
 
 /**
 * @see \App\Http\Controllers\MainController::login
- * @see app/Http/Controllers/MainController.php:15
+ * @see app/Http/Controllers/MainController.php:17
  * @route '/login'
  */
 login.url = (options?: RouteQueryOptions) => {
@@ -68,10 +68,44 @@ login.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\MainController::login
- * @see app/Http/Controllers/MainController.php:15
+ * @see app/Http/Controllers/MainController.php:17
  * @route '/login'
  */
 login.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: login.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\MainController::logout
+ * @see app/Http/Controllers/MainController.php:38
+ * @route '/logout'
+ */
+export const logout = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: logout.url(options),
+    method: 'post',
+})
+
+logout.definition = {
+    methods: ["post"],
+    url: '/logout',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \App\Http\Controllers\MainController::logout
+ * @see app/Http/Controllers/MainController.php:38
+ * @route '/logout'
+ */
+logout.url = (options?: RouteQueryOptions) => {
+    return logout.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\MainController::logout
+ * @see app/Http/Controllers/MainController.php:38
+ * @route '/logout'
+ */
+logout.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: logout.url(options),
     method: 'post',
 })

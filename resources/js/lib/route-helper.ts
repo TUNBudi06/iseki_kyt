@@ -28,9 +28,9 @@ page.subscribe(($page) => {
  * <Link href={route(dashboard()).url}>Dashboard</Link>
  * ```
  */
-export function route<T extends RouteDefinition<any>>(
-    routeDefinition: T
-): T {
+export function route<B extends RouteDefinition<any>>(
+    routeDefinition: B
+): B {
     return {
         ...routeDefinition,
         url: baseUrlStore + routeDefinition.url,

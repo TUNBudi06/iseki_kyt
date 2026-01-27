@@ -9,7 +9,7 @@
     "devDependencies": {
         "@internationalized/date": "^3.10.1",
         "@laravel/vite-plugin-wayfinder": "^0.1.7",
-        "@lucide/svelte": "^0.563.1",
+        "@lucide/svelte": "^0.561.0",
         "@tailwindcss/vite": "^4.0.0",
         "@tsconfig/svelte": "^5.0.6",
         "axios": "^1.11.0",
