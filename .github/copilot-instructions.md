@@ -20,7 +20,9 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - pestphp/pest (PEST) - v3
 - phpunit/phpunit (PHPUNIT) - v11
 - @inertiajs/svelte (INERTIA) - v2
+- @laravel/vite-plugin-wayfinder (WAYFINDER) - v0
 - tailwindcss (TAILWINDCSS) - v4
+- svelte (SVELTE) - v5
 
 ## Skills Activation
 

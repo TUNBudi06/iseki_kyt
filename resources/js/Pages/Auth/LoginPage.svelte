@@ -10,7 +10,7 @@
     } from "$shadcn/components/ui/field/index.js";
     const id = $props.id();
 </script>
-<Card.Root class="mx-auto w-full max-w-sm">
+<Card.Root class="mx-auto mt-50 w-full max-w-sm">
     <Card.Header>
         <Card.Title class="text-2xl">Login</Card.Title>
         <Card.Description>Enter your email below to login to your account</Card.Description>

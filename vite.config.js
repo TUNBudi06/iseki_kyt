@@ -35,7 +35,8 @@ export default defineConfig({
         wayfinder({
             command: 'php artisan wayfinder:generate',
             routes: true,
-            actions: false
+            actions: false,
+
         }),
         svelte(),
         tailwindcss(),
