@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import laravel from 'laravel-vite-plugin';
 import path from 'path';
 import { defineConfig } from 'vite';
+import {wayfinder} from "@laravel/vite-plugin-wayfinder";
 
 export default defineConfig({
     base: '/iseki_kyt/public/build',
@@ -30,6 +31,11 @@ export default defineConfig({
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.ts'],
             refresh: true,
+        }),
+        wayfinder({
+            command: 'php artisan wayfinder:generate',
+            routes: true,
+            actions: false
         }),
         svelte(),
         tailwindcss(),
