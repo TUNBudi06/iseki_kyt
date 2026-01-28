@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('title')->comment('judul kyt');
             $table->text('potensi')->comment('potensi bahaya kyt');
             $table->text('penanganan')->comment('penanganan kyt');
+            $table->string('foto-path')->nullable()->comment('path foto kyt');
+            $table->string('result-path')->nullable()->comment('path foto hasil penanganan kyt');
             $table->timestamps();
         });
     }

@@ -8,10 +8,6 @@
     let { weeksInCurrentMonth = [], currentYear = 2026, currentMonthName = "January" } = $props();
 
     $inspect($page.props)
-
-    // Generate weeks array based on Friday dates from controller
-    // weeksInCurrentMonth is an ARRAY of Unix timestamps (e.g., [1735948800, 1736553600, ...])
-    // Each timestamp represents a Friday in the month
     const weeks = $derived.by(() => {
         // If no data from backend, generate dummy weeks
         if (!weeksInCurrentMonth || weeksInCurrentMonth.length === 0) {
@@ -35,28 +31,25 @@
             return generatedWeeks;
         }
 
-        // Convert Unix timestamps to Date objects and generate week ranges
-        // Each Friday marks the END of a week (Monday to Friday)
+        // Convert date strings to Date objects
         const generatedWeeks = [];
 
         for (let i = 0; i < weeksInCurrentMonth.length; i++) {
-            const fridayTimestamp = weeksInCurrentMonth[i];
-            const friday = new Date(fridayTimestamp * 1000); // Convert Unix timestamp to milliseconds
+            const week = weeksInCurrentMonth[i];
 
-            // Calculate Monday (start of week) - 4 days before Friday
-            const monday = new Date(friday);
-            monday.setDate(friday.getDate() - 4);
+            // Parse date_start and date_end strings (format: 'YYYY-MM-DD')
+            const startDate = new Date(week.date_start);
+            const endDate = new Date(week.date_end);
 
             generatedWeeks.push({
-                start: monday,
-                end: friday
+                start: startDate,
+                end: endDate
             });
         }
 
         return generatedWeeks;
     });
 
-    // Team list with example KYT data - null means week was skipped/not submitted
     const teams = [
         {
             name: "DST",

@@ -17,27 +17,14 @@ trait KytDateParser
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $date = strtotime("$year-$month-$day");
             if (date('N', $date) == 5) { // 5 means Friday
-                $fridays[] = $day;
+                $fridays[] = [
+                    'date_end'=>date('Y-m-d', $date),
+                    'date_start'=>date('Y-m-d', strtotime("-4 days", $date))
+                ];
             }
         }
-        Cache::put('fridays_count_' . $month . '_' . $year, count($fridays));
-        return count($fridays);
-    }
-
-    public function getHowManyDateFridayInMonth($month,$years)
-    {
-        if(Cache::has('fridays_dates_' . $month . '_' . $years)) {
-            return Cache::get('fridays_dates_' . $month . '_' . $years);
-        }
-        $fridays = [];
-        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $years);
-        for ($day = 1; $day <= $daysInMonth; $day++) {
-            $date = strtotime("$years-$month-$day");
-            if (date('N', $date) == 5) { // 5 means Friday
-                $fridays[] = $date;
-            }
-        }
-        Cache::put('fridays_dates_' . $month . '_' . $years, $fridays);
+        debugbar()->log($fridays);
+        Cache::put('fridays_count_' . $month . '_' . $year, $fridays);
         return $fridays;
     }
 
