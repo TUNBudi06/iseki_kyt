@@ -13,7 +13,7 @@ class AdminController extends Controller
     public function index()
     {
         return Inertia::render('Admin/Dashboard',[
-            'weeksInCurrentMonth' => $this->getHowManyWeeksInMonth(date('m'), date('Y')),
+            'weeksInCurrentMonth' => $this->getHowManyDateFridayInMonth(date('m'), date('Y')),
             'currentMonthName' => $this->monthNumberToName(date('m')),
             'currentYear' => date('Y'),
         ]);

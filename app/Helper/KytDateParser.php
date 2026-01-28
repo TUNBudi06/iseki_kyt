@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Cache;
 
 trait KytDateParser
 {
-    public function getHowManyWeeksInMonth($month, $year)
+    public function getHowManyFridayInMonth($month, $year)
     {
         if (Cache::has('fridays_count_' . $month . '_' . $year)) {
             return Cache::get('fridays_count_' . $month . '_' . $year);
@@ -22,6 +22,23 @@ trait KytDateParser
         }
         Cache::put('fridays_count_' . $month . '_' . $year, count($fridays));
         return count($fridays);
+    }
+
+    public function getHowManyDateFridayInMonth($month,$years)
+    {
+        if(Cache::has('fridays_dates_' . $month . '_' . $years)) {
+            return Cache::get('fridays_dates_' . $month . '_' . $years);
+        }
+        $fridays = [];
+        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $years);
+        for ($day = 1; $day <= $daysInMonth; $day++) {
+            $date = strtotime("$years-$month-$day");
+            if (date('N', $date) == 5) { // 5 means Friday
+                $fridays[] = $date;
+            }
+        }
+        Cache::put('fridays_dates_' . $month . '_' . $years, $fridays);
+        return $fridays;
     }
 
     public function monthNameToNumber($monthName): ?string
