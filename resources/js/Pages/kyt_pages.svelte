@@ -2,10 +2,10 @@
     import DefaultLayouts from "$/Layouts/DefaultLayouts.svelte";
 </script>
 <DefaultLayouts>
-<div class="max-h-[700px] bg-pink-50 p-4 font-[&quot;Times_New_Roman&quot;,Calibri,serif] text-blue-900">
+<div class="max-h-[700px] bg-pink-50 p-4 text-blue-900">
     <div class="mx-auto max-w-[1400px]">
         <div class="mb-3 flex flex-wrap items-center justify-between gap-3">
-            <div class="text-3xl font-extrabold tracking-tight text-pink-600">
+            <div class="text-3xl font-serif font-extrabold tracking-tight text-pink-600">
                 KIKEN YOCHI TRAINING (KYT)
             </div>
             <div class="text-2xl font-bold text-blue-600">SUB ASSY — MAIN LINE</div>

@@ -15,12 +15,14 @@ class LoginCheckMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->user()->role == 'admin') {
-            return redirect()->route('admin.home');
-        }
+        if(auth()->check()){
+            if (auth()->user()->role == 'admin') {
+                return redirect()->route('admin.home');
+            }
 
-        if (auth()->user()->role == 'user') {
-            return redirect('/user/dashboard');
+            if (auth()->user()->role == 'user') {
+                return redirect('/user/dashboard');
+            }
         }
 
         return $next($request);
