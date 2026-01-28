@@ -5,8 +5,7 @@ import './bootstrap';
 createInertiaApp({
     resolve: (name: string) => {
         const pages = import.meta.glob<ResolvedComponent>('./Pages/**/*.svelte');
-        const page = pages[`./Pages/${name}.svelte`]()
-        return page;
+        return pages[`./Pages/${name}.svelte`]();
     },
     setup({ el, App, props }) {
         if (el && el.dataset.serverRendered === 'true') {
