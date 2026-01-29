@@ -4,6 +4,7 @@
     import { Button } from "$shadcn/components/ui/button/index.js";
     import * as Separator from "$shadcn/components/ui/separator/index.js";
     import { home as adminHome } from "$/routes/admin";
+    import {list as userList} from "$/routes/admin/user";
     import {route} from "$/lib/route-helper";
 
     let { children } = $props();
@@ -13,7 +14,7 @@
     // Navigation items
     const navItems = [
         { name: 'Dashboard', href: route(adminHome()).url, icon: '📊' },
-        { name: 'User', href: '/admin/users', icon: '👤' },
+        { name: 'User', href: route(userList()).url, icon: '👤' },
         { name: 'List KYT', href: '/admin/kyt', icon: '📋' },
         { name: 'Settings', href: '/admin/settings', icon: '⚙️' },
     ];

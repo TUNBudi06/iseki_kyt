@@ -32,4 +32,13 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isLeader(): bool {
+        return $this->role === 'leader';
+    }
 }
