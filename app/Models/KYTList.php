@@ -10,13 +10,12 @@ class KYTList extends Model
 
     protected $fillable = [
         'team_k_y_t_id',
+        'kyt_date_id',
         'user_name',
         'title',
         'potensi',
         'penanganan',
         'foto',
         'result',
-        'friday_date',
-        'number_of_week',
     ];
 }

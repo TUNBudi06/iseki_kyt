@@ -125,5 +125,8 @@ class AdminController extends Controller
     {
         $year = request()->get('year', date('Y'));
 
+        return Inertia::render('Admin/KYT-list-index', [
+            'selectedYear' => $year,
+        ]);
     }
 }
