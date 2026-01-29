@@ -1,0 +1,6 @@
+{
+    "rules": {
+        "svelte/a11y-label-has-associated-control": "off",
+        "svelte/no-captured-state": "off"
+    }
+}
