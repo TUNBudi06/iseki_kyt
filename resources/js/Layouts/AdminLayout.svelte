@@ -44,7 +44,7 @@
                 <!-- Logo & Brand -->
                 <div class="flex items-center gap-6">
                     <a use:inertia href={route(adminHome()).url} class="flex items-center gap-2 font-semibold text-lg hover:opacity-80 transition-opacity">
-                        <span class="hidden sm:inline-block">Iseki KYT</span>
+                        <span class="inline-block">Iseki KYT</span>
                     </a>
 
                     <!-- Desktop Navigation -->

@@ -1,8 +1,8 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\AdminController::list
- * @see app/Http/Controllers/AdminController.php:25
- * @route '/admin/user/list'
+ * @see app/Http/Controllers/AdminController.php:78
+ * @route '/admin/team/list'
  */
 export const list = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: list.url(options),
@@ -11,13 +11,13 @@ export const list = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 list.definition = {
     methods: ["get","head"],
-    url: '/admin/user/list',
+    url: '/admin/team/list',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\AdminController::list
- * @see app/Http/Controllers/AdminController.php:25
- * @route '/admin/user/list'
+ * @see app/Http/Controllers/AdminController.php:78
+ * @route '/admin/team/list'
  */
 list.url = (options?: RouteQueryOptions) => {
     return list.definition.url + queryParams(options)
@@ -25,8 +25,8 @@ list.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AdminController::list
- * @see app/Http/Controllers/AdminController.php:25
- * @route '/admin/user/list'
+ * @see app/Http/Controllers/AdminController.php:78
+ * @route '/admin/team/list'
  */
 list.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: list.url(options),
@@ -34,8 +34,8 @@ list.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\AdminController::list
- * @see app/Http/Controllers/AdminController.php:25
- * @route '/admin/user/list'
+ * @see app/Http/Controllers/AdminController.php:78
+ * @route '/admin/team/list'
  */
 list.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: list.url(options),
@@ -44,8 +44,8 @@ list.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\AdminController::add
- * @see app/Http/Controllers/AdminController.php:33
- * @route '/admin/user/add'
+ * @see app/Http/Controllers/AdminController.php:88
+ * @route '/admin/team/add'
  */
 export const add = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: add.url(options),
@@ -54,13 +54,13 @@ export const add = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 add.definition = {
     methods: ["post"],
-    url: '/admin/user/add',
+    url: '/admin/team/add',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\AdminController::add
- * @see app/Http/Controllers/AdminController.php:33
- * @route '/admin/user/add'
+ * @see app/Http/Controllers/AdminController.php:88
+ * @route '/admin/team/add'
  */
 add.url = (options?: RouteQueryOptions) => {
     return add.definition.url + queryParams(options)
@@ -68,8 +68,8 @@ add.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AdminController::add
- * @see app/Http/Controllers/AdminController.php:33
- * @route '/admin/user/add'
+ * @see app/Http/Controllers/AdminController.php:88
+ * @route '/admin/team/add'
  */
 add.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: add.url(options),
@@ -78,8 +78,8 @@ add.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\AdminController::edit
- * @see app/Http/Controllers/AdminController.php:49
- * @route '/admin/user/edit/{id}'
+ * @see app/Http/Controllers/AdminController.php:101
+ * @route '/admin/team/edit/{id}'
  */
 export const edit = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: edit.url(args, options),
@@ -88,13 +88,13 @@ export const edit = (args: { id: string | number } | [id: string | number ] | st
 
 edit.definition = {
     methods: ["put"],
-    url: '/admin/user/edit/{id}',
+    url: '/admin/team/edit/{id}',
 } satisfies RouteDefinition<["put"]>
 
 /**
 * @see \App\Http\Controllers\AdminController::edit
- * @see app/Http/Controllers/AdminController.php:49
- * @route '/admin/user/edit/{id}'
+ * @see app/Http/Controllers/AdminController.php:101
+ * @route '/admin/team/edit/{id}'
  */
 edit.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -121,8 +121,8 @@ edit.url = (args: { id: string | number } | [id: string | number ] | string | nu
 
 /**
 * @see \App\Http\Controllers\AdminController::edit
- * @see app/Http/Controllers/AdminController.php:49
- * @route '/admin/user/edit/{id}'
+ * @see app/Http/Controllers/AdminController.php:101
+ * @route '/admin/team/edit/{id}'
  */
 edit.put = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: edit.url(args, options),
@@ -131,8 +131,8 @@ edit.put = (args: { id: string | number } | [id: string | number ] | string | nu
 
 /**
 * @see \App\Http\Controllers\AdminController::deleteMethod
- * @see app/Http/Controllers/AdminController.php:69
- * @route '/admin/user/delete/{id}'
+ * @see app/Http/Controllers/AdminController.php:116
+ * @route '/admin/team/delete/{id}'
  */
 export const deleteMethod = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: deleteMethod.url(args, options),
@@ -141,13 +141,13 @@ export const deleteMethod = (args: { id: string | number } | [id: string | numbe
 
 deleteMethod.definition = {
     methods: ["delete"],
-    url: '/admin/user/delete/{id}',
+    url: '/admin/team/delete/{id}',
 } satisfies RouteDefinition<["delete"]>
 
 /**
 * @see \App\Http\Controllers\AdminController::deleteMethod
- * @see app/Http/Controllers/AdminController.php:69
- * @route '/admin/user/delete/{id}'
+ * @see app/Http/Controllers/AdminController.php:116
+ * @route '/admin/team/delete/{id}'
  */
 deleteMethod.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
@@ -174,18 +174,18 @@ deleteMethod.url = (args: { id: string | number } | [id: string | number ] | str
 
 /**
 * @see \App\Http\Controllers\AdminController::deleteMethod
- * @see app/Http/Controllers/AdminController.php:69
- * @route '/admin/user/delete/{id}'
+ * @see app/Http/Controllers/AdminController.php:116
+ * @route '/admin/team/delete/{id}'
  */
 deleteMethod.delete = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: deleteMethod.url(args, options),
     method: 'delete',
 })
-const user = {
+const team = {
     list: Object.assign(list, list),
 add: Object.assign(add, add),
 edit: Object.assign(edit, edit),
 delete: Object.assign(deleteMethod, deleteMethod),
 }
 
-export default user
+export default team
