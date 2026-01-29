@@ -16,5 +16,7 @@ class KYTList extends Model
         'penanganan',
         'foto',
         'result',
+        'friday_date',
+        'number_of_week',
     ];
 }

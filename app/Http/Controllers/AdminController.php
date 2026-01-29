@@ -120,4 +120,10 @@ class AdminController extends Controller
 
         return back()->with(['success' => 'Team deleted successfully.']);
     }
+
+    public function kytList()
+    {
+        $year = request()->get('year', date('Y'));
+
+    }
 }

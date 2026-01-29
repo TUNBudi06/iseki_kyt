@@ -11,6 +11,13 @@ Route::prefix('user')->group(function () {
     Route::delete('/delete/{id}', [AdminController::class, 'userDelete'])->name('admin.user.delete');
 });
 
+Route::prefix('kyt')->group(function () {
+    Route::get('/list', [AdminController::class, 'kytList'])->name('admin.kyt.list');
+//    Route::post('/add', [AdminController::class, 'kytAdd'])->name('admin.kyt.add');
+//    Route::put('/edit/{id}', [AdminController::class, 'kytEdit'])->name('admin.kyt.edit');
+//    Route::delete('/delete/{id}', [AdminController::class, 'kytDelete'])->name('admin.kyt.delete');
+});
+
 Route::prefix('team')->group(function () {
     Route::get('/list', [AdminController::class, 'teamList'])->name('admin.team.list');
     Route::post('/add', [AdminController::class, 'teamAdd'])->name('admin.team.add');

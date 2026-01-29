@@ -1,5 +1,6 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../wayfinder'
 import user from './user'
+import kyt from './kyt'
 import team from './team'
 /**
 * @see \App\Http\Controllers\AdminController::home
@@ -46,6 +47,7 @@ home.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 const admin = {
     home: Object.assign(home, home),
 user: Object.assign(user, user),
+kyt: Object.assign(kyt, kyt),
 team: Object.assign(team, team),
 }
 
