@@ -25,3 +25,6 @@ Route::prefix('team')->group(function () {
     Route::delete('/delete/{id}', [AdminController::class, 'teamDelete'])->name('admin.team.delete');
 });
 
+// Settings Routes
+Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
+Route::post('/settings/change-password', [AdminController::class, 'changePassword'])->name('admin.settings.changePassword');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helper\KytDateParser;
+use App\Models\KytDateList;
 use App\Models\TeamKYT;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -11,22 +12,23 @@ use Inertia\Inertia;
 class AdminController extends Controller
 {
     use KytDateParser;
+
     //
     public function index()
     {
-        return Inertia::render('Admin/Dashboard',[
+        return Inertia::render('Admin/Dashboard', [
             'weeksInCurrentMonth' => $this->getHowManyFridayInMonth(date('m'), date('Y')),
             'currentMonthName' => $this->monthNumberToName(date('m')),
             'currentYear' => date('Y'),
         ]);
     }
 
-
     public function userList()
     {
         $user = User::all();
-        return Inertia::render('Admin/User-Lists',[
-            'users' => $user
+
+        return Inertia::render('Admin/User-Lists', [
+            'users' => $user,
         ]);
     }
 
@@ -38,11 +40,12 @@ class AdminController extends Controller
             'role' => 'required|in:admin,leader',
         ]);
         debugbar()->info($data);
-        $user = new User();
+        $user = new User;
         $user->username = $data['username'];
         $user->password = $data['password'];
         $user->role = $data['role'];
         $user->save();
+
         return back()->with(['success' => 'User added successfully.']);
     }
 
@@ -51,13 +54,13 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
 
         $data = $request->validate([
-            'username' => 'required|unique:users,username,' . $id,
+            'username' => 'required|unique:users,username,'.$id,
             'password' => 'nullable|string|min:8',
             'role' => 'required|in:admin,leader',
         ]);
 
         $user->username = $data['username'];
-        if (!empty($data['password'])) {
+        if (! empty($data['password'])) {
             $user->password = $data['password'];
         }
         $user->role = $data['role'];
@@ -79,9 +82,10 @@ class AdminController extends Controller
     {
         $teams = TeamKYT::with('user')->get();
         $users = User::all(); // For PIC dropdown
+
         return Inertia::render('Admin/Team-Lists', [
             'teams' => $teams,
-            'users' => $users
+            'users' => $users,
         ]);
     }
 
@@ -103,7 +107,7 @@ class AdminController extends Controller
         $team = TeamKYT::findOrFail($id);
 
         $data = $request->validate([
-            'team_name' => 'required|string|max:255|unique:team_k_y_t_s,team_name,' . $id,
+            'team_name' => 'required|string|max:255|unique:team_k_y_t_s,team_name,'.$id,
             'team_description' => 'nullable|string|max:500',
             'user_id' => 'required|exists:users,id',
         ]);
@@ -123,10 +127,35 @@ class AdminController extends Controller
 
     public function kytList()
     {
-        $year = request()->get('year', date('Y'));
+        $kytList = KytDateList::with(['kytLists'])->get();
 
         return Inertia::render('Admin/KYT-list-index', [
-            'selectedYear' => $year,
+            'kytLists' => $kytList,
         ]);
+    }
+
+    // Settings Methods
+    public function settings()
+    {
+        return Inertia::render('Admin/Settings');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $user = auth()->user();
+
+        $data = $request->validate([
+            'new_password' => 'required|string|min:8|confirmed',
+        ], [
+            'new_password.required' => 'New password is required.',
+            'new_password.min' => 'New password must be at least 8 characters.',
+            'new_password.confirmed' => 'Password confirmation does not match.',
+        ]);
+
+        // Update password directly
+        $user->password = $data['new_password'];
+        $user->save();
+
+        return back()->with(['success' => 'Password changed successfully.']);
     }
 }

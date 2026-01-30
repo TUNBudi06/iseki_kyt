@@ -4,6 +4,7 @@
     import { Button } from "$shadcn/components/ui/button/index.js";
     import * as Separator from "$shadcn/components/ui/separator/index.js";
     import { home as adminHome } from "$/routes/admin";
+    import {settings as SettingsRoute} from "$/routes/admin";
     import { list as kytList } from "$/routes/admin/kyt";
     import {list as userList} from "$/routes/admin/user";
     import {route} from "$/lib/route-helper";
@@ -19,7 +20,7 @@
         { name: 'Dashboard', href: route(adminHome()).url, icon: '📊' },
         { name: 'User', href: route(userList()).url, icon: '👤' },
         { name: 'List KYT', href: route(kytList()).url, icon: '📋' },
-        { name: 'Settings', href: '/admin/settings', icon: '⚙️' },
+        { name: 'Settings', href: route(SettingsRoute()).url, icon: '⚙️' },
     ];
 
     function isActive(href: string): boolean {
@@ -152,7 +153,7 @@
                             </div>
                             <div>
                                 <p class="text-sm font-medium">{$page.props.auth?.user?.username || 'User'}</p>
-                                <p class="text-xs text-muted-foreground">admin@iseki.com</p>
+                                <p class="text-xs text-muted-foreground">admin</p>
                             </div>
                         </div>
 
