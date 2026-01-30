@@ -34,33 +34,24 @@ class autoGenerateFridayDateAfterThursdayByBindMiddleware
             }
 
             // Generate next month based on CURRENT date, not last Friday
-            $currentMonth = now()->month;
-            $currentYear = now()->year;
+            $months = $this->getCurrentAndNextMonth();
 
             // Check if CURRENT month already has data
-            $currentMonthHasData = KytDateList::whereYear('kyt_date', $currentYear)
-                ->whereMonth('kyt_date', $currentMonth)
+            $currentMonthHasData = KytDateList::whereYear('kyt_date', $months['current']['year'])
+                ->whereMonth('kyt_date', $months['current']['month'])
                 ->exists();
 
             if (!$currentMonthHasData) {
-                $this->generateMonthFridays($currentMonth, $currentYear);
+                $this->generateMonthFridays($months['current']['month'], $months['current']['year']);
             }
 
-            // Calculate next month properly
-            if ($currentMonth == 12) {
-                $nextMonth = 1;
-                $nextYear = $currentYear + 1;
-            } else {
-                $nextMonth = $currentMonth + 1;
-                $nextYear = $currentYear;
-            }
-
-            $nextMonthHasData = KytDateList::whereYear('kyt_date', $nextYear)
-                ->whereMonth('kyt_date', $nextMonth)
+            // Check if NEXT month already has data
+            $nextMonthHasData = KytDateList::whereYear('kyt_date', $months['next']['year'])
+                ->whereMonth('kyt_date', $months['next']['month'])
                 ->exists();
 
             if (!$nextMonthHasData) {
-                $this->generateMonthFridays($nextMonth, $nextYear);
+                $this->generateMonthFridays($months['next']['month'], $months['next']['year']);
             }
         }
 

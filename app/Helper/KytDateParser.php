@@ -39,4 +39,67 @@ trait KytDateParser
         $date = \DateTime::createFromFormat('m', str_pad($monthNumber, 2, '0', STR_PAD_LEFT));
         return $date ? $date->format('F') : null;
     }
+
+    /**
+     * Get current month and next month data
+     * Returns array with current and next month/year
+     */
+    public function getCurrentAndNextMonth(): array
+    {
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
+
+        // Calculate next month properly
+        if ($currentMonth == 12) {
+            $nextMonth = 1;
+            $nextYear = $currentYear + 1;
+        } else {
+            $nextMonth = $currentMonth + 1;
+            $nextYear = $currentYear;
+        }
+
+        return [
+            'current' => [
+                'month' => $currentMonth,
+                'year' => $currentYear,
+            ],
+            'next' => [
+                'month' => $nextMonth,
+                'year' => $nextYear,
+            ],
+        ];
+    }
+
+    /**
+     * Get KYT date list for current and next month
+     * Returns collection of KytDateList with date_start and date_end calculated
+     */
+    public function getWeeksForCurrentAndNextMonth(): array
+    {
+        $months = $this->getCurrentAndNextMonth();
+
+        $kytDates = \App\Models\KytDateList::where(function($query) use ($months) {
+                $query->where(function($q) use ($months) {
+                    $q->whereYear('kyt_date', $months['current']['year'])
+                      ->whereMonth('kyt_date', $months['current']['month']);
+                })
+                ->orWhere(function($q) use ($months) {
+                    $q->whereYear('kyt_date', $months['next']['year'])
+                      ->whereMonth('kyt_date', $months['next']['month']);
+                });
+            })
+            ->orderBy('kyt_date', 'asc')
+            ->get();
+
+        // Transform to include date_start and date_end
+        return $kytDates->map(function($kytDate) {
+            $friday = \Carbon\Carbon::parse($kytDate->kyt_date);
+            return [
+                'id' => $kytDate->id,
+                'date_start' => $friday->copy()->subDays(4)->format('Y-m-d'), // Monday
+                'date_end' => $friday->format('Y-m-d'), // Friday
+                'kyt_date' => $kytDate->kyt_date,
+            ];
+        })->toArray();
+    }
 }
