@@ -45,9 +45,15 @@ class autoGenerateFridayDateAfterThursdayByBindMiddleware
             if (!$currentMonthHasData) {
                 $this->generateMonthFridays($currentMonth, $currentYear);
             }
-            // Now check next month
-            $nextMonth = now()->addDays(6)->month;
-            $nextYear = now()->addDays(6)->year;
+
+            // Calculate next month properly
+            if ($currentMonth == 12) {
+                $nextMonth = 1;
+                $nextYear = $currentYear + 1;
+            } else {
+                $nextMonth = $currentMonth + 1;
+                $nextYear = $currentYear;
+            }
 
             $nextMonthHasData = KytDateList::whereYear('kyt_date', $nextYear)
                 ->whereMonth('kyt_date', $nextMonth)

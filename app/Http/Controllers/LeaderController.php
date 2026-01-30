@@ -36,8 +36,15 @@ class LeaderController extends Controller
         // Get current month and next month weeks from database
         $currentMonth = now()->month;
         $currentYear = now()->year;
-        $nextMonth = now()->addMonth()->month;
-        $nextYear = now()->addMonth()->year;
+
+        // Calculate next month properly
+        if ($currentMonth == 12) {
+            $nextMonth = 1;
+            $nextYear = $currentYear + 1;
+        } else {
+            $nextMonth = $currentMonth + 1;
+            $nextYear = $currentYear;
+        }
 
         // Get all weeks from current month and next month
         $kytDates = KytDateList::where(function($query) use ($currentMonth, $currentYear, $nextMonth, $nextYear) {
@@ -73,8 +80,8 @@ class LeaderController extends Controller
 
             $weeklyKYT[$index] = $kyt ? [
                 'id' => $kyt->id,
-                'image_url' => $kyt->image_url,
-                'status' => $kyt->status ?? 'submitted',
+                'image_url' => $kyt->{'result-path'}, // Use result-path field from database
+                'status' => 'submitted',
                 'submitted_at' => $kyt->created_at,
             ] : null;
         }

@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\AdminController::list
- * @see app/Http/Controllers/AdminController.php:57
+ * @see app/Http/Controllers/AdminController.php:90
  * @route '/admin/user/list'
  */
 export const list = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ list.definition = {
 
 /**
 * @see \App\Http\Controllers\AdminController::list
- * @see app/Http/Controllers/AdminController.php:57
+ * @see app/Http/Controllers/AdminController.php:90
  * @route '/admin/user/list'
  */
 list.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ list.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AdminController::list
- * @see app/Http/Controllers/AdminController.php:57
+ * @see app/Http/Controllers/AdminController.php:90
  * @route '/admin/user/list'
  */
 list.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -34,7 +34,7 @@ list.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\AdminController::list
- * @see app/Http/Controllers/AdminController.php:57
+ * @see app/Http/Controllers/AdminController.php:90
  * @route '/admin/user/list'
  */
 list.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -44,7 +44,7 @@ list.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\AdminController::add
- * @see app/Http/Controllers/AdminController.php:66
+ * @see app/Http/Controllers/AdminController.php:99
  * @route '/admin/user/add'
  */
 export const add = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -59,7 +59,7 @@ add.definition = {
 
 /**
 * @see \App\Http\Controllers\AdminController::add
- * @see app/Http/Controllers/AdminController.php:66
+ * @see app/Http/Controllers/AdminController.php:99
  * @route '/admin/user/add'
  */
 add.url = (options?: RouteQueryOptions) => {
@@ -68,7 +68,7 @@ add.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AdminController::add
- * @see app/Http/Controllers/AdminController.php:66
+ * @see app/Http/Controllers/AdminController.php:99
  * @route '/admin/user/add'
  */
 add.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -78,7 +78,7 @@ add.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\AdminController::edit
- * @see app/Http/Controllers/AdminController.php:83
+ * @see app/Http/Controllers/AdminController.php:116
  * @route '/admin/user/edit/{id}'
  */
 export const edit = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -93,7 +93,7 @@ edit.definition = {
 
 /**
 * @see \App\Http\Controllers\AdminController::edit
- * @see app/Http/Controllers/AdminController.php:83
+ * @see app/Http/Controllers/AdminController.php:116
  * @route '/admin/user/edit/{id}'
  */
 edit.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -121,7 +121,7 @@ edit.url = (args: { id: string | number } | [id: string | number ] | string | nu
 
 /**
 * @see \App\Http\Controllers\AdminController::edit
- * @see app/Http/Controllers/AdminController.php:83
+ * @see app/Http/Controllers/AdminController.php:116
  * @route '/admin/user/edit/{id}'
  */
 edit.put = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -131,7 +131,7 @@ edit.put = (args: { id: string | number } | [id: string | number ] | string | nu
 
 /**
 * @see \App\Http\Controllers\AdminController::deleteMethod
- * @see app/Http/Controllers/AdminController.php:103
+ * @see app/Http/Controllers/AdminController.php:136
  * @route '/admin/user/delete/{id}'
  */
 export const deleteMethod = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -146,7 +146,7 @@ deleteMethod.definition = {
 
 /**
 * @see \App\Http\Controllers\AdminController::deleteMethod
- * @see app/Http/Controllers/AdminController.php:103
+ * @see app/Http/Controllers/AdminController.php:136
  * @route '/admin/user/delete/{id}'
  */
 deleteMethod.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -174,7 +174,7 @@ deleteMethod.url = (args: { id: string | number } | [id: string | number ] | str
 
 /**
 * @see \App\Http\Controllers\AdminController::deleteMethod
- * @see app/Http/Controllers/AdminController.php:103
+ * @see app/Http/Controllers/AdminController.php:136
  * @route '/admin/user/delete/{id}'
  */
 deleteMethod.delete = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({

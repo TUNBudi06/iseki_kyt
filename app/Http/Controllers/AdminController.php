@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\KytDateParser;
 use App\Models\KytDateList;
+use App\Models\KYTList;
 use App\Models\TeamKYT;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,8 +20,15 @@ class AdminController extends Controller
         // Get current month and next month weeks from database
         $currentMonth = now()->month;
         $currentYear = now()->year;
-        $nextMonth = now()->addMonth()->month;
-        $nextYear = now()->addMonth()->year;
+
+        // Calculate next month properly
+        if ($currentMonth == 12) {
+            $nextMonth = 1;
+            $nextYear = $currentYear + 1;
+        } else {
+            $nextMonth = $currentMonth + 1;
+            $nextYear = $currentYear;
+        }
 
         // Get all weeks from current month and next month
         $kytDates = KytDateList::where(function($query) use ($currentMonth, $currentYear, $nextMonth, $nextYear) {
@@ -47,8 +55,33 @@ class AdminController extends Controller
             ];
         })->toArray();
 
+        // Get all teams with their KYT submissions
+        $teams = TeamKYT::all()->map(function($team) use ($weeksInCurrentMonth) {
+            $weeklyKYT = [];
+            foreach ($weeksInCurrentMonth as $index => $week) {
+                $kyt = \App\Models\KYTList::where('team_k_y_t_id', $team->id)
+                    ->where('kyt_date_id', $week['id'])
+                    ->first();
+
+                $weeklyKYT[$index] = $kyt ? [
+                    'id' => $kyt->id,
+                    'image' => $kyt->{'result-path'}, // Use result-path field
+                    'title' => $kyt->title,
+                    'desc' => $kyt->potensi,
+                    'submittedBy' => $kyt->user_name,
+                ] : null;
+            }
+
+            return [
+                'name' => $team->team_name,
+                'desc' => $team->team_description,
+                'weeklyKYT' => $weeklyKYT,
+            ];
+        })->toArray();
+
         return Inertia::render('Admin/Dashboard', [
             'weeksInCurrentMonth' => $weeksInCurrentMonth,
+            'teams' => $teams,
             'currentMonthName' => now()->format('F'),
             'currentYear' => now()->year,
         ]);
