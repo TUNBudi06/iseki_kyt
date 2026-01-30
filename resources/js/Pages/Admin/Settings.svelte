@@ -7,7 +7,7 @@
     import { toast } from "svelte-sonner";
     import { page, useForm } from "@inertiajs/svelte";
     import { changePassword } from "$/routes/admin/settings";
-    import { route } from "$/lib/route-helper";
+    import { route } from "@tunbudi06/inertia-route-helper";
 
     const form = useForm({
         new_password: '',
@@ -24,7 +24,7 @@
     function handleSubmit(e: Event) {
         e.preventDefault();
 
-        $form.submit(route(changePassword()), {
+        $form.put(route(changePassword()).url, {
             onSuccess: () => {
                 toast.success('Password changed successfully!', {
                     id: 'change-password-success',

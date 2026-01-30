@@ -1,6 +1,9 @@
-import { createInertiaApp, type ResolvedComponent } from '@inertiajs/svelte';
+import { createInertiaApp, type ResolvedComponent,page } from '@inertiajs/svelte';
 import { hydrate, mount } from 'svelte';
 import './bootstrap';
+import {initRouteHelper} from "@tunbudi06/inertia-route-helper";
+
+
 
 createInertiaApp({
     resolve: (name: string) => {
@@ -8,6 +11,7 @@ createInertiaApp({
         return pages[`./Pages/${name}.svelte`]();
     },
     setup({ el, App, props }) {
+        initRouteHelper(props);
         if (el && el.dataset.serverRendered === 'true') {
             hydrate(App, { target: el, props });
         } else if (el) {

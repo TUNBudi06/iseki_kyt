@@ -30,6 +30,7 @@
 	"dependencies": {
 		"@inertiajs/svelte": "^2.3.12",
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
+		"@tunbudi06/inertia-route-helper": "file:tunbudi06-inertia-route-helper-1.2.2.tgz",
 		"fabric": "^7.1.0",
 		"lucide": "^0.563.0",
 		"svelte": "^5.49.0"

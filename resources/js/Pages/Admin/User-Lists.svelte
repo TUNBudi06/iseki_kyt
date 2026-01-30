@@ -11,7 +11,7 @@
     import * as Select from "$shadcn/components/ui/select/index.js";
     import { add as addUser, edit as editUser, deleteMethod as deleteUser } from "\$/routes/admin/user";
     import { list as teamList } from "\$/routes/admin/team";
-    import {route} from "$/lib/route-helper";
+    import {route, routeUrl} from "@tunbudi06/inertia-route-helper";
     import {toast} from "svelte-sonner";
     let {users} = $props();
 
@@ -32,7 +32,7 @@
 
     function submitButton(e: Event) {
         e.preventDefault();
-        $form.submit(route(addUser()),{
+        $form.post(route(addUser()).url, {
             onSuccess: () => {
                 open = false;
                 $form.reset();
@@ -48,8 +48,7 @@
         e.preventDefault();
         if (editingUserId === null) return;
 
-        $editForm.submit(route(editUser(editingUserId)), {
-            method: 'put',
+        $editForm.put(route(editUser(editingUserId)).url, {
             onSuccess: () => {
                 openEdit = false;
                 editingUserId = null;
@@ -65,7 +64,7 @@
     function confirmDelete() {
         if (deletingUserId === null) return;
 
-        router.delete(route(deleteUser(deletingUserId)), {
+        router.delete(route(deleteUser(deletingUserId)).url, {
             onSuccess: () => {
                 openDelete = false;
                 deletingUserId = null;
@@ -136,7 +135,7 @@
                     <Card.Description>Manage and view all registered users.</Card.Description>
                 </div>
                 <div>
-                    <Link href={route(teamList())}>
+                    <Link href={routeUrl(teamList())}>
                         <Button class="transform-3d hover:scale-105">Manage Teams</Button>
                     </Link>
                 </div>

@@ -11,7 +11,7 @@
     import * as Select from "$shadcn/components/ui/select/index.js";
     import { add as addTeam, edit as editTeam, deleteMethod as deleteTeam } from "\$/routes/admin/team";
     import { list as userList } from "\$/routes/admin/user";
-    import {route} from "$/lib/route-helper";
+    import {route, routeUrl} from "@tunbudi06/inertia-route-helper";
     import {toast} from "svelte-sonner";
 
     let {teams, users} = $props();
@@ -52,7 +52,7 @@
 
     function submitButton(e: Event) {
         e.preventDefault();
-        $form.submit(route(addTeam()),{
+        $form.post(route(addTeam()).url, {
             onSuccess: () => {
                 open = false;
                 $form.reset();
@@ -68,8 +68,7 @@
         e.preventDefault();
         if (editingTeamId === null) return;
 
-        $editForm.submit(route(editTeam(editingTeamId)), {
-            method: 'put',
+        $editForm.put(route(editTeam(editingTeamId)).url, {
             onSuccess: () => {
                 openEdit = false;
                 editingTeamId = null;
@@ -85,7 +84,7 @@
     function confirmDelete() {
         if (deletingTeamId === null) return;
 
-        router.delete(route(deleteTeam(deletingTeamId)), {
+        router.delete(route(deleteTeam(deletingTeamId)).url, {
             onSuccess: () => {
                 openDelete = false;
                 deletingTeamId = null;
@@ -145,7 +144,7 @@
                     <Card.Description class="text-pink-50">Manage and view all teams.</Card.Description>
                 </div>
                 <div>
-                    <Link href={route(userList())}>
+                    <Link href={routeUrl(userList())}>
                         <Button class="bg-white text-pink-600 hover:bg-pink-50 font-semibold shadow-lg transform hover:scale-105 transition-all">
                             Manage Users
                         </Button>

@@ -20,8 +20,8 @@ class LoginCheckMiddleware
                 return redirect()->route('admin.home');
             }
 
-            if (auth()->user()->role == 'user') {
-                return redirect('/user/dashboard');
+            if (auth()->user()->role == 'leader') {
+                return redirect()->route('leader.dashboard');
             }
         }
 

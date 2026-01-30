@@ -3,7 +3,7 @@
     import * as Card from "$shadcn/components/ui/card/index.js";
     import {useForm} from "@inertiajs/svelte"
     import {login} from "$routes";
-    import {route} from "$/lib/route-helper";
+    import {route} from "@tunbudi06/inertia-route-helper";
     import { Input } from "$shadcn/components/ui/input/index.js";
     import {
         FieldGroup,
@@ -19,7 +19,7 @@
 
     function onsubmit(e: Event) {
         e.preventDefault();
-        $form.submit(route(login()),{
+        $form.submit(route(login()), {
             onSuccess: (e) => {
                 console.log('Login successful', e);
             },

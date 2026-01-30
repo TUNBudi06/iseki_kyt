@@ -18,4 +18,9 @@ class KYTList extends Model
         'foto',
         'result',
     ];
+
+    public function kytDateList()
+    {
+        return $this->belongsTo(KytDateList::class, 'kyt_date_id', 'id');
+    }
 }

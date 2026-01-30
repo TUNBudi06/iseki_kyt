@@ -1,9 +1,6 @@
 <?php
 
+use App\Http\Controllers\LeaderController;
+use Illuminate\Support\Facades\Route;
 
-
-
-
-Route::get('/dashboard', function () {
-    return view('leader.dashboard');
-})->name('leader.dashboard');
+Route::get('/dashboard', [LeaderController::class, 'dashboard'])->name('leader.dashboard');

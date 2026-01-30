@@ -1,26 +1,19 @@
 <script lang="ts">
     import DefaultLayouts from "$/Layouts/DefaultLayouts.svelte";
-    import { page, router,inertia } from "@inertiajs/svelte";
+    import { page, router, inertia } from "@inertiajs/svelte";
     import { Button } from "$shadcn/components/ui/button/index.js";
-    import * as Separator from "$shadcn/components/ui/separator/index.js";
-    import { home as adminHome } from "$/routes/admin";
-    import {settings as SettingsRoute} from "$/routes/admin";
-    import { list as kytList } from "$/routes/admin/kyt";
-    import {logout as webLogout} from "$routes";
-    import {list as userList} from "$/routes/admin/user";
+    import leader from "$/routes/leader";
+    import {logout} from "$routes";
     import {routeUrl} from "@tunbudi06/inertia-route-helper";
-
 
     let { children } = $props();
     let mobileMenuOpen = $state(false);
     let userMenuOpen = $state(false);
 
-    // Navigation items
     const navItems = [
-        { name: 'Dashboard', href: routeUrl(adminHome()), icon: '📊' },
-        { name: 'User', href: routeUrl(userList()), icon: '👤' },
-        { name: 'List KYT', href: routeUrl(kytList()), icon: '📋' },
-        { name: 'Settings', href: routeUrl(SettingsRoute()), icon: '⚙️' },
+        { name: 'Dashboard', href: routeUrl(leader.dashboard()), icon: '📊' },
+        { name: 'KYT', href: '#', icon: '📋' },
+        { name: 'Settings', href: '#', icon: '⚙️' },
     ];
 
     function isActive(href: string): boolean {
@@ -28,7 +21,7 @@
     }
 
     function handleLogout() {
-        router.post(routeUrl(webLogout()));
+        router.post(routeUrl(logout()));
     }
 
     function toggleMobileMenu() {
@@ -45,10 +38,9 @@
     <nav class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
         <div class="container mx-auto px-4">
             <div class="flex h-16 items-center justify-between">
-                <!-- Logo & Brand -->
                 <div class="flex items-center gap-6">
-                    <a use:inertia href={routeUrl(adminHome())} class="flex items-center gap-2 font-semibold text-lg hover:opacity-80 transition-opacity">
-                        <span class="inline-block">Iseki KYT</span>
+                    <a use:inertia href={routeUrl(leader.dashboard())} class="flex items-center gap-2 font-semibold text-lg hover:opacity-80 transition-opacity">
+                        <span class="inline-block">Iseki KYT - Leader</span>
                     </a>
 
                     <!-- Desktop Navigation -->
@@ -68,54 +60,46 @@
                     </div>
                 </div>
 
-                <!-- Right Section: Notifications & User Menu -->
-                <div class="flex items-center gap-3">
-
-                    <!-- User Dropdown (Desktop) -->
-                    <div class="hidden md:block relative">
+                <div class="flex items-center gap-4">
+                    <!-- User Menu -->
+                    <div class="relative hidden md:block">
                         <Button
                             variant="ghost"
-                            class="flex items-center gap-2 px-3"
                             onclick={toggleUserMenu}
+                            class="flex items-center gap-2"
                         >
                             <div class="h-8 w-8 rounded-full bg-pink-500 flex items-center justify-center text-white font-semibold">
-                                {($page.props.auth?.user?.username || 'U')[0].toUpperCase()}
+                                {$page.props.auth?.user?.username?.charAt(0) || 'U'}
                             </div>
-                            <div class="text-left">
-                                <p class="text-sm font-medium leading-none">
-                                    {$page.props.auth?.user?.username || 'User'}
-                                </p>
-                                <p class="text-xs text-muted-foreground leading-none">Admin</p>
-                            </div>
-                            <svg class="h-4 w-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <span class="text-sm font-medium">{$page.props.auth?.user?.username || 'User'}</span>
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
                         </Button>
 
-                        <!-- Dropdown Menu -->
                         {#if userMenuOpen}
-                            <div class="absolute right-0 mt-2 w-56 rounded-md border bg-popover shadow-lg">
-                                <div class="p-2 space-y-1">
-                                    <Separator.Root />
+                            <div class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                                <div class="py-1">
+                                    <div class="px-4 py-2 text-sm text-gray-700 border-b">
+                                        <div class="font-semibold">{$page.props.auth?.user?.username || 'User'}</div>
+                                        <div class="text-xs text-gray-500">{$page.props.auth?.user?.role || 'Leader'}</div>
+                                    </div>
                                     <button
                                         onclick={handleLogout}
-                                        class="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-sm hover:bg-accent transition-colors text-left"
+                                        class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     >
-                                        <span>🚪</span>
-                                        <span>Logout</span>
+                                        Logout
                                     </button>
                                 </div>
                             </div>
                         {/if}
                     </div>
 
-                    <!-- Mobile Menu Button -->
+                    <!-- Mobile menu button -->
                     <Button
                         variant="ghost"
-                        size="icon"
                         class="md:hidden"
                         onclick={toggleMobileMenu}
-                        aria-label="Toggle menu"
                     >
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             {#if mobileMenuOpen}
@@ -149,7 +133,7 @@
                     <div class="pt-4 mt-4 border-t">
                         <div class="px-4 py-2 text-sm">
                             <div class="font-semibold">{$page.props.auth?.user?.username || 'User'}</div>
-                            <div class="text-xs text-gray-500">{$page.props.auth?.user?.role || 'Admin'}</div>
+                            <div class="text-xs text-gray-500">{$page.props.auth?.user?.role || 'Leader'}</div>
                         </div>
                         <button
                             onclick={handleLogout}
@@ -164,7 +148,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-6">
-        {@render children?.()}
+    <main class="flex-1 container mx-auto px-4 py-6">
+        {@render children()}
     </main>
 </DefaultLayouts>
