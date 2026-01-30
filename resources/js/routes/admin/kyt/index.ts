@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\AdminController::list
- * @see app/Http/Controllers/AdminController.php:157
+ * @see app/Http/Controllers/AdminController.php:159
  * @route '/admin/kyt/list'
  */
 export const list = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ list.definition = {
 
 /**
 * @see \App\Http\Controllers\AdminController::list
- * @see app/Http/Controllers/AdminController.php:157
+ * @see app/Http/Controllers/AdminController.php:159
  * @route '/admin/kyt/list'
  */
 list.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ list.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AdminController::list
- * @see app/Http/Controllers/AdminController.php:157
+ * @see app/Http/Controllers/AdminController.php:159
  * @route '/admin/kyt/list'
  */
 list.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -34,7 +34,7 @@ list.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\AdminController::list
- * @see app/Http/Controllers/AdminController.php:157
+ * @see app/Http/Controllers/AdminController.php:159
  * @route '/admin/kyt/list'
  */
 list.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({

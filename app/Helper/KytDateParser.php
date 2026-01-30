@@ -98,6 +98,7 @@ trait KytDateParser
                 'id' => $kytDate->id,
                 'date_start' => $friday->copy()->subDays(4)->format('Y-m-d'), // Monday
                 'date_end' => $friday->format('Y-m-d'), // Friday
+                'week_number' => $kytDate->number_of_Weeks,
                 'kyt_date' => $kytDate->kyt_date,
             ];
         })->toArray();

@@ -24,7 +24,8 @@
                 const endDay = Math.min((i + 1) * 7, new Date(year, month + 1, 0).getDate());
                 generatedWeeks.push({
                     start: new Date(year, month, startDay),
-                    end: new Date(year, month, endDay)
+                    end: new Date(year, month, endDay),
+                    week_number: i + 1
                 });
             }
             return generatedWeeks;
@@ -42,7 +43,8 @@
 
             generatedWeeks.push({
                 start: startDate,
-                end: endDate
+                end: endDate,
+                week_number: week.week_number || (i + 1)
             });
         }
 
@@ -136,14 +138,15 @@
                     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
                         <!-- Show cards based on weeks in month -->
                         {#each weeks as week, weekIndex}
-                            {@const kytData = team.weeklyKYT[weekIndex]}
+                            {@const weekNumber = week.week_number || (weekIndex + 1)}
+                            {@const kytData = team.weeklyKYT[weekNumber]}
                             {@const isNextMonthWeek = isNextMonth(week, currentMonthName)}
                             <div class="group relative aspect-[16/9] rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer {isNextMonthWeek ? 'ring-2 ring-blue-400' : ''}">
                                 {#if kytData && kytData.image_url}
                                     <!-- KYT Submitted - Show Image & Data -->
                                     <img
                                         src={kytData.image_url}
-                                        alt="KYT Week {weekIndex + 1}"
+                                        alt="KYT Week {weekNumber}"
                                         class="w-full h-full object-cover m-0"
                                     />
 
@@ -152,26 +155,26 @@
 
                                     <!-- Next Month Badge -->
                                     {#if isNextMonthWeek}
-                                        <div class="absolute top-2 right-2 bg-blue-500 text-white text-[10px] px-2 py-1 rounded font-bold">
+                                        <div class="absolute top-2 right-2 bg-blue-500 text-white text-xs sm:text-sm md:text-base px-2.5 py-1.5 rounded font-bold">
                                             {getMonthName(week.start)}
                                         </div>
                                     {/if}
 
                                     <!-- KYT Info - Bottom -->
-                                    <div class="absolute pb-2 px-2 sm:pb-3 sm:px-3 md:pb-4 md:px-4 inset-x-0 bottom-0 flex flex-col justify-end space-y-1 sm:space-y-2">
+                                    <div class="absolute pb-3 px-3 sm:pb-4 sm:px-4 md:pb-5 md:px-5 inset-x-0 bottom-0 flex flex-col justify-end space-y-2 sm:space-y-3">
                                         <!-- Week Number -->
-                                        <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-0.5 sm:mb-1">
-                                            <span class="bg-pink-600 text-white text-[10px] sm:text-xs font-bold px-1.5 py-0.5 sm:px-2 rounded w-fit">
-                                                Minggu {weekIndex + 1}
+                                        <div class="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
+                                            <span class="bg-pink-600 text-white text-sm sm:text-base md:text-lg font-bold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded w-fit">
+                                                Minggu {weekNumber}
                                             </span>
-                                            <span class="text-white/70 text-[10px] sm:text-xs">
+                                            <span class="text-white/70 text-xs sm:text-sm md:text-base">
                                                 {formatWeekRange(week.start, week.end)}
                                             </span>
                                         </div>
 
                                         <!-- Submitted Date -->
-                                        <div class="flex items-center text-[10px] sm:text-xs">
-                                            <span class="text-white/70">
+                                        <div class="flex items-center text-sm sm:text-base md:text-lg">
+                                            <span class="text-white/70 font-medium">
                                                 ✅ Submitted
                                             </span>
                                         </div>
@@ -181,19 +184,19 @@
                                     <div class="absolute inset-0 bg-pink-600/0 group-hover:bg-pink-600/10 transition-colors duration-300"></div>
                                 {:else}
                                     <!-- Week Not Submitted - Empty State -->
-                                    <div class="w-full h-full bg-linear-to-br from-gray-100 to-gray-200 flex flex-col items-center justify-center p-2 sm:p-3 md:p-4">
+                                    <div class="w-full h-full bg-linear-to-br from-gray-100 to-gray-200 flex flex-col items-center justify-center p-3 sm:p-4 md:p-5">
                                         <!-- Next Month Badge -->
                                         {#if isNextMonthWeek}
-                                            <div class="absolute top-2 right-2 bg-blue-500 text-white text-[10px] px-2 py-1 rounded font-bold">
+                                            <div class="absolute top-2 right-2 bg-blue-500 text-white text-xs sm:text-sm px-2.5 py-1.5 rounded font-bold">
                                                 {getMonthName(week.start)}
                                             </div>
                                         {/if}
 
-                                        <div class="text-center space-y-1 sm:space-y-2">
-                                            <div class="text-2xl sm:text-3xl md:text-4xl opacity-30">📋</div>
-                                            <div class="text-xs sm:text-sm font-semibold text-gray-500">Minggu {weekIndex + 1}</div>
-                                            <div class="text-[10px] sm:text-xs text-gray-400">{formatWeekRange(week.start, week.end)}</div>
-                                            <div class="mt-1 sm:mt-2 px-2 sm:px-3 py-1 bg-gray-300/50 rounded text-[10px] sm:text-xs text-gray-600">
+                                        <div class="text-center space-y-2 sm:space-y-3">
+                                            <div class="text-4xl sm:text-5xl md:text-6xl opacity-30">📋</div>
+                                            <div class="text-sm sm:text-base md:text-lg font-semibold text-gray-500">Minggu {weekNumber}</div>
+                                            <div class="text-xs sm:text-sm md:text-base text-gray-400">{formatWeekRange(week.start, week.end)}</div>
+                                            <div class="mt-2 sm:mt-3 px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-300/50 rounded text-xs sm:text-sm md:text-base text-gray-600 font-medium">
                                                 Belum Submit
                                             </div>
                                         </div>

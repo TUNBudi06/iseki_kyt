@@ -23,17 +23,19 @@ class AdminController extends Controller
         // Get all teams with their KYT submissions
         $teams = TeamKYT::all()->map(function($team) use ($weeksInCurrentMonth) {
             $weeklyKYT = [];
-            foreach ($weeksInCurrentMonth as $index => $week) {
+            foreach ($weeksInCurrentMonth as $week) {
                 $kyt = KYTList::where('team_k_y_t_id', $team->id)
                     ->where('kyt_date_id', $week['id'])
                     ->first();
 
-                $weeklyKYT[$index] = $kyt ? [
+                // Use week_number as key instead of index
+                $weeklyKYT[$week['week_number']] = $kyt ? [
                     'id' => $kyt->id,
                     'image' => $kyt->{'result-path'}, // Use result-path field
                     'title' => $kyt->title,
                     'desc' => $kyt->potensi,
                     'submittedBy' => $kyt->user_name,
+                    'week_number' => $week['week_number'],
                 ] : null;
             }
 

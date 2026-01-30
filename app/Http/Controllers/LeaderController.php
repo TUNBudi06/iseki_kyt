@@ -38,16 +38,18 @@ class LeaderController extends Controller
 
         // Get KYT submissions for this team
         $weeklyKYT = [];
-        foreach ($weeksInCurrentMonth as $index => $week) {
+        foreach ($weeksInCurrentMonth as $week) {
             $kyt = KYTList::where('team_k_y_t_id', $team->id)
                 ->where('kyt_date_id', $week['id'])
                 ->first();
 
-            $weeklyKYT[$index] = $kyt ? [
+            // Use week_number as key instead of index
+            $weeklyKYT[$week['week_number']] = $kyt ? [
                 'id' => $kyt->id,
                 'image_url' => $kyt->{'result-path'}, // Use result-path field from database
                 'status' => 'submitted',
                 'submitted_at' => $kyt->created_at,
+                'week_number' => $week['week_number'],
             ] : null;
         }
 

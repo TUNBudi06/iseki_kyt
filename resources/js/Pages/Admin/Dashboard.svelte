@@ -25,7 +25,8 @@
                 const endDay = Math.min((i + 1) * 7, new Date(year, month + 1, 0).getDate());
                 generatedWeeks.push({
                     start: new Date(year, month, startDay),
-                    end: new Date(year, month, endDay)
+                    end: new Date(year, month, endDay),
+                    week_number: i + 1
                 });
             }
             return generatedWeeks;
@@ -43,7 +44,8 @@
 
             generatedWeeks.push({
                 start: startDate,
-                end: endDate
+                end: endDate,
+                week_number: week.week_number || (i + 1)
             });
         }
 
@@ -194,7 +196,7 @@
         : "w-full sm:w-[calc(50%-0.375rem)] lg:w-[calc(20%-0.6rem)]");  // Mobile: full, Tablet: 2 cols, Desktop: 5 cols
 </script>
 
-{#snippet cardImg(kytData, weekIndex, weekStart, weekEnd)}
+{#snippet cardImg(kytData, weekNumber, weekStart, weekEnd)}
     <div class="rounded-xl md:rounded-2xl relative aspect-[16/9] overflow-hidden group {cardWidthClass} cursor-pointer transition-all hover:scale-105 hover:shadow-2xl border-2 border-transparent hover:border-pink-600">
         {#if kytData}
             <!-- KYT Submitted - Show Image & Data -->
@@ -212,7 +214,7 @@
                 <!-- Week Number -->
                 <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-0.5 sm:mb-1">
                     <span class="bg-pink-600 text-white text-[10px] sm:text-xs font-bold px-1.5 py-0.5 sm:px-2 rounded w-fit">
-                        Minggu {weekIndex + 1}
+                        Minggu {weekNumber}
                     </span>
                     <span class="text-white/70 text-[10px] sm:text-xs">
                         {weekStart.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })} -
@@ -249,7 +251,7 @@
                 <div class="text-center space-y-1 sm:space-y-2">
                     <div class="text-2xl sm:text-3xl md:text-4xl opacity-30">📋</div>
                     <div class="bg-gray-300 text-gray-600 text-[10px] sm:text-xs font-bold px-1.5 py-0.5 sm:px-2 rounded">
-                        Minggu {weekIndex + 1}
+                        Minggu {weekNumber}
                     </div>
                     <p class="text-[10px] sm:text-xs text-gray-500 font-medium">
                         {weekStart.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })} -
@@ -313,8 +315,9 @@
                     <div class="flex flex-wrap gap-2 md:gap-3 justify-center">
                         <!-- Show 4 or 5 cards based on weeks in month -->
                         {#each weeks as week, weekIndex}
-                            {@const kytData = team.weeklyKYT[weekIndex]}
-                            {@render cardImg(kytData, weekIndex, week.start, week.end)}
+                            {@const weekNumber = week.week_number || (weekIndex + 1)}
+                            {@const kytData = team.weeklyKYT[weekNumber]}
+                            {@render cardImg(kytData, weekNumber, week.start, week.end)}
                         {/each}
                     </div>
                 </Card.Content>
