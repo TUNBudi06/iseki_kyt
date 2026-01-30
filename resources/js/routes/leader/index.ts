@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../wayfinder'
 /**
 * @see \App\Http\Controllers\LeaderController::dashboard
- * @see app/Http/Controllers/LeaderController.php:19
+ * @see app/Http/Controllers/LeaderController.php:20
  * @route '/leader/dashboard'
  */
 export const dashboard = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ dashboard.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::dashboard
- * @see app/Http/Controllers/LeaderController.php:19
+ * @see app/Http/Controllers/LeaderController.php:20
  * @route '/leader/dashboard'
  */
 dashboard.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ dashboard.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\LeaderController::dashboard
- * @see app/Http/Controllers/LeaderController.php:19
+ * @see app/Http/Controllers/LeaderController.php:20
  * @route '/leader/dashboard'
  */
 dashboard.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -34,7 +34,7 @@ dashboard.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\LeaderController::dashboard
- * @see app/Http/Controllers/LeaderController.php:19
+ * @see app/Http/Controllers/LeaderController.php:20
  * @route '/leader/dashboard'
  */
 dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({

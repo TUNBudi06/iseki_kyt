@@ -23,29 +23,61 @@ class autoGenerateFridayDateAfterThursdayByBindMiddleware
         $kytDate = KytDateList::latest()->first();
 
         if (!$kytDate) {
-            $friday = now()->next(CarbonInterface::FRIDAY);
+            // If no data exists, generate current month
+            $this->generateMonthFridays(now()->month, now()->year);
         } else {
             $base = Carbon::parse($kytDate->kyt_date);
 
+            // Check if we're 2 days before the last Friday (Wednesday)
             if ($base->copy()->subDays(2)->timestamp > now()->timestamp) {
                 return $next($request);
             }
 
-            $friday = $base->copy()->next(CarbonInterface::FRIDAY);
+            // Generate next month based on CURRENT date, not last Friday
+            $currentMonth = now()->month;
+            $currentYear = now()->year;
 
-            if ($friday->month !== $base->month) {
-                $friday = $base->copy()->addMonthNoOverflow()->startOfMonth()->next(CarbonInterface::FRIDAY);
+            // Check if CURRENT month already has data
+            $currentMonthHasData = KytDateList::whereYear('kyt_date', $currentYear)
+                ->whereMonth('kyt_date', $currentMonth)
+                ->exists();
+
+            if (!$currentMonthHasData) {
+                $this->generateMonthFridays($currentMonth, $currentYear);
+            }
+            // Now check next month
+            $nextMonth = now()->addDays(6)->month;
+            $nextYear = now()->addDays(6)->year;
+
+            $nextMonthHasData = KytDateList::whereYear('kyt_date', $nextYear)
+                ->whereMonth('kyt_date', $nextMonth)
+                ->exists();
+
+            if (!$nextMonthHasData) {
+                $this->generateMonthFridays($nextMonth, $nextYear);
             }
         }
 
-        $mYDateNow = $this->getHowManyFridayInMonth($friday->month, $friday->year);
-        $weekIndex = array_search($friday->format('Y-m-d'), array_column($mYDateNow, 'date_end'), true);
-
-        $newKytDate = new KytDateList();
-        $newKytDate->kyt_date = $friday->format('Y-m-d');
-        $newKytDate->number_of_Weeks = $weekIndex !== false ? $weekIndex + 1 : 1;
-        $newKytDate->save();
-
         return $next($request);
+    }
+
+    /**
+     * Generate all Fridays for a given month
+     */
+    protected function generateMonthFridays(int $month, int $year): void
+    {
+        $allFridays = $this->getHowManyFridayInMonth($month, $year);
+
+        foreach ($allFridays as $index => $friday) {
+            // Check if this Friday already exists
+            $exists = KytDateList::where('kyt_date', $friday['date_end'])->exists();
+
+            if (!$exists) {
+                KytDateList::create([
+                    'kyt_date' => $friday['date_end'],
+                    'number_of_Weeks' => $index + 1,
+                ]);
+            }
+        }
     }
 }

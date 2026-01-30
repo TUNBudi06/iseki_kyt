@@ -195,7 +195,7 @@
 </script>
 
 {#snippet cardImg(kytData, weekIndex, weekStart, weekEnd)}
-    <div class="rounded-xl md:rounded-2xl relative aspect-4/3 overflow-hidden group {cardWidthClass} cursor-pointer transition-all hover:scale-105 hover:shadow-2xl border-2 border-transparent hover:border-pink-600">
+    <div class="rounded-xl md:rounded-2xl relative aspect-[16/9] overflow-hidden group {cardWidthClass} cursor-pointer transition-all hover:scale-105 hover:shadow-2xl border-2 border-transparent hover:border-pink-600">
         {#if kytData}
             <!-- KYT Submitted - Show Image & Data -->
             <img

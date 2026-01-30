@@ -54,6 +54,17 @@
         return `${start.getDate()} ${months[start.getMonth()]} - ${end.getDate()} ${months[end.getMonth()]}`;
     };
 
+    const getMonthName = (date: Date) => {
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        return months[date.getMonth()];
+    };
+
+    // Check if week belongs to next month
+    const isNextMonth = (week: any, currentMonthName: string) => {
+        const weekMonth = getMonthName(week.start);
+        return weekMonth !== currentMonthName;
+    };
+
     // Stats calculations
     const totalKytThisMonth = $derived(weeks.length);
     const kytSubmitted = $derived(team?.weeklyKYT?.filter((kyt: any) => kyt !== null && kyt.image_url).length || 0);
@@ -126,7 +137,8 @@
                         <!-- Show cards based on weeks in month -->
                         {#each weeks as week, weekIndex}
                             {@const kytData = team.weeklyKYT[weekIndex]}
-                            <div class="group relative aspect-[3/4] rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer">
+                            {@const isNextMonthWeek = isNextMonth(week, currentMonthName)}
+                            <div class="group relative aspect-[16/9] rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer {isNextMonthWeek ? 'ring-2 ring-blue-400' : ''}">
                                 {#if kytData && kytData.image_url}
                                     <!-- KYT Submitted - Show Image & Data -->
                                     <img
@@ -137,6 +149,13 @@
 
                                     <!-- Gradient Overlay -->
                                     <div class="absolute inset-0 bg-linear-to-t from-black/95 via-black/50 to-black/20"></div>
+
+                                    <!-- Next Month Badge -->
+                                    {#if isNextMonthWeek}
+                                        <div class="absolute top-2 right-2 bg-blue-500 text-white text-[10px] px-2 py-1 rounded font-bold">
+                                            {getMonthName(week.start)}
+                                        </div>
+                                    {/if}
 
                                     <!-- KYT Info - Bottom -->
                                     <div class="absolute pb-2 px-2 sm:pb-3 sm:px-3 md:pb-4 md:px-4 inset-x-0 bottom-0 flex flex-col justify-end space-y-1 sm:space-y-2">
@@ -163,6 +182,13 @@
                                 {:else}
                                     <!-- Week Not Submitted - Empty State -->
                                     <div class="w-full h-full bg-linear-to-br from-gray-100 to-gray-200 flex flex-col items-center justify-center p-2 sm:p-3 md:p-4">
+                                        <!-- Next Month Badge -->
+                                        {#if isNextMonthWeek}
+                                            <div class="absolute top-2 right-2 bg-blue-500 text-white text-[10px] px-2 py-1 rounded font-bold">
+                                                {getMonthName(week.start)}
+                                            </div>
+                                        {/if}
+
                                         <div class="text-center space-y-1 sm:space-y-2">
                                             <div class="text-2xl sm:text-3xl md:text-4xl opacity-30">📋</div>
                                             <div class="text-xs sm:text-sm font-semibold text-gray-500">Minggu {weekIndex + 1}</div>

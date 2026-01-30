@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Seed KYT Date Lists first
+//        $this->call(KytDateListSeeder::class);
 
         User::insert([
             [

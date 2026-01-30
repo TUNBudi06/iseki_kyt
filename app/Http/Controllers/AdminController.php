@@ -16,10 +16,41 @@ class AdminController extends Controller
     //
     public function index()
     {
+        // Get current month and next month weeks from database
+        $currentMonth = now()->month;
+        $currentYear = now()->year;
+        $nextMonth = now()->addMonth()->month;
+        $nextYear = now()->addMonth()->year;
+
+        // Get all weeks from current month and next month
+        $kytDates = KytDateList::where(function($query) use ($currentMonth, $currentYear, $nextMonth, $nextYear) {
+                $query->where(function($q) use ($currentMonth, $currentYear) {
+                    $q->whereYear('kyt_date', $currentYear)
+                      ->whereMonth('kyt_date', $currentMonth);
+                })
+                ->orWhere(function($q) use ($nextMonth, $nextYear) {
+                    $q->whereYear('kyt_date', $nextYear)
+                      ->whereMonth('kyt_date', $nextMonth);
+                });
+            })
+            ->orderBy('kyt_date', 'asc')
+            ->get();
+
+        // Transform to include date_start and date_end
+        $weeksInCurrentMonth = $kytDates->map(function($kytDate) {
+            $friday = \Carbon\Carbon::parse($kytDate->kyt_date);
+            return [
+                'id' => $kytDate->id,
+                'date_start' => $friday->copy()->subDays(4)->format('Y-m-d'), // Monday
+                'date_end' => $friday->format('Y-m-d'), // Friday
+                'kyt_date' => $kytDate->kyt_date,
+            ];
+        })->toArray();
+
         return Inertia::render('Admin/Dashboard', [
-            'weeksInCurrentMonth' => $this->getHowManyFridayInMonth(date('m'), date('Y')),
-            'currentMonthName' => $this->monthNumberToName(date('m')),
-            'currentYear' => date('Y'),
+            'weeksInCurrentMonth' => $weeksInCurrentMonth,
+            'currentMonthName' => now()->format('F'),
+            'currentYear' => now()->year,
         ]);
     }
 
