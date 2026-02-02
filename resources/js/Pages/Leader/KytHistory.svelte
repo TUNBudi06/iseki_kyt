@@ -110,7 +110,7 @@
                                             <Button variant="outline" size="sm">Edit</Button>
                                         {:else}
                                             <a use:InertiaLink href={routeUrl(leader.kytadd({IdKytDate: row.id}))}>
-                                                <Button variant="primary" size="sm">Tambahkan KYT</Button>
+                                                <Button size="sm">Tambahkan KYT</Button>
                                             </a>
                                         {/if}
                                     </Table.Cell>

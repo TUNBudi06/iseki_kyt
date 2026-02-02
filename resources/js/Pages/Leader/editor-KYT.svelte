@@ -403,42 +403,42 @@
                                     hover:file:bg-primary/90 file:cursor-pointer"
                             />
                         </div>
-                    <Button variant="outline" onclick={addHighlight}>
-                        🟡 Highlight
-                    </Button>
-                    <Button variant="outline" onclick={addCircle}>
-                        🔴 Circle
-                    </Button>
-                    <Button variant="outline" onclick={removeSelected}>
-                        🗑️ Remove Selected
-                    </Button>
-                    <Button variant="outline" onclick={bringForward}>
-                        🔼 Bring Forward
-                    </Button>
-                    <Button variant="outline" onclick={sendBackward}>
-                        🔽 Send Backward
-                    </Button>
-                    <Button variant="outline" onclick={bringToFront}>
-                        ⏫ Bring To Front
-                    </Button>
-                    <Button variant="outline" onclick={sendToBack}>
-                        ⏬ Send To Back
-                    </Button>
-                    <Button variant="outline" onclick={startCrop}>
-                        ✂️ Crop
-                    </Button>
-                    <Button variant="outline" onclick={applyCrop}>
-                        ✅ Apply Crop
-                    </Button>
-                    <Button variant="outline" onclick={undo}>
-                        ↩️ Undo
-                    </Button>
-                    <Button variant="outline" onclick={redo}>
-                        ↪️ Redo
-                    </Button>
-                    <Button onclick={exportImage}>
-                        💾 Save
-                    </Button>
+                        <Button variant="outline" onclick={addHighlight}>
+                            🟡 Highlight
+                        </Button>
+                        <Button variant="outline" onclick={addCircle}>
+                            🔴 Circle
+                        </Button>
+                        <Button variant="outline" onclick={removeSelected}>
+                            🗑️ Remove Selected
+                        </Button>
+                        <Button variant="outline" onclick={bringForward}>
+                            🔼 Bring Forward
+                        </Button>
+                        <Button variant="outline" onclick={sendBackward}>
+                            🔽 Send Backward
+                        </Button>
+                        <Button variant="outline" onclick={bringToFront}>
+                            ⏫ Bring To Front
+                        </Button>
+                        <Button variant="outline" onclick={sendToBack}>
+                            ⏬ Send To Back
+                        </Button>
+                        <Button variant="outline" onclick={startCrop}>
+                            ✂️ Crop
+                        </Button>
+                        <Button variant="outline" onclick={applyCrop}>
+                            ✅ Apply Crop
+                        </Button>
+                        <Button variant="outline" onclick={undo}>
+                            ↩️ Undo
+                        </Button>
+                        <Button variant="outline" onclick={redo}>
+                            ↪️ Redo
+                        </Button>
+                        <Button onclick={exportImage}>
+                            💾 Save
+                        </Button>
                     </div>
                 </div>
             </Card.Content>
