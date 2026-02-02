@@ -1,11 +1,38 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-    import { Canvas, FabricImage, Rect, Circle } from "fabric";
+    import {onMount} from "svelte";
+    import {Canvas, Circle, FabricImage, Rect} from "fabric";
     import LeaderLayout from "$/Layouts/LeaderLayout.svelte";
-    import { Button } from "$shadcn/components/ui/button";
-    import * as Card from "$shadcn/components/ui/card";
+    import {Button} from "$shadcn/components/ui/button";
+    import {useForm} from "@inertiajs/svelte";
     import KytPreview from "$/Components/KytPreview.svelte";
-    let {bgKyt,kytDate,kytTeam} = $props();
+    import {kytstore} from "$routes/leader";
+    import {routeUrl} from "@tunbudi06/inertia-route-helper";
+
+    let {bgKyt,kytDate,kytTeam,kytTeamId,kytDateId} = $props();
+
+    const form  = useForm({
+        foto_path: null as File | null,
+        result_path: null as File | null,
+        penanganan: '',
+        potensi: '',
+        user_name: '',
+        title: '',
+        team_id: 0,
+        kyt_date_id: 0
+    });
+
+    $effect(()=>{
+        $form.kyt_date_id = kytDateId;
+        $form.team_id = kytTeamId;
+    })
+
+    // Sync local state with form
+    $effect(() => {
+        $form.title = kytTitle;
+        $form.user_name = kytPic;
+        $form.potensi = kytPotensi;
+        $form.penanganan = kytPenanganan;
+    })
 
     // Use plain Svelte variables and explicit nullable types.
     let canvasEl = $state<HTMLCanvasElement>();
@@ -15,7 +42,7 @@
     let cropRect = $state<Rect | null>(null);
     let savedImageUrl = $state<string>("");
     let kytTitle = $state<string>("");
-    let kytPic = $state<string>("Agus Setiawan");
+    let kytPic = $state<string>("");
     let kytPotensi = $state<string>("");
     let kytPenanganan = $state<string>("");
     const maxChartTitleLength = 95;
@@ -230,22 +257,26 @@
         cropRect = null;
     }
 
-    function exportImage() {
+    async function exportImage() {
         if (!canvas) return;
-        // Add required multiplier parameter for Fabric v7
-        const url = canvas.toDataURL({
+
+        // Convert canvas to Blob
+        const blob = await canvas.toBlob({
             format: "png",
             multiplier: 1
         });
 
-        // Store the image URL for preview
-        savedImageUrl = url;
+        if (!blob) return;
 
-        // // Download the image
-        // const a = document.createElement("a");
-        // a.href = url;
-        // a.download = "kyt-edited.png";
-        // a.click();
+        // Create File object from Blob with timestamp
+        const timestamp = new Date().getTime();
+        // Set file to form
+        $form.foto_path = new File([blob], `kyt-edited-${timestamp}.png`, {
+            type: "image/png"
+        });
+
+        // Create URL for preview
+        savedImageUrl = URL.createObjectURL(blob);
     }
 
     function handleFileChange(e: Event) {
@@ -304,6 +335,18 @@
             saveState();
         }
      }
+
+    function submitKyt() {
+        $form.post(routeUrl(kytstore()), {
+            preserveScroll: true,
+            onSuccess: (e) => {
+                console.log(e)
+            },
+            onError: (errors) => {
+                console.error('Error submitting KYT:', errors);
+            }
+        });
+    }
 </script>
 
 <LeaderLayout>
@@ -388,72 +431,104 @@
                         ></textarea>
                     </div>
 
-                    <div class="flex flex-wrap gap-2">
-                        <div class="relative">
-                            <input
-                                type="file"
-                                accept="image/*"
-                                multiple
-                                onchange={handleFileChange}
-                                class="block w-full text-sm text-muted-foreground
-                                    file:mr-4 file:py-2 file:px-4
-                                    file:rounded-md file:border-0
-                                    file:text-sm file:font-medium
-                                    file:bg-primary file:text-primary-foreground
-                                    hover:file:bg-primary/90 file:cursor-pointer"
-                            />
-                        </div>
-                        <Button variant="outline" onclick={addHighlight}>
-                            🟡 Highlight
-                        </Button>
-                        <Button variant="outline" onclick={addCircle}>
-                            🔴 Circle
-                        </Button>
-                        <Button variant="outline" onclick={removeSelected}>
-                            🗑️ Remove Selected
-                        </Button>
-                        <Button variant="outline" onclick={bringForward}>
-                            🔼 Bring Forward
-                        </Button>
-                        <Button variant="outline" onclick={sendBackward}>
-                            🔽 Send Backward
-                        </Button>
-                        <Button variant="outline" onclick={bringToFront}>
-                            ⏫ Bring To Front
-                        </Button>
-                        <Button variant="outline" onclick={sendToBack}>
-                            ⏬ Send To Back
-                        </Button>
-                        <Button variant="outline" onclick={startCrop}>
-                            ✂️ Crop
-                        </Button>
-                        <Button variant="outline" onclick={applyCrop}>
-                            ✅ Apply Crop
-                        </Button>
-                        <Button variant="outline" onclick={undo}>
-                            ↩️ Undo
-                        </Button>
-                        <Button variant="outline" onclick={redo}>
-                            ↪️ Redo
-                        </Button>
-                        <Button onclick={exportImage}>
-                            💾 Save
-                        </Button>
+                    <div class="relative">
+                        <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onchange={handleFileChange}
+                            class="block w-full text-sm text-muted-foreground
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-md file:border-0
+                                file:text-sm file:font-medium
+                                file:bg-primary file:text-primary-foreground
+                                hover:file:bg-primary/90 file:cursor-pointer"
+                        />
                     </div>
                 </div>
             </Card.Content>
         </Card.Root>
 
-        <Card.Root>
-            <Card.Content class="p-4">
-                <div class="overflow-x-auto overflow-y-auto max-w-full p-4 bg-white md:overflow-x-hidden md:overflow-y-hidden md:p-0 md:bg-transparent">
-                    <canvas
-                        bind:this={canvasEl}
-                        class="border border-border rounded-lg w-170 h-125.5"
-                    ></canvas>
-                </div>
-            </Card.Content>
-        </Card.Root>
+        <!-- Canvas dan Toolbar - Responsive Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto] xl:grid-cols-[1fr_auto_auto] gap-6">
+            <!-- Canvas Editor -->
+            <Card.Root>
+                <Card.Content class="p-4">
+                    <div class="overflow-x-auto overflow-y-auto max-w-full p-4 bg-white md:overflow-x-hidden md:overflow-y-hidden md:p-0 md:bg-transparent">
+                        <canvas
+                            bind:this={canvasEl}
+                            class="border border-border rounded-lg w-170 h-125.5"
+                        ></canvas>
+                    </div>
+                </Card.Content>
+            </Card.Root>
+
+            <!-- Toolbar Buttons (Drawing & Arranging) - Di samping canvas pada lg screen -->
+            <Card.Root class="lg:w-64">
+                <Card.Header>
+                    <Card.Title class="text-base">Drawing Tools</Card.Title>
+                    <Card.Description class="text-xs">Tools untuk menggambar dan mengatur</Card.Description>
+                </Card.Header>
+                <Card.Content>
+                    <div class="flex flex-col gap-2">
+                        <Button variant="outline" onclick={addHighlight} class="justify-start">
+                            🟡 Highlight
+                        </Button>
+                        <Button variant="outline" onclick={addCircle} class="justify-start">
+                            🔴 Circle
+                        </Button>
+                        <Button variant="outline" onclick={removeSelected} class="justify-start">
+                            🗑️ Remove Selected
+                        </Button>
+
+                        <div class="border-t border-border my-2"></div>
+
+                        <Button variant="outline" onclick={bringToFront} class="justify-start">
+                            ⏫ Bring To Front
+                        </Button>
+                        <Button variant="outline" onclick={bringForward} class="justify-start">
+                            🔼 Bring Forward
+                        </Button>
+                        <Button variant="outline" onclick={sendBackward} class="justify-start">
+                            🔽 Send Backward
+                        </Button>
+                        <Button variant="outline" onclick={sendToBack} class="justify-start">
+                            ⏬ Send To Back
+                        </Button>
+
+                        <div class="border-t border-border my-2"></div>
+
+                        <Button variant="outline" onclick={startCrop} class="justify-start">
+                            ✂️ Crop
+                        </Button>
+                        <Button variant="outline" onclick={applyCrop} class="justify-start">
+                            ✅ Apply Crop
+                        </Button>
+                    </div>
+                </Card.Content>
+            </Card.Root>
+
+            <!-- Action Buttons (Undo/Redo/Save) - Di bawah canvas pada lg, di samping pada xl -->
+            <Card.Root class="lg:col-span-2 xl:col-span-1 xl:w-64">
+                <Card.Header>
+                    <Card.Title class="text-base">Actions</Card.Title>
+                    <Card.Description class="text-xs">Undo, Redo, dan Simpan</Card.Description>
+                </Card.Header>
+                <Card.Content>
+                    <div class="flex flex-row lg:flex-row xl:flex-col gap-2">
+                        <Button variant="outline" onclick={undo} class="justify-start flex-1">
+                            ↩️ Undo
+                        </Button>
+                        <Button variant="outline" onclick={redo} class="justify-start flex-1">
+                            ↪️ Redo
+                        </Button>
+                        <Button onclick={exportImage} class="justify-start flex-1">
+                            💾 Save
+                        </Button>
+                    </div>
+                </Card.Content>
+            </Card.Root>
+        </div>
 
         <Card.Root>
             <Card.Header>
@@ -479,6 +554,17 @@
                         {kytPenanganan}
                     />
                 </div>
+                {#if savedImageUrl}
+                    <div class="mt-4">
+                        <Button
+                            onclick={submitKyt}
+                            class="w-full"
+                            disabled={$form.processing}
+                        >
+                            {$form.processing ? 'Menyimpan...' : 'Simpan KYT'}
+                        </Button>
+                    </div>
+                {/if}
             </Card.Content>
         </Card.Root>
     </div>

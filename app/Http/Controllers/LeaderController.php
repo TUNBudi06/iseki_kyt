@@ -98,9 +98,28 @@ class LeaderController extends Controller
         $kytTeam = TeamKYT::where('user_id', auth()->user()->id)->first();
 
         return Inertia::render('Leader/editor-KYT', [
-            'bgKyt'=>asset('assets/img/bg-kyt.jpg'),
-            'kytDate'=>$kytDateList->kyt_date,
-            'kytTeam'=>$kytTeam->team_name
+            'bgKyt' => asset('assets/img/bg-kyt.jpg'),
+            'kytDate' => $kytDateList->kyt_date,
+            'kytTeam' => $kytTeam->team_name,
+            'kytDateId' => $kytDateList->id,
+            'kytTeamId' => $kytTeam->id,
         ]);
+    }
+
+    public function storeKyt(Request $request)
+    {
+        $validated = $request->validate([
+            'foto_path' => 'required|image|max:2048',
+            'title' => 'required|string|max:255',
+            'user_name' => 'required|string|max:255',
+            'potensi' => 'required|string',
+            'penanganan' => 'required|string',
+            'kyt_date_id' => 'required|exists:kyt_date_lists,id',
+            'team_id' => 'required|exists:team_k_y_t_s,id',
+        ]);
+
+
+
+        return $validated;
     }
 }

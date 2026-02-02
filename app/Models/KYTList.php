@@ -15,8 +15,8 @@ class KYTList extends Model
         'title',
         'potensi',
         'penanganan',
-        'foto',
-        'result',
+        'foto-path',
+        'result-path',
     ];
 
     public function kytDateList()

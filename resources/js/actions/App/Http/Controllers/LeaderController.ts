@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\LeaderController::dashboard
  * @see app/Http/Controllers/LeaderController.php:20
@@ -43,69 +43,69 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\LeaderController::kyt
+* @see \App\Http\Controllers\LeaderController::kytHistory
  * @see app/Http/Controllers/LeaderController.php:69
  * @route '/leader/kyt'
  */
-export const kyt = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: kyt.url(options),
+export const kytHistory = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: kytHistory.url(options),
     method: 'get',
 })
 
-kyt.definition = {
+kytHistory.definition = {
     methods: ["get","head"],
     url: '/leader/kyt',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \App\Http\Controllers\LeaderController::kyt
+* @see \App\Http\Controllers\LeaderController::kytHistory
  * @see app/Http/Controllers/LeaderController.php:69
  * @route '/leader/kyt'
  */
-kyt.url = (options?: RouteQueryOptions) => {
-    return kyt.definition.url + queryParams(options)
+kytHistory.url = (options?: RouteQueryOptions) => {
+    return kytHistory.definition.url + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\LeaderController::kyt
+* @see \App\Http\Controllers\LeaderController::kytHistory
  * @see app/Http/Controllers/LeaderController.php:69
  * @route '/leader/kyt'
  */
-kyt.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: kyt.url(options),
+kytHistory.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: kytHistory.url(options),
     method: 'get',
 })
 /**
-* @see \App\Http\Controllers\LeaderController::kyt
+* @see \App\Http\Controllers\LeaderController::kytHistory
  * @see app/Http/Controllers/LeaderController.php:69
  * @route '/leader/kyt'
  */
-kyt.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: kyt.url(options),
+kytHistory.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: kytHistory.url(options),
     method: 'head',
 })
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytadd
+* @see \App\Http\Controllers\LeaderController::addKyt
  * @see app/Http/Controllers/LeaderController.php:94
  * @route '/leader/kyt/add/{IdKytDate}'
  */
-export const kytadd = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: kytadd.url(args, options),
+export const addKyt = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: addKyt.url(args, options),
     method: 'get',
 })
 
-kytadd.definition = {
+addKyt.definition = {
     methods: ["get","head"],
     url: '/leader/kyt/add/{IdKytDate}',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytadd
+* @see \App\Http\Controllers\LeaderController::addKyt
  * @see app/Http/Controllers/LeaderController.php:94
  * @route '/leader/kyt/add/{IdKytDate}'
  */
-kytadd.url = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions) => {
+addKyt.url = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { IdKytDate: args }
     }
@@ -123,68 +123,63 @@ kytadd.url = (args: { IdKytDate: string | number } | [IdKytDate: string | number
                         IdKytDate: args.IdKytDate,
                 }
 
-    return kytadd.definition.url
+    return addKyt.definition.url
             .replace('{IdKytDate}', parsedArgs.IdKytDate.toString())
             .replace(/\/+$/, '') + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytadd
+* @see \App\Http\Controllers\LeaderController::addKyt
  * @see app/Http/Controllers/LeaderController.php:94
  * @route '/leader/kyt/add/{IdKytDate}'
  */
-kytadd.get = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: kytadd.url(args, options),
+addKyt.get = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: addKyt.url(args, options),
     method: 'get',
 })
 /**
-* @see \App\Http\Controllers\LeaderController::kytadd
+* @see \App\Http\Controllers\LeaderController::addKyt
  * @see app/Http/Controllers/LeaderController.php:94
  * @route '/leader/kyt/add/{IdKytDate}'
  */
-kytadd.head = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: kytadd.url(args, options),
+addKyt.head = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: addKyt.url(args, options),
     method: 'head',
 })
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytstore
+* @see \App\Http\Controllers\LeaderController::storeKyt
  * @see app/Http/Controllers/LeaderController.php:109
  * @route '/leader/kyt/store'
  */
-export const kytstore = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: kytstore.url(options),
+export const storeKyt = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: storeKyt.url(options),
     method: 'post',
 })
 
-kytstore.definition = {
+storeKyt.definition = {
     methods: ["post"],
     url: '/leader/kyt/store',
 } satisfies RouteDefinition<["post"]>
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytstore
+* @see \App\Http\Controllers\LeaderController::storeKyt
  * @see app/Http/Controllers/LeaderController.php:109
  * @route '/leader/kyt/store'
  */
-kytstore.url = (options?: RouteQueryOptions) => {
-    return kytstore.definition.url + queryParams(options)
+storeKyt.url = (options?: RouteQueryOptions) => {
+    return storeKyt.definition.url + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytstore
+* @see \App\Http\Controllers\LeaderController::storeKyt
  * @see app/Http/Controllers/LeaderController.php:109
  * @route '/leader/kyt/store'
  */
-kytstore.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: kytstore.url(options),
+storeKyt.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: storeKyt.url(options),
     method: 'post',
 })
-const leader = {
-    dashboard: Object.assign(dashboard, dashboard),
-kyt: Object.assign(kyt, kyt),
-kytadd: Object.assign(kytadd, kytadd),
-kytstore: Object.assign(kytstore, kytstore),
-}
+const LeaderController = { dashboard, kytHistory, addKyt, storeKyt }
 
-export default leader
+export default LeaderController

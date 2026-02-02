@@ -8,4 +8,5 @@ Route::get('/dashboard', [LeaderController::class, 'dashboard'])->name('leader.d
 Route::prefix('kyt')->group(function () {
     Route::get('/', [LeaderController::class, 'kytHistory'])->name('leader.kyt');
     Route::get('/add/{IdKytDate}', [LeaderController::class, 'addKyt'])->name('leader.kytadd');
+    Route::post('/store', [LeaderController::class, 'storeKyt'])->name('leader.kytstore');
 });
