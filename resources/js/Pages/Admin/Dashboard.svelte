@@ -197,7 +197,7 @@
 </script>
 
 {#snippet cardImg(kytData, weekNumber, weekStart, weekEnd)}
-    <div class="rounded-xl md:rounded-2xl relative aspect-[16/9] overflow-hidden group {cardWidthClass} cursor-pointer transition-all hover:scale-105 hover:shadow-2xl border-2 border-transparent hover:border-pink-600">
+    <div class="rounded-xl md:rounded-2xl relative aspect-[4/3] overflow-hidden group {cardWidthClass} cursor-pointer transition-all hover:scale-105 hover:shadow-2xl border-2 border-transparent hover:border-pink-600">
         {#if kytData}
             <!-- KYT Submitted - Show Image & Data -->
             <img
@@ -210,33 +210,33 @@
             <div class="absolute inset-0 bg-linear-to-t from-black/95 via-black/50 to-black/20"></div>
 
             <!-- KYT Info - Bottom -->
-            <div class="absolute pb-2 px-2 sm:pb-3 sm:px-3 md:pb-4 md:px-4 inset-x-0 bottom-0 flex flex-col justify-end space-y-1 sm:space-y-2">
+            <div class="absolute pb-3 px-3 sm:pb-4 sm:px-4 md:pb-5 md:px-5 inset-x-0 bottom-0 flex flex-col justify-end space-y-2 sm:space-y-3">
                 <!-- Week Number -->
-                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-0.5 sm:mb-1">
-                    <span class="bg-pink-600 text-white text-[10px] sm:text-xs font-bold px-1.5 py-0.5 sm:px-2 rounded w-fit">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
+                    <span class="bg-pink-600 text-white text-xs sm:text-sm md:text-base font-bold px-2 py-1 sm:px-2.5 sm:py-1.5 rounded w-fit">
                         Minggu {weekNumber}
                     </span>
-                    <span class="text-white/70 text-[10px] sm:text-xs">
+                    <span class="text-white/70 text-xs sm:text-sm">
                         {weekStart.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })} -
                         {weekEnd.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
                     </span>
                 </div>
 
                 <!-- KYT Title -->
-                <h3 class="text-white font-bold text-xs sm:text-sm md:text-base leading-tight line-clamp-2">
+                <h3 class="text-white font-bold text-sm sm:text-base md:text-lg leading-tight line-clamp-2">
                     {kytData.title}
                 </h3>
 
                 <!-- KYT Description -->
-                <p class="text-white/80 text-[10px] sm:text-xs leading-tight line-clamp-1 sm:line-clamp-2">
+                <p class="text-white/80 text-xs sm:text-sm md:text-base leading-tight line-clamp-2">
                     {kytData.desc}
                 </p>
 
                 <!-- Divider -->
-                <div class="border-t border-white/20 my-0.5 sm:my-1"></div>
+                <div class="border-t border-white/20 my-1 sm:my-2"></div>
 
                 <!-- Submitted By -->
-                <div class="flex items-center text-[10px] sm:text-xs">
+                <div class="flex items-center text-xs sm:text-sm">
                     <span class="text-white/70 truncate">
                         📝 {kytData.submittedBy}
                     </span>
@@ -247,19 +247,19 @@
             <div class="absolute inset-0 bg-pink-600/0 group-hover:bg-pink-600/10 transition-colors duration-300"></div>
         {:else}
             <!-- Week Not Submitted - Empty State -->
-            <div class="w-full h-full bg-linear-to-br from-gray-100 to-gray-200 flex flex-col items-center justify-center p-2 sm:p-3 md:p-4">
-                <div class="text-center space-y-1 sm:space-y-2">
-                    <div class="text-2xl sm:text-3xl md:text-4xl opacity-30">📋</div>
-                    <div class="bg-gray-300 text-gray-600 text-[10px] sm:text-xs font-bold px-1.5 py-0.5 sm:px-2 rounded">
+            <div class="w-full h-full bg-linear-to-br from-gray-100 to-gray-200 flex flex-col items-center justify-center p-3 sm:p-4 md:p-5">
+                <div class="text-center space-y-2 sm:space-y-3">
+                    <div class="text-3xl sm:text-4xl md:text-5xl opacity-30">📋</div>
+                    <div class="bg-gray-300 text-gray-600 text-xs sm:text-sm md:text-base font-bold px-2 py-1 sm:px-2.5 sm:py-1.5 rounded">
                         Minggu {weekNumber}
                     </div>
-                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium">
+                    <p class="text-xs sm:text-sm text-gray-500 font-medium">
                         {weekStart.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })} -
                         {weekEnd.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
                     </p>
-                    <div class="pt-1 sm:pt-2">
-                        <p class="text-[10px] sm:text-xs font-semibold text-gray-600">Belum Submit</p>
-                        <p class="text-[10px] sm:text-xs text-gray-500 hidden sm:block">KYT minggu ini</p>
+                    <div class="pt-2 sm:pt-3">
+                        <p class="text-xs sm:text-sm font-semibold text-gray-600">Belum Submit</p>
+                        <p class="text-xs sm:text-sm text-gray-500 hidden sm:block">KYT minggu ini</p>
                     </div>
                 </div>
             </div>

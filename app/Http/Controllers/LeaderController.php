@@ -24,7 +24,7 @@ class LeaderController extends Controller
         // Get the team for this leader
         $team = TeamKYT::where('user_id', $user->id)->first();
 
-        if (!$team) {
+        if (! $team) {
             return Inertia::render('Leader/Dashboard', [
                 'team' => null,
                 'weeksInCurrentMonth' => [],
@@ -63,6 +63,44 @@ class LeaderController extends Controller
             'weeksInCurrentMonth' => $weeksInCurrentMonth,
             'currentYear' => now()->year,
             'currentMonthName' => now()->format('F'),
+        ]);
+    }
+
+    public function kytHistory(): Response
+    {
+        $user = auth()->user();
+
+        // Get the team for this leader
+        $team = TeamKYT::where('user_id', $user->id)->first();
+
+        // Get all date lists with KYT entries filtered by team
+        $dateLists = KytDateList::with(['kytLists' => function ($query) use ($team) {
+            if ($team) {
+                $query->where('team_k_y_t_id', $team->id);
+            }
+        }])
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return Inertia::render('Leader/KytHistory', [
+            'kytListDates' => $dateLists,
+            'team' => $team ? [
+                'id' => $team->id,
+                'team_name' => $team->team_name,
+            ] : null,
+        ]);
+    }
+
+    public function addKyt(string $IdKytDate)
+    {
+        $kytDateList = KytDateList::find($IdKytDate);
+
+        $kytTeam = TeamKYT::where('user_id', auth()->user()->id)->first();
+
+        return Inertia::render('Leader/editor-KYT', [
+            'bgKyt'=>asset('assets/img/bg-kyt.jpg'),
+            'kytDate'=>$kytDateList->kyt_date,
+            'kytTeam'=>$kytTeam->team_name
         ]);
     }
 }

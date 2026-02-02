@@ -1,10 +1,11 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { Canvas, FabricImage, Rect, Circle } from "fabric";
-    import AdminLayout from "$/Layouts/AdminLayout.svelte";
-    import { Button } from "$shadcn/components/ui/button/index.js";
-    import * as Card from "$shadcn/components/ui/card/index.js";
-    let {bgKyt} = $props();
+    import LeaderLayout from "$/Layouts/LeaderLayout.svelte";
+    import { Button } from "$shadcn/components/ui/button";
+    import * as Card from "$shadcn/components/ui/card";
+    import KytPreview from "$/Components/KytPreview.svelte";
+    let {bgKyt,kytDate,kytTeam} = $props();
 
     // Use plain Svelte variables and explicit nullable types.
     let canvasEl = $state<HTMLCanvasElement>();
@@ -13,6 +14,15 @@
     let redoStack = $state<string[]>([]);
     let cropRect = $state<Rect | null>(null);
     let savedImageUrl = $state<string>("");
+    let kytTitle = $state<string>("");
+    let kytPic = $state<string>("Agus Setiawan");
+    let kytPotensi = $state<string>("");
+    let kytPenanganan = $state<string>("");
+    const maxChartTitleLength = 95;
+    const maxTeamLength = 26;
+    const maxPicLength = 100;
+    const maxKeteranganLength = 174;
+    const maxPenangananLength = 180;
 
     function saveState() {
         if (!canvas) return;
@@ -296,34 +306,103 @@
      }
 </script>
 
-<AdminLayout>
+<LeaderLayout>
     <div class="space-y-6">
         <div>
-            <h1 class="text-3xl font-bold tracking-tight">Image Editor</h1>
-            <p class="text-muted-foreground mt-1">Edit and annotate your images</p>
+            <h1 class="text-3xl font-bold tracking-tight">Editor KYT</h1>
+            <p class="text-muted-foreground mt-1">Edit dan anotasi gambar Kiken Yochi Training</p>
         </div>
 
         <Card.Root>
             <Card.Header>
                 <Card.Title>Toolbar</Card.Title>
-                <Card.Description>Upload an image and use the tools below to edit</Card.Description>
+                <Card.Description>Upload gambar dan gunakan alat di bawah ini untuk mengedit</Card.Description>
             </Card.Header>
             <Card.Content>
-                <div class="flex flex-wrap gap-2">
-                    <div class="relative">
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-2">
+                        <label for="kyt-title" class="text-sm font-medium">
+                            Judul KYT
+                            <span class="text-xs text-muted-foreground ml-2">
+                                ({kytTitle.length}/{maxChartTitleLength})
+                            </span>
+                        </label>
                         <input
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onchange={handleFileChange}
-                            class="block w-full text-sm text-muted-foreground
-                                file:mr-4 file:py-2 file:px-4
-                                file:rounded-md file:border-0
-                                file:text-sm file:font-medium
-                                file:bg-primary file:text-primary-foreground
-                                hover:file:bg-primary/90 file:cursor-pointer"
+                            id="kyt-title"
+                            type="text"
+                            bind:value={kytTitle}
+                            maxlength={maxChartTitleLength}
+                            placeholder="Masukkan judul KYT..."
+                            class="px-4 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                         />
                     </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="kyt-pic" class="text-sm font-medium">
+                            Disampaikan Oleh
+                            <span class="text-xs text-muted-foreground ml-2">
+                                ({kytPic.length}/{maxPicLength})
+                            </span>
+                        </label>
+                        <input
+                            id="kyt-pic"
+                            type="text"
+                            bind:value={kytPic}
+                            maxlength={maxPicLength}
+                            placeholder="Nama penanggung jawab..."
+                            class="px-4 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                        />
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="kyt-potensi" class="text-sm font-medium">
+                            Potensi Bahaya
+                            <span class="text-xs text-muted-foreground ml-2">
+                                ({kytPotensi.length}/{maxKeteranganLength})
+                            </span>
+                        </label>
+                        <textarea
+                            id="kyt-potensi"
+                            bind:value={kytPotensi}
+                            maxlength={maxKeteranganLength}
+                            placeholder="Jelaskan potensi bahaya..."
+                            rows="4"
+                            class="px-4 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none"
+                        ></textarea>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <label for="kyt-penanganan" class="text-sm font-medium">
+                            Penanganan
+                            <span class="text-xs text-muted-foreground ml-2">
+                                ({kytPenanganan.length}/{maxPenangananLength})
+                            </span>
+                        </label>
+                        <textarea
+                            id="kyt-penanganan"
+                            bind:value={kytPenanganan}
+                            maxlength={maxPenangananLength}
+                            placeholder="Jelaskan cara penanganan..."
+                            rows="4"
+                            class="px-4 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none"
+                        ></textarea>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2">
+                        <div class="relative">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onchange={handleFileChange}
+                                class="block w-full text-sm text-muted-foreground
+                                    file:mr-4 file:py-2 file:px-4
+                                    file:rounded-md file:border-0
+                                    file:text-sm file:font-medium
+                                    file:bg-primary file:text-primary-foreground
+                                    hover:file:bg-primary/90 file:cursor-pointer"
+                            />
+                        </div>
                     <Button variant="outline" onclick={addHighlight}>
                         🟡 Highlight
                     </Button>
@@ -360,6 +439,7 @@
                     <Button onclick={exportImage}>
                         💾 Save
                     </Button>
+                    </div>
                 </div>
             </Card.Content>
         </Card.Root>
@@ -369,8 +449,7 @@
                 <div class="overflow-x-auto overflow-y-auto max-w-full p-4 bg-white md:overflow-x-hidden md:overflow-y-hidden md:p-0 md:bg-transparent">
                     <canvas
                         bind:this={canvasEl}
-                        class="border border-border rounded-lg"
-                        style="width: 680px; height: 454px;"
+                        class="border border-border rounded-lg w-170 h-125.5"
                     ></canvas>
                 </div>
             </Card.Content>
@@ -389,47 +468,21 @@
             </Card.Header>
             <Card.Content class="p-4">
                 <div class="overflow-x-auto">
-                    {#if savedImageUrl}
-                        <div class="relative mx-auto" style="width: 1280px; height: 720px;">
-                            <!-- Background KYT Image - PPT Size 1280x720 -->
-                            <img
-                                src={bgKyt}
-                                alt="KYT Background"
-                                style="width: 1280px; height: 720px; object-fit: cover;"
-                                class="rounded-lg border border-border"
-                            />
-                            <!-- Overlay Saved Image - Positioned to match PPT layout (offsetX calculation from controller) -->
-                            <div class="absolute" style="left: 50px; top: 133px; width: 680px; height: 454px;">
-                                <img
-                                    src={savedImageUrl}
-                                    alt="Hasil editing KYT"
-                                    class="rounded shadow-lg object-contain"
-                                />
-                            </div>
-                        </div>
-                    {:else}
-                        <div class="relative mx-auto" style="width: 1280px; height: 720px;">
-                            <!-- Background KYT Image - PPT Size 1280x720 -->
-                            <img
-                                src={bgKyt}
-                                alt="KYT Background"
-                                style="width: 1280px; height: 720px; object-fit: cover;"
-                                class="rounded-lg border border-border"
-                            />
-                            <!-- Placeholder text when no image saved -->
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <div class="text-center text-muted-foreground bg-white/80 p-4 rounded-lg">
-                                    <p class="text-sm font-medium">Belum ada gambar tersimpan</p>
-                                    <p class="text-xs mt-1">Upload dan edit gambar, lalu klik Save</p>
-                                </div>
-                            </div>
-                        </div>
-                    {/if}
+                    <KytPreview
+                        {bgKyt}
+                        {kytDate}
+                        {kytTeam}
+                        {kytTitle}
+                        {savedImageUrl}
+                        {kytPic}
+                        {kytPotensi}
+                        {kytPenanganan}
+                    />
                 </div>
             </Card.Content>
         </Card.Root>
     </div>
-</AdminLayout>
+</LeaderLayout>
 
 <style>
     canvas {

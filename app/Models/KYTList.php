@@ -23,4 +23,9 @@ class KYTList extends Model
     {
         return $this->belongsTo(KytDateList::class, 'kyt_date_id', 'id');
     }
+
+    public function teamKYT()
+    {
+        return $this->belongsTo(TeamKYT::class, 'team_k_y_t_id', 'id');
+    }
 }

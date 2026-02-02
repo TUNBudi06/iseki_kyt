@@ -4,7 +4,7 @@
     import { Button } from "$shadcn/components/ui/button/index.js";
     import leader from "$/routes/leader";
     import {logout} from "$routes";
-    import {routeUrl} from "@tunbudi06/inertia-route-helper";
+    import {routeUrl,isCurrentRoute} from "@tunbudi06/inertia-route-helper";
 
     let { children } = $props();
     let mobileMenuOpen = $state(false);
@@ -12,13 +12,9 @@
 
     const navItems = [
         { name: 'Dashboard', href: routeUrl(leader.dashboard()), icon: '📊' },
-        { name: 'KYT', href: '#', icon: '📋' },
+        { name: 'KYT', href: routeUrl(leader.kyt()), icon: '📋' },
         { name: 'Settings', href: '#', icon: '⚙️' },
     ];
-
-    function isActive(href: string): boolean {
-        return window.location.href.startsWith(href);
-    }
 
     function handleLogout() {
         router.post(routeUrl(logout()));
@@ -49,7 +45,7 @@
                             <a
                                 use:inertia
                                 href={item.href}
-                                class="px-4 py-2 rounded-md text-sm font-medium transition-colors {isActive(item.href)
+                                class="px-4 py-2 rounded-md text-sm font-medium transition-colors {isCurrentRoute(item.href,true)
                                     ? 'bg-pink-500 text-white'
                                     : 'text-foreground hover:bg-pink-100 hover:text-pink-600'}"
                             >
