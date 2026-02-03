@@ -54,7 +54,10 @@ class LeaderController extends Controller
                 'status' => 'submitted',
                 'submitted_at' => $kyt->created_at,
                 'week_number' => $week['week_number'],
-            ] : null;
+                'kyt_date_id' => $week['id'], // Add kyt_date_id for linking
+            ] : [
+                'kyt_date_id' => $week['id'], // Add kyt_date_id for empty weeks too
+            ];
         }
 
         return Inertia::render('Leader/Dashboard', [

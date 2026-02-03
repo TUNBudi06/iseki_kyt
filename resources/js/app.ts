@@ -1,7 +1,7 @@
 import { createInertiaApp, type ResolvedComponent,page } from '@inertiajs/svelte';
 import { hydrate, mount } from 'svelte';
 import './bootstrap';
-import {initRouteHelper} from "@tunbudi06/inertia-route-helper";
+import {initRouteHelper} from "@tunbudi06/inertia-route-helper/init";
 
 
 
@@ -11,6 +11,7 @@ createInertiaApp({
         return pages[`./Pages/${name}.svelte`]();
     },
     setup({ el, App, props }) {
+        console.log('Inertia props:', props);
         initRouteHelper(props);
         if (el && el.dataset.serverRendered === 'true') {
             hydrate(App, { target: el, props });

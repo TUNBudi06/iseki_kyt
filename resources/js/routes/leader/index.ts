@@ -44,7 +44,7 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\LeaderController::kyt
- * @see app/Http/Controllers/LeaderController.php:73
+ * @see app/Http/Controllers/LeaderController.php:76
  * @route '/leader/kyt'
  */
 export const kyt = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -59,7 +59,7 @@ kyt.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::kyt
- * @see app/Http/Controllers/LeaderController.php:73
+ * @see app/Http/Controllers/LeaderController.php:76
  * @route '/leader/kyt'
  */
 kyt.url = (options?: RouteQueryOptions) => {
@@ -68,7 +68,7 @@ kyt.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\LeaderController::kyt
- * @see app/Http/Controllers/LeaderController.php:73
+ * @see app/Http/Controllers/LeaderController.php:76
  * @route '/leader/kyt'
  */
 kyt.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -77,7 +77,7 @@ kyt.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\LeaderController::kyt
- * @see app/Http/Controllers/LeaderController.php:73
+ * @see app/Http/Controllers/LeaderController.php:76
  * @route '/leader/kyt'
  */
 kyt.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -87,7 +87,7 @@ kyt.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytadd
- * @see app/Http/Controllers/LeaderController.php:98
+ * @see app/Http/Controllers/LeaderController.php:101
  * @route '/leader/kyt/add/{IdKytDate}'
  */
 export const kytadd = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -102,7 +102,7 @@ kytadd.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytadd
- * @see app/Http/Controllers/LeaderController.php:98
+ * @see app/Http/Controllers/LeaderController.php:101
  * @route '/leader/kyt/add/{IdKytDate}'
  */
 kytadd.url = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -130,7 +130,7 @@ kytadd.url = (args: { IdKytDate: string | number } | [IdKytDate: string | number
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytadd
- * @see app/Http/Controllers/LeaderController.php:98
+ * @see app/Http/Controllers/LeaderController.php:101
  * @route '/leader/kyt/add/{IdKytDate}'
  */
 kytadd.get = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -139,7 +139,7 @@ kytadd.get = (args: { IdKytDate: string | number } | [IdKytDate: string | number
 })
 /**
 * @see \App\Http\Controllers\LeaderController::kytadd
- * @see app/Http/Controllers/LeaderController.php:98
+ * @see app/Http/Controllers/LeaderController.php:101
  * @route '/leader/kyt/add/{IdKytDate}'
  */
 kytadd.head = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -149,7 +149,7 @@ kytadd.head = (args: { IdKytDate: string | number } | [IdKytDate: string | numbe
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytstore
- * @see app/Http/Controllers/LeaderController.php:113
+ * @see app/Http/Controllers/LeaderController.php:116
  * @route '/leader/kyt/store'
  */
 export const kytstore = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -164,7 +164,7 @@ kytstore.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytstore
- * @see app/Http/Controllers/LeaderController.php:113
+ * @see app/Http/Controllers/LeaderController.php:116
  * @route '/leader/kyt/store'
  */
 kytstore.url = (options?: RouteQueryOptions) => {
@@ -173,7 +173,7 @@ kytstore.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytstore
- * @see app/Http/Controllers/LeaderController.php:113
+ * @see app/Http/Controllers/LeaderController.php:116
  * @route '/leader/kyt/store'
  */
 kytstore.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
