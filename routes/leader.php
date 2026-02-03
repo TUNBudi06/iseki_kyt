@@ -10,3 +10,8 @@ Route::prefix('kyt')->group(function () {
     Route::get('/add/{IdKytDate}', [LeaderController::class, 'addKyt'])->name('leader.kytadd');
     Route::post('/store', [LeaderController::class, 'storeKyt'])->name('leader.kytstore');
 });
+
+// Settings Routes
+Route::get('/settings', [LeaderController::class, 'settings'])->name('leader.settings');
+Route::post('/settings/change-password', [LeaderController::class, 'changePassword'])->name('leader.settings.changePassword');
+

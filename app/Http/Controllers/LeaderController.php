@@ -158,7 +158,7 @@ class LeaderController extends Controller
                 $fotoFile = $request->file('foto_path');
                 $fotoFilename = 'foto_'.$teamKYT->team_name.'.'.$fotoFile->getClientOriginalExtension();
                 $fotoPath = $fotoFile->move($dir, $fotoFilename);
-                $kyt->foto_path = $dir . '/' . $fotoFilename;
+                $kyt->foto_path = $dir.'/'.$fotoFilename;
             }
 
             // Handle result_path upload (full preview thumbnail)
@@ -166,12 +166,37 @@ class LeaderController extends Controller
                 $resultFile = $request->file('result_path');
                 $resultFilename = 'result_'.$teamKYT->team_name.'.'.$resultFile->getClientOriginalExtension();
                 $resultPath = $resultFile->move($dir, $resultFilename);
-                $kyt->result_path = $dir . '/' . $resultFilename;
+                $kyt->result_path = $dir.'/'.$resultFilename;
             }
 
             $kyt->save();
 
             return redirect()->route('leader.kyt')->with('success', 'KYT berhasil disimpan!');
         });
+    }
+
+    // Settings Methods
+    public function settings()
+    {
+        return Inertia::render('Leader/Settings');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $user = auth()->user();
+
+        $data = $request->validate([
+            'new_password' => 'required|string|min:8|confirmed',
+        ], [
+            'new_password.required' => 'New password is required.',
+            'new_password.min' => 'New password must be at least 8 characters.',
+            'new_password.confirmed' => 'Password confirmation does not match.',
+        ]);
+
+        // Update password directly
+        $user->password = $data['new_password'];
+        $user->save();
+
+        return back()->with(['success' => 'Password changed successfully.']);
     }
 }

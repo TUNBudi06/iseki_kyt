@@ -13,7 +13,7 @@
     const navItems = [
         { name: 'Dashboard', href: routeUrl(leader.dashboard()), icon: '📊' },
         { name: 'KYT', href: routeUrl(leader.kyt()), icon: '📋' },
-        { name: 'Settings', href: '#', icon: '⚙️' },
+        { name: 'Settings', href: routeUrl(leader.settings()), icon: '⚙️' },
     ];
 
     function handleLogout() {

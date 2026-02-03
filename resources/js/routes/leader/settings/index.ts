@@ -1,8 +1,8 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../wayfinder'
 /**
-* @see \App\Http\Controllers\AdminController::changePassword
- * @see app/Http/Controllers/AdminController.php:177
- * @route '/admin/settings/change-password'
+* @see \App\Http\Controllers\LeaderController::changePassword
+ * @see app/Http/Controllers/LeaderController.php:184
+ * @route '/leader/settings/change-password'
  */
 export const changePassword = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: changePassword.url(options),
@@ -11,22 +11,22 @@ export const changePassword = (options?: RouteQueryOptions): RouteDefinition<'po
 
 changePassword.definition = {
     methods: ["post"],
-    url: '/admin/settings/change-password',
+    url: '/leader/settings/change-password',
 } satisfies RouteDefinition<["post"]>
 
 /**
-* @see \App\Http\Controllers\AdminController::changePassword
- * @see app/Http/Controllers/AdminController.php:177
- * @route '/admin/settings/change-password'
+* @see \App\Http\Controllers\LeaderController::changePassword
+ * @see app/Http/Controllers/LeaderController.php:184
+ * @route '/leader/settings/change-password'
  */
 changePassword.url = (options?: RouteQueryOptions) => {
     return changePassword.definition.url + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\AdminController::changePassword
- * @see app/Http/Controllers/AdminController.php:177
- * @route '/admin/settings/change-password'
+* @see \App\Http\Controllers\LeaderController::changePassword
+ * @see app/Http/Controllers/LeaderController.php:184
+ * @route '/leader/settings/change-password'
  */
 changePassword.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: changePassword.url(options),

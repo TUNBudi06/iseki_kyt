@@ -1,4 +1,5 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../wayfinder'
+import settings69f00b from './settings'
 /**
 * @see \App\Http\Controllers\LeaderController::dashboard
  * @see app/Http/Controllers/LeaderController.php:24
@@ -180,11 +181,55 @@ kytstore.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: kytstore.url(options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\LeaderController::settings
+ * @see app/Http/Controllers/LeaderController.php:179
+ * @route '/leader/settings'
+ */
+export const settings = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: settings.url(options),
+    method: 'get',
+})
+
+settings.definition = {
+    methods: ["get","head"],
+    url: '/leader/settings',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Http\Controllers\LeaderController::settings
+ * @see app/Http/Controllers/LeaderController.php:179
+ * @route '/leader/settings'
+ */
+settings.url = (options?: RouteQueryOptions) => {
+    return settings.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\LeaderController::settings
+ * @see app/Http/Controllers/LeaderController.php:179
+ * @route '/leader/settings'
+ */
+settings.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: settings.url(options),
+    method: 'get',
+})
+/**
+* @see \App\Http\Controllers\LeaderController::settings
+ * @see app/Http/Controllers/LeaderController.php:179
+ * @route '/leader/settings'
+ */
+settings.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: settings.url(options),
+    method: 'head',
+})
 const leader = {
     dashboard: Object.assign(dashboard, dashboard),
 kyt: Object.assign(kyt, kyt),
 kytadd: Object.assign(kytadd, kytadd),
 kytstore: Object.assign(kytstore, kytstore),
+settings: Object.assign(settings, settings69f00b),
 }
 
 export default leader

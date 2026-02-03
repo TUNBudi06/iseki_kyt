@@ -1,11 +1,10 @@
 <script>
-    import CardBodyImg from "$/lib/component/CardBodyImg.svelte";
     import * as Card from "$shadcn/components/ui/card/index.js";
     import { page } from "@inertiajs/svelte";
     import AdminLayout from "$/Layouts/AdminLayout.svelte";
-    import { Button } from "$shadcn/components/ui/button/index.js";
+    import {assetUrl} from "@tunbudi06/inertia-route-helper";
 
-    let { weeksInCurrentMonth = [], currentYear = 2026, currentMonthName = "January" } = $props();
+    let { weeksInCurrentMonth = [], teams = [], currentYear = 2026, currentMonthName = "January" } = $props();
 
     $inspect($page.props)
     const weeks = $derived.by(() => {
@@ -52,162 +51,49 @@
         return generatedWeeks;
     });
 
-    const teams = [
-        {
-            name: "DST",
-            desc: "PENGECEKAN KUALITAS KOMPONEN DST",
-            weeklyKYT: [
-                {
-                    image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800&auto=format&fit=crop",
-                    title: "HANDLING OIL FILTER",
-                    desc: "POTENSI TUMPAHAN OIL",
-                    submittedBy: "Dedi Kurniawan"
-                },
-                null, // Week 2 - Not submitted
-                {
-                    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop",
-                    title: "INSPEKSI KABEL SENSOR",
-                    desc: "POTENSI KONSLETING LISTRIK",
-                    submittedBy: "Budi Santoso"
-                },
-                {
-                    image: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800&auto=format&fit=crop",
-                    title: "PENGECEKAN KOMPONEN BEARING",
-                    desc: "POTENSI KERUSAKAN BEARING",
-                    submittedBy: "Ahmad Sutrisno"
-                }
-            ]
-        },
-        {
-            name: "MowColl-Inspeksi",
-            desc: "INSPEKSI VISUAL BODY & CAT",
-            weeklyKYT: [
-                {
-                    image: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=800&auto=format&fit=crop",
-                    title: "CEK PANEL BODY",
-                    desc: "POTENSI PANEL TIDAK PAS",
-                    submittedBy: "Hadi Susanto"
-                },
-                {
-                    image: "https://images.unsplash.com/photo-1619642751220-e3f2c34f98fa?w=800&auto=format&fit=crop",
-                    title: "INSPEKSI LAMPU & KABEL",
-                    desc: "POTENSI KORSLETING",
-                    submittedBy: "Gunawan Adi"
-                },
-                {
-                    image: "https://images.unsplash.com/photo-1619642751456-c3c5a9e2e9b5?w=800&auto=format&fit=crop",
-                    title: "CEK DIMENSI BODY",
-                    desc: "POTENSI DIMENSI TIDAK SESUAI",
-                    submittedBy: "Fajar Rahman"
-                },
-                {
-                    image: "https://images.unsplash.com/photo-1619642751789-f4f3e5e2c8e9?w=800&auto=format&fit=crop",
-                    title: "INSPEKSI WARNA CAT",
-                    desc: "POTENSI CAT TIDAK MERATA",
-                    submittedBy: "Eko Prasetyo"
-                }
-            ]
-        },
-        {
-            name: "Sub-Engine - Transmisi",
-            desc: "PERAKITAN ENGINE & TRANSMISI",
-            weeklyKYT: [
-                null, // Week 1 - Not submitted
-                {
-                    image: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&auto=format&fit=crop",
-                    title: "PEMASANGAN FUEL LINE",
-                    desc: "POTENSI KEBOCORAN BBM",
-                    submittedBy: "Kurniawan Aji"
-                },
-                {
-                    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=800&auto=format&fit=crop",
-                    title: "INSTALASI ENGINE MOUNT",
-                    desc: "POTENSI MOUNTING TIDAK KUAT",
-                    submittedBy: "Joko Widodo"
-                },
-                {
-                    image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800&auto=format&fit=crop",
-                    title: "PEMASANGAN GEAR BOX",
-                    desc: "POTENSI SALAH TORQUE",
-                    submittedBy: "Indra Gunawan"
-                }
-            ]
-        },
-        {
-            name: "Painting",
-            desc: "PROSES PENGECATAN BODY",
-            weeklyKYT: [
-                {
-                    image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800&auto=format&fit=crop",
-                    title: "SETTING SPRAY GUN",
-                    desc: "POTENSI TEKANAN BERLEBIH",
-                    submittedBy: "Putra Ananda"
-                },
-                {
-                    image: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&auto=format&fit=crop",
-                    title: "APLIKASI BASE COAT",
-                    desc: "POTENSI INHALE GAS BERBAHAYA",
-                    submittedBy: "Oki Setiawan"
-                },
-                null, // Week 3 - Not submitted
-                {
-                    image: "https://images.unsplash.com/photo-1572375992501-4b0892d50c69?w=800&auto=format&fit=crop",
-                    title: "MIXING CAT & THINNER",
-                    desc: "POTENSI KONTAMINASI CAT",
-                    submittedBy: "Mulyono Adi"
-                }
-            ]
-        },
-        {
-            name: "Sub Assy Mainline",
-            desc: "PERAKITAN SUB ASSY MAINLINE",
-            weeklyKYT: [
-                {
-                    image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&auto=format&fit=crop",
-                    title: "FITTING BRAKE LINE",
-                    desc: "POTENSI KEBOCORAN REM",
-                    submittedBy: "Toni Setiawan"
-                },
-                {
-                    image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800&auto=format&fit=crop",
-                    title: "ROUTING KABEL BAWAH",
-                    desc: "POTENSI KABEL TERJEPIT",
-                    submittedBy: "Sandi Wijaya"
-                },
-                {
-                    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop",
-                    title: "INSTALASI SUSPENSI",
-                    desc: "POTENSI PEMASANGAN TERBALIK",
-                    submittedBy: "Rudi Hartono"
-                },
-                {
-                    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&auto=format&fit=crop",
-                    title: "TORQUE BOLT CHASSIS",
-                    desc: "POTENSI BOLT KURANG TORQUE",
-                    submittedBy: "Qomar Hidayat"
-                }
-            ]
-        }
-    ];
 
     // Calculate card width based on number of weeks (4 or 5) - responsive
     const cardWidthClass = $derived(weeks.length === 4
         ? "w-full sm:w-[calc(50%-0.375rem)] lg:w-[calc(25%-0.75rem)]"  // Mobile: full, Tablet: 2 cols, Desktop: 4 cols
         : "w-full sm:w-[calc(50%-0.375rem)] lg:w-[calc(20%-0.6rem)]");  // Mobile: full, Tablet: 2 cols, Desktop: 5 cols
+
+    const formatWeekRange = (start, end) => {
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        return `${start.getDate()} ${months[start.getMonth()]} - ${end.getDate()} ${months[end.getMonth()]}`;
+    };
+
+    const getMonthName = (date) => {
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        return months[date.getMonth()];
+    };
+
+    // Check if week belongs to next month
+    const isNextMonth = (week, currentMonthName) => {
+        const weekMonth = getMonthName(week.start);
+        return weekMonth !== currentMonthName;
+    };
 </script>
 
 {#snippet cardImg(kytData, weekNumber, weekStart, weekEnd)}
-    <div class="rounded-xl md:rounded-2xl relative aspect-[4/3] overflow-hidden group {cardWidthClass} cursor-pointer transition-all hover:scale-105 hover:shadow-2xl border-2 border-transparent hover:border-pink-600">
+    {@const isNextMonthWeek = isNextMonth({start: weekStart, end: weekEnd}, currentMonthName)}
+    <div class="rounded-xl md:rounded-2xl relative aspect-4/3 overflow-hidden group {cardWidthClass} cursor-pointer transition-all hover:scale-105 hover:shadow-2xl border-2 border-transparent hover:border-pink-600 {isNextMonthWeek ? 'ring-2 ring-blue-400' : ''}">
         {#if kytData}
             <!-- KYT Submitted - Show Image & Data -->
             <img
-                src={kytData.image}
+                src={assetUrl(kytData.image)}
                 alt={kytData.title}
-                class="w-full h-full object-cover m-0"
+                class="w-full h-full object-cover"
             />
 
             <!-- Gradient Overlay -->
             <div class="absolute inset-0 bg-linear-to-t from-black/95 via-black/50 to-black/20"></div>
+
+            <!-- Next Month Badge -->
+            {#if isNextMonthWeek}
+                <div class="absolute top-2 right-2 bg-blue-500 text-white text-xs sm:text-sm font-bold px-2 py-1 rounded shadow-lg">
+                    {getMonthName(weekStart)}
+                </div>
+            {/if}
 
             <!-- KYT Info - Bottom -->
             <div class="absolute pb-3 px-3 sm:pb-4 sm:px-4 md:pb-5 md:px-5 inset-x-0 bottom-0 flex flex-col justify-end space-y-2 sm:space-y-3">
@@ -217,8 +103,7 @@
                         Minggu {weekNumber}
                     </span>
                     <span class="text-white/70 text-xs sm:text-sm">
-                        {weekStart.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })} -
-                        {weekEnd.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+                        {formatWeekRange(weekStart, weekEnd)}
                     </span>
                 </div>
 
@@ -247,15 +132,21 @@
             <div class="absolute inset-0 bg-pink-600/0 group-hover:bg-pink-600/10 transition-colors duration-300"></div>
         {:else}
             <!-- Week Not Submitted - Empty State -->
-            <div class="w-full h-full bg-linear-to-br from-gray-100 to-gray-200 flex flex-col items-center justify-center p-3 sm:p-4 md:p-5">
+            <div class="w-full h-full bg-linear-to-br from-gray-100 to-gray-200 flex flex-col items-center justify-center p-3 sm:p-4 md:p-5 relative">
+                <!-- Next Month Badge -->
+                {#if isNextMonthWeek}
+                    <div class="absolute top-2 right-2 bg-blue-500 text-white text-xs sm:text-sm font-bold px-2 py-1 rounded shadow-lg">
+                        {getMonthName(weekStart)}
+                    </div>
+                {/if}
+
                 <div class="text-center space-y-2 sm:space-y-3">
                     <div class="text-3xl sm:text-4xl md:text-5xl opacity-30">📋</div>
                     <div class="bg-gray-300 text-gray-600 text-xs sm:text-sm md:text-base font-bold px-2 py-1 sm:px-2.5 sm:py-1.5 rounded">
                         Minggu {weekNumber}
                     </div>
                     <p class="text-xs sm:text-sm text-gray-500 font-medium">
-                        {weekStart.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })} -
-                        {weekEnd.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+                        {formatWeekRange(weekStart, weekEnd)}
                     </p>
                     <div class="pt-2 sm:pt-3">
                         <p class="text-xs sm:text-sm font-semibold text-gray-600">Belum Submit</p>
@@ -280,7 +171,7 @@
 
         <!-- Each Team gets a Card Row -->
         {#each teams as team}
-            {@const submittedCount = team.weeklyKYT.filter(k => k !== null).length}
+            {@const submittedCount = Object.values(team.weeklyKYT).filter(k => k !== null).length}
             {@const notSubmittedCount = weeks.length - submittedCount}
 
             <Card.Root class="border-2 hover:border-pink-600/50 transition-colors">
@@ -314,7 +205,7 @@
                 <Card.Content class="pt-4 md:pt-6 p-3 md:p-6">
                     <div class="flex flex-wrap gap-2 md:gap-3 justify-center">
                         <!-- Show 4 or 5 cards based on weeks in month -->
-                        {#each weeks as week, weekIndex}
+                        {#each weeks as week, weekIndex (week.week_number || weekIndex)}
                             {@const weekNumber = week.week_number || (weekIndex + 1)}
                             {@const kytData = team.weeklyKYT[weekNumber]}
                             {@render cardImg(kytData, weekNumber, week.start, week.end)}

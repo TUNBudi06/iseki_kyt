@@ -1,5 +1,5 @@
 <script lang="ts">
-    import AdminLayout from "$/Layouts/AdminLayout.svelte";
+    import LeaderLayout from "$/Layouts/LeaderLayout.svelte";
     import { Button } from "$shadcn/components/ui/button/index.js";
     import { Input } from "$shadcn/components/ui/input/index.js";
     import * as Card from "$shadcn/components/ui/card/index.js";
@@ -25,7 +25,7 @@
     function handleSubmit(e: Event) {
         e.preventDefault();
 
-        $form.post('/admin/settings/change-password', {
+        $form.post('/leader/settings/change-password', {
             onSuccess: () => {
                 toast.success('Password changed successfully!');
                 $form.reset();
@@ -43,33 +43,33 @@
 </script>
 
 <svelte:head>
-    <title>Settings - Admin Panel</title>
-    <meta name="description" content="Admin settings page for managing account" />
+    <title>Settings - Leader Panel</title>
+    <meta name="description" content="Leader settings page for managing account" />
 </svelte:head>
 
-<AdminLayout>
-    <div class="space-y-4 md:space-y-6 px-2 sm:px-0">
-        <!-- Page Header - Gradient Style matching Dashboard -->
-        <div class="bg-linear-to-r from-pink-500 to-pink-600 rounded-lg p-6 md:p-8 text-white">
-            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">Settings</h1>
-            <p class="text-pink-100 text-sm md:text-base">
+<LeaderLayout>
+    <div class="space-y-6">
+        <!-- Page Header - Gradient Style matching Leader Dashboard -->
+        <div class="bg-linear-to-r from-pink-500 to-pink-600 rounded-lg p-8 text-white">
+            <h1 class="text-3xl font-bold mb-2">Settings</h1>
+            <p class="text-pink-100">
                 Manage your account settings and preferences
             </p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Change Password Card - Takes 2 columns -->
             <div class="lg:col-span-2">
                 <Card.Root class="border-2 border-pink-200">
-                    <Card.Header class="bg-linear-to-r from-pink-50 to-blue-50 p-4 md:p-6">
-                        <Card.Title class="text-xl sm:text-2xl font-bold text-pink-600">
+                    <Card.Header>
+                        <Card.Title class="text-2xl font-bold text-pink-600">
                             Change Password
                         </Card.Title>
-                        <Card.Description class="text-sm md:text-base mt-1">
+                        <Card.Description class="text-base">
                             Update your password to keep your account secure
                         </Card.Description>
                     </Card.Header>
-                    <Card.Content class="p-4 md:p-6">
+                    <Card.Content>
                         <form onsubmit={handleSubmit}>
                             <Field.Set>
                                 <Field.Group>
@@ -151,15 +151,15 @@
             <!-- Account Information Card - Takes 1 column -->
             <div class="lg:col-span-1">
                 <Card.Root class="border-2 border-gray-200 h-full">
-                    <Card.Header class="bg-gray-50 p-4 md:p-6">
-                        <Card.Title class="text-lg sm:text-xl font-bold text-gray-800">
+                    <Card.Header class="bg-gray-50">
+                        <Card.Title class="text-xl font-bold text-gray-800">
                             Account Information
                         </Card.Title>
-                        <Card.Description class="text-sm">
+                        <Card.Description>
                             Your current account details
                         </Card.Description>
                     </Card.Header>
-                    <Card.Content class="p-4 md:p-6">
+                    <Card.Content class="pt-6">
                         <div class="space-y-4">
                             <div class="flex flex-col gap-1 py-3 border-b">
                                 <span class="text-sm font-semibold text-gray-600">Username</span>
@@ -185,45 +185,5 @@
                 </Card.Root>
             </div>
         </div>
-
-        <!-- Security Tips Card -->
-        <Card.Root class="border-2 border-blue-200 bg-blue-50/50">
-            <Card.Header class="p-4 md:p-6">
-                <Card.Title class="text-lg sm:text-xl font-bold text-blue-800 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Security Tips
-                </Card.Title>
-            </Card.Header>
-            <Card.Content class="p-4 md:p-6 pt-0">
-                <ul class="space-y-2 text-sm text-gray-700">
-                    <li class="flex items-start gap-2">
-                        <svg class="w-5 h-5 text-green-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                        </svg>
-                        Use a strong password with at least 8 characters
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="w-5 h-5 text-green-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                        </svg>
-                        Include a mix of uppercase, lowercase, numbers, and symbols
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="w-5 h-5 text-green-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                        </svg>
-                        Don't share your password with anyone
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="w-5 h-5 text-green-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                        </svg>
-                        Change your password regularly for better security
-                    </li>
-                </ul>
-            </Card.Content>
-        </Card.Root>
     </div>
-</AdminLayout>
+</LeaderLayout>
