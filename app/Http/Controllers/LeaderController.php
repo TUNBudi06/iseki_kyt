@@ -199,4 +199,35 @@ class LeaderController extends Controller
 
         return back()->with(['success' => 'Password changed successfully.']);
     }
+
+    public function deleteKyt($id)
+    {
+        try {
+            $kyt = KYTList::findOrFail($id);
+
+            // Check if the KYT belongs to the current user's team
+            $user = auth()->user();
+            $team = TeamKYT::where('user_id', $user->id)->first();
+
+            if (! $team || $kyt->team_k_y_t_id !== $team->id) {
+                return back()->with(['error' => 'You are not authorized to delete this KYT.']);
+            }
+
+            // Delete the image files if they exist
+            if ($kyt->foto_path && file_exists(public_path($kyt->foto_path))) {
+                unlink(public_path($kyt->foto_path));
+            }
+
+            if ($kyt->result_path && file_exists(public_path($kyt->result_path))) {
+                unlink(public_path($kyt->result_path));
+            }
+
+            // Delete the KYT record
+            $kyt->delete();
+
+            return redirect()->route('leader.kyt')->with(['success' => 'KYT deleted successfully.']);
+        } catch (\Exception $e) {
+            return back()->with(['error' => 'Failed to delete KYT: '.$e->getMessage()]);
+        }
+    }
 }

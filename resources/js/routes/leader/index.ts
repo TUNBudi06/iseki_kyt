@@ -183,6 +183,59 @@ kytstore.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\LeaderController::kytdelete
+ * @see app/Http/Controllers/LeaderController.php:203
+ * @route '/leader/kyt/delete/{id}'
+ */
+export const kytdelete = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+    url: kytdelete.url(args, options),
+    method: 'delete',
+})
+
+kytdelete.definition = {
+    methods: ["delete"],
+    url: '/leader/kyt/delete/{id}',
+} satisfies RouteDefinition<["delete"]>
+
+/**
+* @see \App\Http\Controllers\LeaderController::kytdelete
+ * @see app/Http/Controllers/LeaderController.php:203
+ * @route '/leader/kyt/delete/{id}'
+ */
+kytdelete.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { id: args }
+    }
+
+    
+    if (Array.isArray(args)) {
+        args = {
+                    id: args[0],
+                }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+                        id: args.id,
+                }
+
+    return kytdelete.definition.url
+            .replace('{id}', parsedArgs.id.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\LeaderController::kytdelete
+ * @see app/Http/Controllers/LeaderController.php:203
+ * @route '/leader/kyt/delete/{id}'
+ */
+kytdelete.delete = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+    url: kytdelete.url(args, options),
+    method: 'delete',
+})
+
+/**
 * @see \App\Http\Controllers\LeaderController::settings
  * @see app/Http/Controllers/LeaderController.php:179
  * @route '/leader/settings'
@@ -229,6 +282,7 @@ const leader = {
 kyt: Object.assign(kyt, kyt),
 kytadd: Object.assign(kytadd, kytadd),
 kytstore: Object.assign(kytstore, kytstore),
+kytdelete: Object.assign(kytdelete, kytdelete),
 settings: Object.assign(settings, settings69f00b),
 }
 

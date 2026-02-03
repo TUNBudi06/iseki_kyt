@@ -9,6 +9,7 @@ Route::prefix('kyt')->group(function () {
     Route::get('/', [LeaderController::class, 'kytHistory'])->name('leader.kyt');
     Route::get('/add/{IdKytDate}', [LeaderController::class, 'addKyt'])->name('leader.kytadd');
     Route::post('/store', [LeaderController::class, 'storeKyt'])->name('leader.kytstore');
+    Route::delete('/delete/{id}', [LeaderController::class, 'deleteKyt'])->name('leader.kytdelete');
 });
 
 // Settings Routes
