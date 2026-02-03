@@ -14,13 +14,10 @@ class AdminController extends Controller
 {
     use KytDateParser;
 
-    //
     public function index()
     {
-        // Get weeks for current and next month using trait method
         $weeksInCurrentMonth = $this->getWeeksForCurrentAndNextMonth();
 
-        // Get all teams with their KYT submissions
         $teams = TeamKYT::all()->map(function ($team) use ($weeksInCurrentMonth) {
             $weeklyKYT = [];
 
@@ -29,10 +26,9 @@ class AdminController extends Controller
                     ->where('kyt_date_id', $week['id'])
                     ->first();
 
-                // Build array indexed by week_number (1-based)
                 $weeklyKYT[$week['week_number']] = $kyt ? [
                     'id' => $kyt->id,
-                    'image' => $kyt->result_path, // Use correct field name: result_path
+                    'image' => $kyt->result_path,
                     'title' => $kyt->title,
                     'desc' => $kyt->potensi,
                     'submittedBy' => $kyt->user_name,
