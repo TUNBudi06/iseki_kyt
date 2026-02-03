@@ -426,7 +426,7 @@
                                             </div>
                                         {:else}
                                             <a use:InertiaLink href={routeUrl(leader.kytadd({IdKytDate: row.id}))}>
-                                                <Button size="sm" class="flex items-center gap-1">
+                                                <Button size="sm" class="flex items-center self-end gap-1">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                                                         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                                                     </svg>
@@ -446,7 +446,7 @@
 
     <!-- View KYT Dialog -->
     <Dialog.Root bind:open={isViewDialogOpen} >
-        <Dialog.Content class="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
+        <Dialog.Content class="md:max-w-4xl xl:max-w-6xl max-h-[90vh] overflow-y-auto">
             <Dialog.Header>
                 <Dialog.Title class="text-2xl font-bold text-pink-600">
                     {#if selectedKyt}
