@@ -32,7 +32,9 @@
                     month: 'long',
                     day: 'numeric'
                 }),
-                weeks: "Minggu Ke " + dateList.number_of_Weeks,
+                weeks: new Date(dateList.kyt_date).toLocaleDateString('id-ID', {
+                    month: 'long'
+                }) + " Minggu Ke " + dateList.number_of_Weeks,
                 formatted_created: new Date(dateList.created_at).toLocaleDateString('id-ID'),
                 status_text: hasSubmission ? 'Submitted' : 'Not Submitted',
                 has_submission: hasSubmission

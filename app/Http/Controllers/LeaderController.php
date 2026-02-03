@@ -153,17 +153,17 @@ class LeaderController extends Controller
             // Handle foto_path upload (edited canvas image)
             if ($request->hasFile('foto_path')) {
                 $fotoFile = $request->file('foto_path');
-                $fotoFilename = 'foto_'.$teamKYT->team_name.'_'.$kyt->id.'.'.$fotoFile->getClientOriginalExtension();
+                $fotoFilename = 'foto_'.$teamKYT->team_name.'.'.$fotoFile->getClientOriginalExtension();
                 $fotoPath = $fotoFile->move($dir, $fotoFilename);
-                $kyt->foto_path = $fotoPath;
+                $kyt->foto_path = $dir . '/' . $fotoFilename;
             }
 
             // Handle result_path upload (full preview thumbnail)
             if ($request->hasFile('result_path')) {
                 $resultFile = $request->file('result_path');
-                $resultFilename = 'result_'.$teamKYT->team_name.'_'.$kyt->id.'.'.$resultFile->getClientOriginalExtension();
+                $resultFilename = 'result_'.$teamKYT->team_name.'.'.$resultFile->getClientOriginalExtension();
                 $resultPath = $resultFile->move($dir, $resultFilename);
-                $kyt->result_path = $resultPath;
+                $kyt->result_path = $dir . '/' . $resultFilename;
             }
 
             $kyt->save();
