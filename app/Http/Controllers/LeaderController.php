@@ -6,13 +6,17 @@ use App\Helper\KytDateParser;
 use App\Models\KytDateList;
 use App\Models\KYTList;
 use App\Models\TeamKYT;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class LeaderController extends Controller
 {
     use KytDateParser;
+
+    private $basePath = 'storage/kyt';
 
     /**
      * Display the leader dashboard
@@ -46,7 +50,7 @@ class LeaderController extends Controller
             // Use week_number as key instead of index
             $weeklyKYT[$week['week_number']] = $kyt ? [
                 'id' => $kyt->id,
-                'image_url' => $kyt->{'result-path'}, // Use result-path field from database
+                'image_url' => $kyt->result_path, // Use result_path field from database
                 'status' => 'submitted',
                 'submitted_at' => $kyt->created_at,
                 'week_number' => $week['week_number'],
@@ -110,6 +114,7 @@ class LeaderController extends Controller
     {
         $validated = $request->validate([
             'foto_path' => 'required|image|max:2048',
+            'result_path' => 'required|image|max:8192',
             'title' => 'required|string|max:255',
             'user_name' => 'required|string|max:255',
             'potensi' => 'required|string',
@@ -118,8 +123,52 @@ class LeaderController extends Controller
             'team_id' => 'required|exists:team_k_y_t_s,id',
         ]);
 
+        $kytDate = KytDateList::find($validated['kyt_date_id']);
+        $teamKYT = TeamKYT::find($validated['team_id']);
+        $date = Carbon::parse($kytDate->kyt_date);
 
+        return DB::transaction(function () use ($request, $kytDate, $teamKYT, $validated, $date) {
 
-        return $validated;
+            // Create KYT record
+            $kyt = new KYTList;
+            $kyt->team_k_y_t_id = $teamKYT->id;
+            $kyt->kyt_date_id = $kytDate->id;
+            $kyt->user_name = $validated['user_name'];
+            $kyt->title = $validated['title'];
+            $kyt->potensi = $validated['potensi'];
+            $kyt->penanganan = $validated['penanganan'];
+            $kyt->save();
+
+            // Create directory path: storage/kyt/2026-02_week-5/
+            $dir = $this->basePath.'/'.$date->format('Y-m').'_'.'week-'.$kytDate->number_of_Weeks;
+
+            \Log::info('KYT Upload Debug', [
+                'directory' => $dir,
+                'team_name' => $teamKYT->team_name,
+                'kyt_id' => $kyt->id,
+                'has_foto_path' => $request->hasFile('foto_path'),
+                'has_result_path' => $request->hasFile('result_path'),
+            ]);
+
+            // Handle foto_path upload (edited canvas image)
+            if ($request->hasFile('foto_path')) {
+                $fotoFile = $request->file('foto_path');
+                $fotoFilename = 'foto_'.$teamKYT->team_name.'_'.$kyt->id.'.'.$fotoFile->getClientOriginalExtension();
+                $fotoPath = $fotoFile->move($dir, $fotoFilename);
+                $kyt->foto_path = $fotoPath;
+            }
+
+            // Handle result_path upload (full preview thumbnail)
+            if ($request->hasFile('result_path')) {
+                $resultFile = $request->file('result_path');
+                $resultFilename = 'result_'.$teamKYT->team_name.'_'.$kyt->id.'.'.$resultFile->getClientOriginalExtension();
+                $resultPath = $resultFile->move($dir, $resultFilename);
+                $kyt->result_path = $resultPath;
+            }
+
+            $kyt->save();
+
+            return redirect()->route('leader.kyt')->with('success', 'KYT berhasil disimpan!');
+        });
     }
 }

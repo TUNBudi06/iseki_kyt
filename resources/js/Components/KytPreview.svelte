@@ -7,11 +7,12 @@
         savedImageUrl = "",
         kytPic = "",
         kytPotensi = "",
-        kytPenanganan = ""
+        kytPenanganan = "",
+        elementId = $bindable()
     } = $props();
 </script>
 
-<div class="relative mx-auto w-7xl h-180">
+<div class="relative mx-auto w-7xl h-180" bind:this={elementId}>
     <!-- Background KYT Image - PPT Size 1280x720 -->
     <img
         src={bgKyt}

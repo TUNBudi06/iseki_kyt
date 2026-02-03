@@ -24,6 +24,7 @@
 
             return {
                 ...dateList,
+                kyt_lists: dateList.kyt_lists ? dateList.kyt_lists[0] : null,
                 // Add computed properties
                 formatted_date: new Date(dateList.kyt_date).toLocaleDateString('id-ID', {
                     weekday: 'long',
@@ -37,7 +38,7 @@
                 has_submission: hasSubmission
             };
         });
-
+        console.log(formattedData);
         table.setRows(formattedData);
     });
 </script>

@@ -8,6 +8,7 @@
     import KytPreview from "$/Components/KytPreview.svelte";
     import {kytstore} from "$routes/leader";
     import {routeUrl} from "@tunbudi06/inertia-route-helper";
+    import {toBlob} from "html-to-image";
 
     let {bgKyt,kytDate,kytTeam,kytTeamId,kytDateId} = $props();
 
@@ -42,6 +43,7 @@
     let redoStack = $state<string[]>([]);
     let cropRect = $state<Rect | null>(null);
     let savedImageUrl = $state<string>("");
+    let previewContainerEl = $state<HTMLDivElement>();
     let kytTitle = $state<string>("");
     let kytPic = $state<string>("");
     let kytPotensi = $state<string>("");
@@ -337,7 +339,87 @@
         }
      }
 
-    function submitKyt() {
+    async function generatePreviewThumbnail() {
+        if (!previewContainerEl) {
+            console.error('Preview container not found');
+            return false;
+        }
+
+        try {
+            // Wait a bit for the preview to fully render
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            // Find all images with blob URLs and convert them to data URLs temporarily
+            const images = previewContainerEl.querySelectorAll('img');
+            const originalSrcs: Map<HTMLImageElement, string> = new Map();
+
+            for (const img of Array.from(images)) {
+                if (img.src.startsWith('blob:')) {
+                    // Store original src
+                    originalSrcs.set(img, img.src);
+
+                    // Convert blob to data URL
+                    try {
+                        const response = await fetch(img.src);
+                        const blob = await response.blob();
+                        const dataUrl = await new Promise<string>((resolve) => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => resolve(reader.result as string);
+                            reader.readAsDataURL(blob);
+                        });
+                        img.src = dataUrl;
+                    } catch (err) {
+                        console.warn('Failed to convert blob URL for image:', err);
+                    }
+                }
+            }
+
+            // Wait for images to be updated
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+            // Convert the preview directly to Blob with 3x quality
+            const blob = await toBlob(previewContainerEl, {
+                quality: 1.0,
+                pixelRatio: 3, // 3x quality for better image
+                cacheBust: true,
+                skipAutoScale: false,
+                backgroundColor: '#ffffff',
+            });
+
+            // Restore original blob URLs
+            for (const [img, src] of originalSrcs.entries()) {
+                img.src = src;
+            }
+
+            if (!blob) {
+                throw new Error('Failed to generate blob');
+            }
+
+            // Create File object from Blob with timestamp
+            const timestamp = new Date().getTime();
+            $form.result_path = new File([blob], `kyt-preview-${timestamp}.png`, {
+                type: "image/png"
+            });
+
+            console.log('Preview thumbnail generated successfully', blob.size);
+            return true;
+        } catch (error) {
+            console.error('Error generating preview thumbnail:', error);
+            // Show user-friendly error message
+            alert('Gagal membuat thumbnail preview. Silakan coba lagi.');
+            return false;
+        }
+    }
+
+    async function submitKyt() {
+        // Generate the preview thumbnail before submitting
+        const success = await generatePreviewThumbnail();
+
+        if (!success) {
+            console.error('Failed to generate preview thumbnail, aborting submission');
+            return;
+        }
+
         $form.post(routeUrl(kytstore()), {
             preserveScroll: true,
             onSuccess: (e) => {
@@ -545,6 +627,7 @@
             <Card.Content class="p-4">
                 <div class="overflow-x-auto">
                     <KytPreview
+                        bind:elementId={previewContainerEl}
                         {bgKyt}
                         {kytDate}
                         {kytTeam}
