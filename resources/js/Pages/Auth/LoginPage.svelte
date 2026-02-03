@@ -39,15 +39,14 @@
                     <Field>
                         <FieldLabel for="email">Username</FieldLabel>
                         <Input id="username" bind:value={$form.username} type="text" placeholder="johndoe" required />
-                        {#if $form.hasErrors}
-                            <FieldError>{$form.errors.username}</FieldError>
-                        {/if}
+                        <FieldError>{$form.errors.username}</FieldError>
                     </Field>
                     <Field>
                         <div class="flex items-center">
                             <FieldLabel for="password">Password</FieldLabel>
                         </div>
                         <Input id="password" bind:value={$form.password} type="password" required />
+                        <FieldError>{$form.errors.password}</FieldError>
                     </Field>
                     <Field>
                         <Button type="submit" class="w-full">Login</Button>

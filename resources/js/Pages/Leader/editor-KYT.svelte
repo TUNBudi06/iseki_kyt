@@ -1,6 +1,7 @@
 <script lang="ts">
     import {onMount} from "svelte";
     import {Canvas, Circle, FabricImage, Rect} from "fabric";
+    import * as Card from "$shadcn/components/ui/card";
     import LeaderLayout from "$/Layouts/LeaderLayout.svelte";
     import {Button} from "$shadcn/components/ui/button";
     import {useForm} from "@inertiajs/svelte";
