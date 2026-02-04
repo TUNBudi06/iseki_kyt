@@ -73,20 +73,37 @@ class LeaderController extends Controller
         ]);
     }
 
-    public function kytHistory(): Response
+    public function kytHistory(Request $request): Response
     {
         $user = auth()->user();
 
         // Get the team for this leader
         $team = TeamKYT::where('user_id', $user->id)->first();
 
-        // Get all date lists with KYT entries filtered by team
-        $dateLists = KytDateList::with(['kytLists' => function ($query) use ($team) {
-            if ($team) {
-                $query->where('team_k_y_t_id', $team->id)->with(['kytDateList']);
-            }
-        }])
-            ->orderBy('id', 'desc')
+        // Get month-year from request or default to current month
+        $monthYear = $request->input('month_year', now()->format('Y-m'));
+        [$year, $month] = explode('-', $monthYear);
+
+        // Get all available month-year combinations from KytDateList
+        $availableMonths = KytDateList::selectRaw('DISTINCT DATE_FORMAT(kyt_date, "%Y-%m") as month_year, YEAR(kyt_date) as year, MONTH(kyt_date) as month')
+            ->orderBy('kyt_date', 'desc')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'value' => $item->month_year,
+                    'label' => now()->setDate($item->year, $item->month, 1)->format('F Y'),
+                ];
+            });
+
+        // Get date lists with KYT entries filtered by team and selected month
+        $dateLists = KytDateList::whereYear('kyt_date', $year)
+            ->whereMonth('kyt_date', $month)
+            ->with(['kytLists' => function ($query) use ($team) {
+                if ($team) {
+                    $query->where('team_k_y_t_id', $team->id)->with(['kytDateList']);
+                }
+            }])
+            ->orderBy('kyt_date', 'desc')
             ->get();
 
         return Inertia::render('Leader/KytHistory', [
@@ -95,6 +112,8 @@ class LeaderController extends Controller
                 'id' => $team->id,
                 'team_name' => $team->team_name,
             ] : null,
+            'availableMonths' => $availableMonths,
+            'selectedMonthYear' => $monthYear,
         ]);
     }
 
@@ -263,7 +282,8 @@ class LeaderController extends Controller
         ]);
     }
 
-    public function updateKyt(Request $request,string $id){
+    public function updateKyt(Request $request, string $id)
+    {
         $validated = $request->validate([
             'foto_path' => 'nullable|image|max:2048',
             'result_path' => 'required|image|max:8192',
@@ -273,11 +293,10 @@ class LeaderController extends Controller
             'penanganan' => 'required|string',
         ]);
 
-
-        return DB::transaction(function () use ($request, $validated,$id) {
+        return DB::transaction(function () use ($request, $validated, $id) {
 
             // Create KYT record
-            $kyt = KYTList::with(['kytDateList','teamKYT'])->findOrFail($id);
+            $kyt = KYTList::with(['kytDateList', 'teamKYT'])->findOrFail($id);
             $kyt->user_name = $validated['user_name'];
             $kyt->title = $validated['title'];
             $kyt->potensi = $validated['potensi'];

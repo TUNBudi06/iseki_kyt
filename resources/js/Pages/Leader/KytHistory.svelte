@@ -1,5 +1,7 @@
 <script>
     import {Input} from "$shadcn/components/ui/input/index.ts";
+    import {Combobox} from "$shadcn/components/ui/combobox/index.js";
+    import * as Field from "$shadcn/components/ui/field/index.js";
     import LeaderLayout from "$/Layouts/LeaderLayout.svelte";
     import * as Card from "$shadcn/components/ui/card/index.ts";
     import * as Dialog from "$shadcn/components/ui/dialog/index.ts";
@@ -7,7 +9,7 @@
     import {Button} from "$shadcn/components/ui/button/index.ts";
     import * as Table from "$shadcn/components/ui/table/index.ts";
     import {Badge} from "$shadcn/components/ui/badge/index.ts";
-    import leader, {kytdelete} from "$routes/leader/index.ts";
+    import leader, {kytdelete, kyt} from "$routes/leader/index.ts";
     import {routeUrl, assetUrl, buildRoute} from "@tunbudi06/inertia-route-helper";
     import {inertia as InertiaLink, router} from "@inertiajs/svelte";
     import {toast} from "svelte-sonner";
@@ -15,7 +17,15 @@
     import {downloadKytImage} from "$/lib/download/KytImage.ts";
     import {downloadKytPptx} from "$/lib/download/KytPptx.ts";
 
-    let {kytListDates, team} = $props();
+    let {kytListDates, team, availableMonths, selectedMonthYear} = $props();
+
+    // Month filter state - reactive to prop changes
+    let monthFilter = $state('');
+
+    // Initialize and sync monthFilter with selectedMonthYear prop
+    $effect(() => {
+        monthFilter = selectedMonthYear;
+    });
 
     // Dialog state
     let isViewDialogOpen = $state(false);
@@ -62,6 +72,16 @@
 
     const table = new TableHandler([], {
         rowsPerPage: 10,
+    });
+
+    // Handle month filter change
+    $effect(() => {
+        if (monthFilter !== selectedMonthYear && monthFilter !== '') {
+            router.get(routeUrl(kyt({ query: { month_year: monthFilter } })), {}, {
+                preserveState: true,
+                preserveScroll: true,
+            });
+        }
     });
 
     $effect(() => {
@@ -116,6 +136,20 @@
         </Card.Header>
 
         <Card.Content class="p-6">
+            <div class="mb-4">
+                <Field.Group class="max-w-md">
+                    <Field.Field>
+                        <Field.Label>Filter by Month:</Field.Label>
+                        <Combobox
+                            items={availableMonths}
+                            bind:value={monthFilter}
+                            placeholder="Select month or search..."
+                            emptyMessage="No months found."
+                            class="w-full"
+                        />
+                    </Field.Field>
+                </Field.Group>
+            </div>
             <div>
                 <Datatable {table} basic>
                     <Table.Root>

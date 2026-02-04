@@ -158,7 +158,7 @@
                 {#if team && team.weeklyKYT}
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         <!-- Show cards based on weeks in month -->
-                        {#each weeks as week, weekIndex (week.week_number || weekIndex)}
+                        {#each weeks as week, weekIndex (weekIndex)}
                             {@const weekNumber = week.week_number || (weekIndex + 1)}
                             {@const kytData = team.weeklyKYT[weekNumber]}
                             {@const isNextMonthWeek = isNextMonth(week, currentMonthName)}

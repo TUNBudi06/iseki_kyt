@@ -229,7 +229,7 @@
                 <Card.Content class="pt-4 md:pt-6 p-3 md:p-6">
                     <div class="flex flex-wrap gap-2 md:gap-3 justify-center">
                         <!-- Show 4 or 5 cards based on weeks in month -->
-                        {#each weeks as week, weekIndex (week.week_number || weekIndex)}
+                        {#each weeks as week, weekIndex (weekIndex)}
                             {@const weekNumber = week.week_number || (weekIndex + 1)}
                             {@const kytData = team.weeklyKYT[weekNumber]}
                             {@render cardImg(kytData, weekNumber, week.start, week.end, team.name)}
