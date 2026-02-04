@@ -236,6 +236,121 @@ kytdelete.delete = (args: { id: string | number } | [id: string | number ] | str
 })
 
 /**
+* @see \App\Http\Controllers\LeaderController::kytedit
+ * @see app/Http/Controllers/LeaderController.php:234
+ * @route '/leader/kyt/edit/{id}'
+ */
+export const kytedit = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: kytedit.url(args, options),
+    method: 'get',
+})
+
+kytedit.definition = {
+    methods: ["get","head"],
+    url: '/leader/kyt/edit/{id}',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Http\Controllers\LeaderController::kytedit
+ * @see app/Http/Controllers/LeaderController.php:234
+ * @route '/leader/kyt/edit/{id}'
+ */
+kytedit.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { id: args }
+    }
+
+    
+    if (Array.isArray(args)) {
+        args = {
+                    id: args[0],
+                }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+                        id: args.id,
+                }
+
+    return kytedit.definition.url
+            .replace('{id}', parsedArgs.id.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\LeaderController::kytedit
+ * @see app/Http/Controllers/LeaderController.php:234
+ * @route '/leader/kyt/edit/{id}'
+ */
+kytedit.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: kytedit.url(args, options),
+    method: 'get',
+})
+/**
+* @see \App\Http\Controllers\LeaderController::kytedit
+ * @see app/Http/Controllers/LeaderController.php:234
+ * @route '/leader/kyt/edit/{id}'
+ */
+kytedit.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: kytedit.url(args, options),
+    method: 'head',
+})
+
+/**
+* @see \App\Http\Controllers\LeaderController::kytupdate
+ * @see app/Http/Controllers/LeaderController.php:266
+ * @route '/leader/kyt/update/{id}'
+ */
+export const kytupdate = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: kytupdate.url(args, options),
+    method: 'post',
+})
+
+kytupdate.definition = {
+    methods: ["post"],
+    url: '/leader/kyt/update/{id}',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \App\Http\Controllers\LeaderController::kytupdate
+ * @see app/Http/Controllers/LeaderController.php:266
+ * @route '/leader/kyt/update/{id}'
+ */
+kytupdate.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { id: args }
+    }
+
+    
+    if (Array.isArray(args)) {
+        args = {
+                    id: args[0],
+                }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+                        id: args.id,
+                }
+
+    return kytupdate.definition.url
+            .replace('{id}', parsedArgs.id.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\LeaderController::kytupdate
+ * @see app/Http/Controllers/LeaderController.php:266
+ * @route '/leader/kyt/update/{id}'
+ */
+kytupdate.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: kytupdate.url(args, options),
+    method: 'post',
+})
+
+/**
 * @see \App\Http\Controllers\LeaderController::settings
  * @see app/Http/Controllers/LeaderController.php:179
  * @route '/leader/settings'
@@ -283,6 +398,8 @@ kyt: Object.assign(kyt, kyt),
 kytadd: Object.assign(kytadd, kytadd),
 kytstore: Object.assign(kytstore, kytstore),
 kytdelete: Object.assign(kytdelete, kytdelete),
+kytedit: Object.assign(kytedit, kytedit),
+kytupdate: Object.assign(kytupdate, kytupdate),
 settings: Object.assign(settings, settings69f00b),
 }
 

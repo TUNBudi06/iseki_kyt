@@ -10,6 +10,8 @@ Route::prefix('kyt')->group(function () {
     Route::get('/add/{IdKytDate}', [LeaderController::class, 'addKyt'])->name('leader.kytadd');
     Route::post('/store', [LeaderController::class, 'storeKyt'])->name('leader.kytstore');
     Route::delete('/delete/{id}', [LeaderController::class, 'deleteKyt'])->name('leader.kytdelete');
+    Route::get('/edit/{id}', [LeaderController::class, 'editKyt'])->name('leader.kytedit');
+    Route::post('/update/{id}', [LeaderController::class, 'updateKyt'])->name('leader.kytupdate');
 });
 
 // Settings Routes

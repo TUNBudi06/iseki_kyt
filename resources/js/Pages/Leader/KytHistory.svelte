@@ -108,14 +108,6 @@
         </Card.Header>
 
         <Card.Content class="p-6">
-<!--            <Card.Root class="shadow-xl w-80 p-4">-->
-<!--                <Card.Title class="font-bold text-primary">KYT Search</Card.Title>-->
-<!--                <div class="w-80 grid grid-cols-2 gap-x-25">-->
-<!--                    <Input class="rounded-t-md w-50"/>-->
-<!--                    <Button class="w-20">Apply</Button>-->
-<!--                </div>-->
-<!--            </Card.Root>-->
-
             <div>
                 <Datatable {table} basic>
                     <Table.Root>

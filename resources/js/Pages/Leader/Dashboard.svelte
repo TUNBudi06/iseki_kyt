@@ -4,7 +4,7 @@
     import * as Dialog from "$shadcn/components/ui/dialog/index.js";
     import { page, Link } from "@inertiajs/svelte";
     import {assetUrl, routeUrl} from "@tunbudi06/inertia-route-helper";
-    import {kytadd} from "$routes/leader";
+    import {kytadd, kytedit} from "$routes/leader";
 
     let { weeksInCurrentMonth = [], team = null, currentYear = 2026, currentMonthName = "January" } = $props();
 
@@ -29,7 +29,7 @@
         if (!weeksInCurrentMonth || weeksInCurrentMonth.length === 0) {
             const currentDate = new Date();
             const monthNames = ["January", "February", "March", "April", "May", "June",
-                              "July", "August", "September", "October", "November", "December"];
+                "July", "August", "September", "October", "November", "December"];
             const monthIndex = monthNames.indexOf(currentMonthName);
             const month = monthIndex >= 0 ? monthIndex : currentDate.getMonth();
             const year = currentYear || currentDate.getFullYear();
@@ -102,7 +102,7 @@
 <LeaderLayout>
     <div class="space-y-6">
         <!-- Welcome Section -->
-            <div class="bg-linear-to-r from-pink-500 to-pink-600 rounded-lg p-8 text-white">
+        <div class="bg-linear-to-r from-pink-500 to-pink-600 rounded-lg p-8 text-white">
             <h1 class="text-3xl font-bold mb-2">
                 Welcome back, {$page.props.auth?.user?.username || 'Leader'}!
             </h1>
@@ -346,7 +346,7 @@
                             <!-- Action Button -->
                             <div class="flex-1 flex items-end">
                                 <Link
-                                    href={`/leader/kyt/add/${selectedKyt.kyt_date_id}`}
+                                    href={routeUrl(kytedit({id: selectedKyt.id}))}
                                     class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-lg transition-all shadow-lg hover:shadow-xl text-base"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

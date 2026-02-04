@@ -104,7 +104,7 @@ class LeaderController extends Controller
 
         $kytTeam = TeamKYT::where('user_id', auth()->user()->id)->first();
 
-        return Inertia::render('Leader/editor-KYT', [
+        return Inertia::render('Leader/editor-KYT-create', [
             'bgKyt' => asset('assets/img/bg-kyt.jpg'),
             'kytDate' => $kytDateList->kyt_date,
             'kytTeam' => $kytTeam->team_name,
@@ -229,5 +229,91 @@ class LeaderController extends Controller
         } catch (\Exception $e) {
             return back()->with(['error' => 'Failed to delete KYT: '.$e->getMessage()]);
         }
+    }
+
+    public function editKyt(string $id)
+    {
+        $kyt = KYTList::findOrFail($id);
+
+        // Check if the KYT belongs to the current user's team
+        $user = auth()->user();
+        $team = TeamKYT::where('user_id', $user->id)->first();
+
+        if (! $team || $kyt->team_k_y_t_id !== $team->id) {
+            return back()->with(['error' => 'You are not authorized to edit this KYT.']);
+        }
+
+        $kytDateList = KytDateList::find($kyt->kyt_date_id);
+
+        return Inertia::render('Leader/editor-KYT-edit', [
+            'bgKyt' => asset('assets/img/bg-kyt.jpg'),
+            'kytDate' => $kytDateList->kyt_date,
+            'kytTeam' => $team->team_name,
+            'kytId' => $kyt->id,
+            'kytTeamId' => $team->id,
+            'kytData' => [
+                'id' => $kyt->id,
+                'user_name' => $kyt->user_name,
+                'title' => $kyt->title,
+                'potensi' => $kyt->potensi,
+                'penanganan' => $kyt->penanganan,
+                'foto_path' => $kyt->foto_path,
+                'result_path' => $kyt->result_path,
+            ],
+        ]);
+    }
+
+    public function updateKyt(Request $request,string $id){
+        $validated = $request->validate([
+            'foto_path' => 'nullable|image|max:2048',
+            'result_path' => 'required|image|max:8192',
+            'title' => 'required|string|max:255',
+            'user_name' => 'required|string|max:255',
+            'potensi' => 'required|string',
+            'penanganan' => 'required|string',
+        ]);
+
+
+        return DB::transaction(function () use ($request, $validated,$id) {
+
+            // Create KYT record
+            $kyt = KYTList::with(['kytDateList','teamKYT'])->findOrFail($id);
+            $kyt->user_name = $validated['user_name'];
+            $kyt->title = $validated['title'];
+            $kyt->potensi = $validated['potensi'];
+            $kyt->penanganan = $validated['penanganan'];
+            $kyt->save();
+            $date = Carbon::parse($kyt->kytDateList->kyt_date);
+
+            // Create directory path: storage/kyt/2026-02_week-5/
+            $dir = $this->basePath.'/'.$date->format('Y-m').'_'.'week-'.$kyt->kytDateList->number_of_Weeks;
+
+            \Log::info('KYT Upload Debug', [
+                'directory' => $dir,
+                'kyt_id' => $kyt->id,
+                'has_foto_path' => $request->hasFile('foto_path'),
+                'has_result_path' => $request->hasFile('result_path'),
+            ]);
+
+            // Handle foto_path upload (edited canvas image)
+            if ($request->hasFile('foto_path')) {
+                $fotoFile = $request->file('foto_path');
+                $fotoFilename = 'foto_'.$kyt->teamKYT->team_name.'.'.$fotoFile->getClientOriginalExtension();
+                $fotoPath = $fotoFile->move($dir, $fotoFilename);
+                $kyt->foto_path = $dir.'/'.$fotoFilename;
+            }
+
+            // Handle result_path upload (full preview thumbnail)
+            if ($request->hasFile('result_path')) {
+                $resultFile = $request->file('result_path');
+                $resultFilename = 'result_'.$kyt->teamKYT->team_name.'.'.$resultFile->getClientOriginalExtension();
+                $resultPath = $resultFile->move($dir, $resultFilename);
+                $kyt->result_path = $dir.'/'.$resultFilename;
+            }
+
+            $kyt->save();
+
+            return redirect()->route('leader.kyt')->with('success', 'KYT berhasil disimpan!');
+        });
     }
 }
