@@ -49,7 +49,8 @@ export default defineConfig({
         alias: {
             '$': path.resolve(__dirname, './resources/js'),
             '$shadcn': path.resolve(__dirname, './resources/js/shadcn'),
-            '$routes': path.resolve(__dirname, './resources/js/routes')
+            '$routes': path.resolve(__dirname, './resources/js/routes'),
+            '$lib': path.resolve(__dirname, './resources/js/lib'),
         },
     },
 });
