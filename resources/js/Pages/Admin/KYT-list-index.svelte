@@ -2,21 +2,31 @@
     import AdminLayout from "$/Layouts/AdminLayout.svelte";
     import * as Card from "$shadcn/components/ui/card/index.js";
     import * as Dialog from "$shadcn/components/ui/dialog/index.js";
+    import {Combobox} from "$shadcn/components/ui/combobox/index.js";
     import {Datatable, TableHandler,Pagination,RowCount,ThSort} from "@vincjo/datatables";
     import * as Table from "$shadcn/components/ui/table/index.js";
     import * as Field from "$shadcn/components/ui/field/index.js";
     import {Button} from "$shadcn/components/ui/button/index.js";
-    import {Input} from "$shadcn/components/ui/input/index.ts";
     import dayjs from "dayjs";
-    import {assetUrl} from "@tunbudi06/inertia-route-helper";
+    import {assetUrl, routeUrl} from "@tunbudi06/inertia-route-helper";
     import {EmptySliceAdderKyt, initPptxKyt, SliceAdderKyt} from "$lib/download/KytPptx.ts";
     import {toast} from "svelte-sonner";
+    import {router} from "@inertiajs/svelte";
+    import {list as kytListRoute} from "$routes/admin/kyt";
 
-    let {kytLists,teamKyt,auth} = $props();
+    let {kytLists, teamKyt, auth, availableMonths, selectedMonthYear} = $props();
 
     // Dialog state
     let isDialogOpen = $state(false);
     let selectedKyts = $state<any[]>([]);
+
+    // Month filter state - reactive to prop changes
+    let monthFilter = $state('');
+
+    // Initialize and sync monthFilter with selectedMonthYear prop
+    $effect(() => {
+        monthFilter = selectedMonthYear;
+    });
 
 
     const table = new TableHandler([],{
@@ -36,10 +46,11 @@
                 return acc;
             }, {}),
         }));
+
+
         table.setRows(data);
     });
 
-    const searchTableGlobal = table.createSearch(['minggu_kyt', ...teamKyt.map(team => team.team_name)]);
 
     // Function to open dialog with KYT details for specific week
     function viewKytDetails(row: any) {
@@ -50,7 +61,7 @@
         isDialogOpen = true;
     }
 
-    async function downloadAsPPT(row) {
+    async function downloadAsPPT(row: any) {
         const pptx = await initPptxKyt(auth.user.username,row.minggu_kyt)
         for (const team of teamKyt) {
             const kytData = row.kyt_lists.find((kyt: any) => kyt.team_k_y_t_id === team.id);
@@ -68,6 +79,19 @@
             console.error('PPT Download error:', error);
         }
     }
+
+    // Handle month filter change
+    $effect(() => {
+        if (monthFilter !== selectedMonthYear && monthFilter !== '') {
+            router.get(routeUrl(kytListRoute({
+                query: { month_year: monthFilter
+                }})), {}, {
+                preserveState: true,
+                preserveScroll: true,
+            });
+        }
+    });
+
 </script>
 
 <AdminLayout>
@@ -78,20 +102,26 @@
                     <Card.Title class="text-2xl font-bold text-white">KYT Lists</Card.Title>
                     <Card.Description class="text-pink-50">Manage and view all KYT.</Card.Description>
                 </div>
-                <div>
-                </div>
             </div>
         </Card.Header>
         <Card.Content>
             <Datatable {table}>
                 {#snippet header()}
                     <div class="w-full pt-5 pb-2">
-                        <Field.Group class="w-68 p-2 border-2 border-gray-200 rounded-md">
-                            <Field.Field>
-                                <Field.Label>Search KYT: </Field.Label>
-                                <Input type="text" class="ps-4" bind:value={searchTableGlobal.value} oninput={()=>searchTableGlobal.set()} placeholder="Search all Here....." />
-                            </Field.Field>
-                        </Field.Group>
+                        <div class="flex items-center gap-4">
+                            <Field.Group class="flex-1 max-w-md">
+                                <Field.Field>
+                                    <Field.Label>Filter by Month:</Field.Label>
+                                    <Combobox
+                                        items={availableMonths}
+                                        bind:value={monthFilter}
+                                        placeholder="Select month or search..."
+                                        emptyMessage="No months found."
+                                        class="w-full"
+                                    />
+                                </Field.Field>
+                            </Field.Group>
+                        </div>
                     </div>
                 {/snippet}
                 <Table.Root>
@@ -99,7 +129,7 @@
                     <Table.Header>
                         <Table.Row>
                             <ThSort {table} field="no" >
-                                <Table.Head class="w-[10px]">No</Table.Head>
+                                <Table.Head class="w-2.5">No</Table.Head>
                             </ThSort>
                             <ThSort {table} field="minggu_kyt" >
                                 <Table.Head>Minggu KYT</Table.Head>
@@ -142,6 +172,7 @@
                                         variant="outline"
                                         size="sm"
                                         onclick={() => downloadAsPPT(row)}
+                                        disabled={row.kyt_lists.length === 0}
                                         class="flex items-center gap-1 bg-orange-50 hover:bg-orange-100"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -195,7 +226,9 @@
                             <!-- KYT Result Image -->
                             <div class="rounded-lg overflow-hidden shadow-lg bg-gray-100">
                                 <img
-                                    src={assetUrl(kyt.result_path)}
+                                    src={assetUrl(kyt.result_path,{query:{
+                                    t: Date.now()
+                                }})}
                                     alt={kyt.title}
                                     class="w-full h-auto object-contain"
                                 />

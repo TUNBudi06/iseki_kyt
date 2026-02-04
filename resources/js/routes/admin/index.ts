@@ -48,7 +48,7 @@ home.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\AdminController::settings
- * @see app/Http/Controllers/AdminController.php:172
+ * @see app/Http/Controllers/AdminController.php:195
  * @route '/admin/settings'
  */
 export const settings = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -63,7 +63,7 @@ settings.definition = {
 
 /**
 * @see \App\Http\Controllers\AdminController::settings
- * @see app/Http/Controllers/AdminController.php:172
+ * @see app/Http/Controllers/AdminController.php:195
  * @route '/admin/settings'
  */
 settings.url = (options?: RouteQueryOptions) => {
@@ -72,7 +72,7 @@ settings.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AdminController::settings
- * @see app/Http/Controllers/AdminController.php:172
+ * @see app/Http/Controllers/AdminController.php:195
  * @route '/admin/settings'
  */
 settings.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -81,7 +81,7 @@ settings.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\AdminController::settings
- * @see app/Http/Controllers/AdminController.php:172
+ * @see app/Http/Controllers/AdminController.php:195
  * @route '/admin/settings'
  */
 settings.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({

@@ -155,16 +155,39 @@ class AdminController extends Controller
         return back()->with(['success' => 'Team deleted successfully.']);
     }
 
-    public function kytList()
+    public function kytList(Request $request)
     {
-        $kytList = KytDateList::with(['kytLists'=>function ($q){
-            $q->with(['kytDateList','teamKYT']);
-        }])->get();
+        // Get month-year from request or default to current month
+        $monthYear = $request->input('month_year', now()->format('Y-m'));
+        [$year, $month] = explode('-', $monthYear);
+
+        // Get all available month-year combinations from KytDateList
+        $availableMonths = KytDateList::selectRaw('DISTINCT DATE_FORMAT(kyt_date, "%Y-%m") as month_year, YEAR(kyt_date) as year, MONTH(kyt_date) as month')
+            ->orderBy('kyt_date', 'desc')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'value' => $item->month_year,
+                    'label' => now()->setDate($item->year, $item->month, 1)->format('F Y'),
+                ];
+            });
+
+        // Filter KytDateList by selected month and year
+        $kytList = KytDateList::whereYear('kyt_date', $year)
+            ->whereMonth('kyt_date', $month)
+            ->with(['kytLists' => function ($q) {
+                $q->with(['kytDateList', 'teamKYT']);
+            }])
+            ->orderBy('kyt_date', 'asc')
+            ->get();
+
         $teamKyt = TeamKYT::all();
 
         return Inertia::render('Admin/KYT-list-index', [
             'kytLists' => $kytList,
             'teamKyt' => $teamKyt,
+            'availableMonths' => $availableMonths,
+            'selectedMonthYear' => $monthYear,
         ]);
     }
 
@@ -179,7 +202,7 @@ class AdminController extends Controller
         $user = auth()->user();
 
         $data = $request->validate([
-            'new_password' => 'required|string|min:8|confirmed',
+            'new_password' => 'required|string|confirmed',
         ], [
             'new_password.required' => 'New password is required.',
             'new_password.min' => 'New password must be at least 8 characters.',

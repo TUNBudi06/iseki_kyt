@@ -27,7 +27,9 @@
         $form.potensi = kytData?.potensi || '';
         $form.user_name = kytData?.user_name || '';
         $form.title = kytData?.title || '';
-        savedImageUrl = assetUrl(kytData?.foto_path || '');
+        savedImageUrl = assetUrl(kytData?.foto_path || '',{query:{
+                t: Date.now()
+            }});
     });
 
     // Use plain Svelte variables and explicit nullable types.

@@ -102,7 +102,9 @@
         {#if kytData}
             <!-- KYT Submitted - Show Image & Data -->
             <img
-                src={assetUrl(kytData.image)}
+                src={assetUrl(kytData.image,{query:{
+                                    t: Date.now()
+                                }})}
                 alt={kytData.title}
                 class="w-full h-full object-cover"
             />
@@ -267,7 +269,9 @@
                     <!-- KYT Result Image -->
                     <div class="rounded-lg overflow-hidden shadow-lg bg-gray-100">
                         <img
-                            src={assetUrl(selectedKyt.image)}
+                            src={assetUrl(selectedKyt.image,{query:{
+                                    t: Date.now()
+                                }})}
                             alt={selectedKyt.title}
                             class="w-full h-auto object-contain"
                         />

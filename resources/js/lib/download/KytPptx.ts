@@ -104,7 +104,9 @@ export function SliceAdderKyt(pptx: PptxGenJS, kytData: KytData, team: Team | nu
     // Position: offsetX: 50px, offsetY: 133px, width: 680px, height: 502px
     // Convert: x=0.39", y=1.04", w=5.31", h=3.92"
     if (kytData.foto_path) {
-        const fotoUrl = assetUrl(kytData.foto_path);
+        const fotoUrl = assetUrl(kytData.foto_path,{query:{
+                t: Date.now()
+            }});
         slide.addImage({
             path: fotoUrl,
             x: 0.39,

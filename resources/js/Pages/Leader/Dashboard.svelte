@@ -166,7 +166,9 @@
                                 {#if kytData && kytData.image_url}
                                     <!-- KYT Submitted - Show Image & Data -->
                                     <img
-                                        src={assetUrl(kytData.image_url)}
+                                        src={assetUrl(kytData.image_url,{query:{
+                                    t: Date.now()
+                                }})}
                                         alt="KYT Week {weekNumber}"
                                         class="w-full h-full object-cover"
                                     />
@@ -290,7 +292,9 @@
                         <!-- Left side - KYT Image (takes 3/4 on large screens for bigger display) -->
                         <div class="lg:col-span-3 flex items-center justify-center bg-gray-900 rounded-lg overflow-hidden shadow-xl h-full">
                             <img
-                                src={assetUrl(selectedKyt.image_url)}
+                                src={assetUrl(selectedKyt.image_url,{query:{
+                                    t: Date.now()
+                                }})}
                                 alt="KYT Week {selectedKyt.weekNumber}"
                                 class="w-full h-full object-contain"
                             />

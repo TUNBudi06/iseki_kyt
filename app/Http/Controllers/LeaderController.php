@@ -186,7 +186,7 @@ class LeaderController extends Controller
         $user = auth()->user();
 
         $data = $request->validate([
-            'new_password' => 'required|string|min:8|confirmed',
+            'new_password' => 'required|string|confirmed',
         ], [
             'new_password.required' => 'New password is required.',
             'new_password.min' => 'New password must be at least 8 characters.',

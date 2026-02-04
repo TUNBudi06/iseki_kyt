@@ -3,7 +3,9 @@ import {toast} from "svelte-sonner";
 
 export async function downloadKytImage({result_path, title}: {result_path: string, title: string}) {
     try {
-        const imageUrl = assetUrl(result_path);
+        const imageUrl = assetUrl(result_path,{query:{
+                t: Date.now()
+            }});
         const response = await fetch(imageUrl);
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
