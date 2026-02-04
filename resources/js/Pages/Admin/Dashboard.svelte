@@ -1,12 +1,16 @@
 <script>
     import * as Card from "$shadcn/components/ui/card/index.js";
+    import * as Dialog from "$shadcn/components/ui/dialog/index.js";
     import { page } from "@inertiajs/svelte";
     import AdminLayout from "$/Layouts/AdminLayout.svelte";
     import {assetUrl} from "@tunbudi06/inertia-route-helper";
 
     let { weeksInCurrentMonth = [], teams = [], currentYear = 2026, currentMonthName = "January" } = $props();
 
-    $inspect($page.props)
+    // Dialog state for viewing KYT details
+    let isDialogOpen = $state(false);
+    let selectedKyt = $state(null);
+
     const weeks = $derived.by(() => {
         // If no data from backend, generate dummy weeks
         if (!weeksInCurrentMonth || weeksInCurrentMonth.length === 0) {
@@ -72,11 +76,29 @@
         const weekMonth = getMonthName(week.start);
         return weekMonth !== currentMonthName;
     };
+
+    // Function to open KYT dialog
+    function openKytDialog(kytData, weekNumber, weekStart, weekEnd, teamName) {
+        selectedKyt = {
+            ...kytData,
+            weekNumber,
+            weekStart,
+            weekEnd,
+            teamName
+        };
+        isDialogOpen = true;
+    }
 </script>
 
-{#snippet cardImg(kytData, weekNumber, weekStart, weekEnd)}
+{#snippet cardImg(kytData, weekNumber, weekStart, weekEnd, teamName)}
     {@const isNextMonthWeek = isNextMonth({start: weekStart, end: weekEnd}, currentMonthName)}
-    <div class="rounded-xl md:rounded-2xl relative aspect-4/3 overflow-hidden group {cardWidthClass} cursor-pointer transition-all hover:scale-105 hover:shadow-2xl border-2 border-transparent hover:border-pink-600 {isNextMonthWeek ? 'ring-2 ring-blue-400' : ''}">
+    <div
+        class="rounded-xl md:rounded-2xl relative aspect-4/3 overflow-hidden group {cardWidthClass} cursor-pointer transition-all hover:scale-105 hover:shadow-2xl border-2 border-transparent hover:border-pink-600 {isNextMonthWeek ? 'ring-2 ring-blue-400' : ''}"
+        onclick={() => kytData && openKytDialog(kytData, weekNumber, weekStart, weekEnd, teamName)}
+        role="button"
+        tabindex="0"
+        onkeydown={(e) => { if (e.key === 'Enter' && kytData) openKytDialog(kytData, weekNumber, weekStart, weekEnd, teamName); }}
+    >
         {#if kytData}
             <!-- KYT Submitted - Show Image & Data -->
             <img
@@ -208,11 +230,71 @@
                         {#each weeks as week, weekIndex (week.week_number || weekIndex)}
                             {@const weekNumber = week.week_number || (weekIndex + 1)}
                             {@const kytData = team.weeklyKYT[weekNumber]}
-                            {@render cardImg(kytData, weekNumber, week.start, week.end)}
+                            {@render cardImg(kytData, weekNumber, week.start, week.end, team.name)}
                         {/each}
                     </div>
                 </Card.Content>
             </Card.Root>
         {/each}
     </div>
+
+    <!-- View KYT Dialog -->
+    <Dialog.Root bind:open={isDialogOpen}>
+        <Dialog.Content class="md:max-w-4xl xl:max-w-6xl max-h-[90vh] overflow-y-auto">
+            <Dialog.Header>
+                <Dialog.Title class="text-2xl font-bold text-pink-600">
+                    {#if selectedKyt}
+                        KYT Details - {selectedKyt.title}
+                    {:else}
+                        KYT Details
+                    {/if}
+                </Dialog.Title>
+                <Dialog.Description>
+                    {#if selectedKyt}
+                        <div class="flex flex-wrap gap-2 text-sm">
+                            <span class="font-semibold">Team: {selectedKyt.teamName}</span>
+                            <span>•</span>
+                            <span>Week {selectedKyt.weekNumber}</span>
+                            <span>•</span>
+                            <span>{formatWeekRange(selectedKyt.weekStart, selectedKyt.weekEnd)}</span>
+                        </div>
+                    {/if}
+                </Dialog.Description>
+            </Dialog.Header>
+
+            {#if selectedKyt}
+                <div class="space-y-6 py-4">
+                    <!-- KYT Result Image -->
+                    <div class="rounded-lg overflow-hidden shadow-lg bg-gray-100">
+                        <img
+                            src={assetUrl(selectedKyt.image)}
+                            alt={selectedKyt.title}
+                            class="w-full h-auto object-contain"
+                        />
+                    </div>
+
+                    <!-- KYT Information -->
+                    <div class="space-y-4">
+                        <!-- Title -->
+                        <div class="bg-pink-50 p-4 rounded-lg">
+                            <h3 class="text-sm font-semibold text-pink-800 mb-2">Judul KYT</h3>
+                            <p class="text-base font-medium">{selectedKyt.title}</p>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="text-sm font-semibold text-blue-800 mb-2">Potensi Bahaya</h3>
+                            <p class="text-base whitespace-pre-line">{selectedKyt.desc}</p>
+                        </div>
+
+                        <!-- Submitted By -->
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h3 class="text-sm font-semibold text-gray-800 mb-2">Disampaikan Oleh</h3>
+                            <p class="text-base">{selectedKyt.submittedBy}</p>
+                        </div>
+                    </div>
+                </div>
+            {/if}
+        </Dialog.Content>
+    </Dialog.Root>
 </AdminLayout>

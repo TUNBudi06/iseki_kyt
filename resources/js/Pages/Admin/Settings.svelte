@@ -185,45 +185,5 @@
                 </Card.Root>
             </div>
         </div>
-
-        <!-- Security Tips Card -->
-        <Card.Root class="border-2 border-blue-200 bg-blue-50/50">
-            <Card.Header class="p-4 md:p-6">
-                <Card.Title class="text-lg sm:text-xl font-bold text-blue-800 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Security Tips
-                </Card.Title>
-            </Card.Header>
-            <Card.Content class="p-4 md:p-6 pt-0">
-                <ul class="space-y-2 text-sm text-gray-700">
-                    <li class="flex items-start gap-2">
-                        <svg class="w-5 h-5 text-green-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                        </svg>
-                        Use a strong password with at least 8 characters
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="w-5 h-5 text-green-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                        </svg>
-                        Include a mix of uppercase, lowercase, numbers, and symbols
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="w-5 h-5 text-green-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                        </svg>
-                        Don't share your password with anyone
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <svg class="w-5 h-5 text-green-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                        </svg>
-                        Change your password regularly for better security
-                    </li>
-                </ul>
-            </Card.Content>
-        </Card.Root>
     </div>
 </AdminLayout>

@@ -12,15 +12,15 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 manualChunks:{
-                    'svelte-vendor': ['svelte', 'svelte/animate', 'svelte/easing', 'svelte/motion', 'svelte/store', 'svelte/transition'],
-                    'icons-vendor': ['@lucide/svelte'],
+                    'vendor-svelte': ['svelte', 'svelte/animate', 'svelte/easing', 'svelte/motion', 'svelte/store', 'svelte/transition'],
+                    'vendor-icons': ['@lucide/svelte'],
+                    'vendor-pptx': ['pptxgenjs'],
                 },
                 chunkFileNames: (chunkInfo) => {
-                    if (chunkInfo.name === 'svelte-vendor') {
-                        return 'vendor/svelte-vendor.[hash].js';
-                    }
-                    if (chunkInfo.name === 'icons-vendor') {
-                        return 'vendor/icons-vendor.[hash].js';
+                    if (chunkInfo.name.startsWith('vendor')) {
+                        const name = chunkInfo.name.split('-')[1];
+
+                        return 'vendor/'+name+'.[hash].js';
                     }
                     return 'assets/[name].[hash].js';
                 }

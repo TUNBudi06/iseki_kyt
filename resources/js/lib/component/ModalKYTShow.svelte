@@ -23,6 +23,18 @@
             });
         }
     }
+
+    async function downloadAsPPT(kytData) {
+        let pptx = await downloadKytPptx(kytData,team);
+        try {
+            // Save the file
+            await pptx.writeFile({ fileName: `KYT_${kytData.title.replace(/\s+/g, '-')}.pptx` });
+            toast.success('PowerPoint downloaded successfully!');
+        } catch (error) {
+            toast.error('Failed to download PowerPoint');
+            console.error('PPT Download error:', error);
+        }
+    }
 </script>
 
 
@@ -148,7 +160,7 @@
                         </Button>
                         <Button
                             variant="outline"
-                            onclick={() => downloadKytPptx(selectedKyt)}
+                            onclick={() => downloadAsPPT(selectedKyt)}
                             class="flex items-center gap-2 bg-orange-50 hover:bg-orange-100"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

@@ -22,7 +22,7 @@
             "$shadcn/*": ["resources/js/shadcn/*"],
             "$routes": ["resources/js/routes"],
             "$routes/*": ["resources/js/routes/*"],
-            "$lib": ["resources/js/lib"],
+            "$lib/*": ["resources/js/lib/*"],
         },
     },
     "include": [

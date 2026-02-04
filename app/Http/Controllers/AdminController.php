@@ -157,10 +157,14 @@ class AdminController extends Controller
 
     public function kytList()
     {
-        $kytList = KytDateList::with(['kytLists'])->get();
+        $kytList = KytDateList::with(['kytLists'=>function ($q){
+            $q->with(['kytDateList','teamKYT']);
+        }])->get();
+        $teamKyt = TeamKYT::all();
 
         return Inertia::render('Admin/KYT-list-index', [
             'kytLists' => $kytList,
+            'teamKyt' => $teamKyt,
         ]);
     }
 

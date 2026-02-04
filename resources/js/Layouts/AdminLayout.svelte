@@ -2,30 +2,27 @@
     import DefaultLayouts from "$/Layouts/DefaultLayouts.svelte";
     import { page, router,inertia } from "@inertiajs/svelte";
     import { Button } from "$shadcn/components/ui/button/index.js";
-    import * as Separator from "$shadcn/components/ui/separator/index.js";
+    import * as DropdownMenu from "$shadcn/components/ui/dropdown-menu/index.js";
     import { home as adminHome } from "$/routes/admin";
     import {settings as SettingsRoute} from "$/routes/admin";
     import { list as kytList } from "$/routes/admin/kyt";
     import {logout as webLogout} from "$routes";
     import {list as userList} from "$/routes/admin/user";
-    import {routeUrl} from "@tunbudi06/inertia-route-helper";
+    import {list as teamList} from "$/routes/admin/team";
+    import {routeUrl, isCurrentRoute} from "@tunbudi06/inertia-route-helper";
 
 
     let { children } = $props();
     let mobileMenuOpen = $state(false);
-    let userMenuOpen = $state(false);
 
     // Navigation items
     const navItems = [
         { name: 'Dashboard', href: routeUrl(adminHome()), icon: '📊' },
         { name: 'User', href: routeUrl(userList()), icon: '👤' },
+        { name: 'Team', href: routeUrl(teamList()), icon: '👥' },
         { name: 'List KYT', href: routeUrl(kytList()), icon: '📋' },
         { name: 'Settings', href: routeUrl(SettingsRoute()), icon: '⚙️' },
     ];
-
-    function isActive(href: string): boolean {
-        return window.location.href.startsWith(href);
-    }
 
     function handleLogout() {
         router.post(routeUrl(webLogout()));
@@ -33,10 +30,6 @@
 
     function toggleMobileMenu() {
         mobileMenuOpen = !mobileMenuOpen;
-    }
-
-    function toggleUserMenu() {
-        userMenuOpen = !userMenuOpen;
     }
 </script>
 
@@ -57,7 +50,7 @@
                             <a
                                 use:inertia
                                 href={item.href}
-                                class="px-4 py-2 rounded-md text-sm font-medium transition-colors {isActive(item.href)
+                                class="px-4 py-2 rounded-md text-sm font-medium transition-colors {isCurrentRoute(item.href, true)
                                     ? 'bg-pink-500 text-white'
                                     : 'text-foreground hover:bg-pink-100 hover:text-pink-600'}"
                             >
@@ -68,54 +61,44 @@
                     </div>
                 </div>
 
-                <!-- Right Section: Notifications & User Menu -->
-                <div class="flex items-center gap-3">
-
-                    <!-- User Dropdown (Desktop) -->
-                    <div class="hidden md:block relative">
-                        <Button
-                            variant="ghost"
-                            class="flex items-center gap-2 px-3"
-                            onclick={toggleUserMenu}
-                        >
-                            <div class="h-8 w-8 rounded-full bg-pink-500 flex items-center justify-center text-white font-semibold">
-                                {($page.props.auth?.user?.username || 'U')[0].toUpperCase()}
-                            </div>
-                            <div class="text-left">
-                                <p class="text-sm font-medium leading-none">
-                                    {$page.props.auth?.user?.username || 'User'}
-                                </p>
-                                <p class="text-xs text-muted-foreground leading-none">Admin</p>
-                            </div>
-                            <svg class="h-4 w-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </Button>
-
-                        <!-- Dropdown Menu -->
-                        {#if userMenuOpen}
-                            <div class="absolute right-0 mt-2 w-56 rounded-md border bg-popover shadow-lg">
-                                <div class="p-2 space-y-1">
-                                    <Separator.Root />
-                                    <button
-                                        onclick={handleLogout}
-                                        class="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-sm hover:bg-accent transition-colors text-left"
-                                    >
-                                        <span>🚪</span>
-                                        <span>Logout</span>
-                                    </button>
-                                </div>
-                            </div>
-                        {/if}
+                <div class="flex items-center gap-4">
+                    <!-- User Menu -->
+                    <div class="hidden md:block">
+                        <DropdownMenu.Root>
+                            <DropdownMenu.Trigger>
+                                <Button variant="ghost" class="flex items-center gap-2">
+                                    <div class="h-8 w-8 rounded-full bg-pink-500 flex items-center justify-center text-white font-semibold">
+                                        {$page.props.auth?.user?.username?.charAt(0) || 'U'}
+                                    </div>
+                                    <span class="text-sm font-medium">{$page.props.auth?.user?.username || 'User'}</span>
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </Button>
+                            </DropdownMenu.Trigger>
+                            <DropdownMenu.Content class="w-48" align="end">
+                                <DropdownMenu.Label>
+                                    <div class="flex flex-col space-y-1">
+                                        <p class="text-sm font-medium leading-none">{$page.props.auth?.user?.username || 'User'}</p>
+                                        <p class="text-xs leading-none text-muted-foreground">{$page.props.auth?.user?.role || 'Admin'}</p>
+                                    </div>
+                                </DropdownMenu.Label>
+                                <DropdownMenu.Separator />
+                                <DropdownMenu.Item class="cursor-pointer" onclick={handleLogout}>
+                                    <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                    </svg>
+                                    <span>Logout</span>
+                                </DropdownMenu.Item>
+                            </DropdownMenu.Content>
+                        </DropdownMenu.Root>
                     </div>
 
-                    <!-- Mobile Menu Button -->
+                    <!-- Mobile menu button -->
                     <Button
                         variant="ghost"
-                        size="icon"
                         class="md:hidden"
                         onclick={toggleMobileMenu}
-                        aria-label="Toggle menu"
                     >
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             {#if mobileMenuOpen}
@@ -136,7 +119,7 @@
                         <a
                             use:inertia
                             href={item.href}
-                            class="block px-4 py-2 rounded-md text-sm font-medium {isActive(item.href)
+                            class="block px-4 py-2 rounded-md text-sm font-medium {isCurrentRoute(item.href, true)
                                 ? 'bg-pink-500 text-white'
                                 : 'text-foreground hover:bg-pink-100 hover:text-pink-600'}"
                         >

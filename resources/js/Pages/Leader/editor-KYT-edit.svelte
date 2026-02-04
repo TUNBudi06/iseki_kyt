@@ -9,6 +9,7 @@
     import {kytstore, kytupdate} from "$routes/leader";
     import {assetUrl, routeUrl} from "@tunbudi06/inertia-route-helper";
     import {toBlob} from "html-to-image";
+    import {toast} from "svelte-sonner";
 
     let {bgKyt,kytDate,kytTeam,kytData} = $props();
 
@@ -414,6 +415,7 @@
             preserveScroll: true,
             onSuccess: (e) => {
                 console.log(e)
+                toast.success('KYT berhasil disimpan!');
             },
             onError: (errors) => {
                 console.error('Error submitting KYT:', errors);

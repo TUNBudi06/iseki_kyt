@@ -83,7 +83,7 @@ class LeaderController extends Controller
         // Get all date lists with KYT entries filtered by team
         $dateLists = KytDateList::with(['kytLists' => function ($query) use ($team) {
             if ($team) {
-                $query->where('team_k_y_t_id', $team->id);
+                $query->where('team_k_y_t_id', $team->id)->with(['kytDateList']);
             }
         }])
             ->orderBy('id', 'desc')
@@ -313,7 +313,7 @@ class LeaderController extends Controller
 
             $kyt->save();
 
-            return redirect()->route('leader.kyt')->with('success', 'KYT berhasil disimpan!');
+            return back()->with('success', 'KYT berhasil diperbarui!');
         });
     }
 }
