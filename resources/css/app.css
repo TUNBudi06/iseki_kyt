@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @custom-variant dark (&:is(.dark *));
-@plugin "tailwindcss-debug-screens";
+/*@plugin "tailwindcss-debug-screens";*/
 
 /*@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views!*.blade.php';*/
 /*@source '../../storage/framework/views!*.php';*/

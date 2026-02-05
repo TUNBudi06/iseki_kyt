@@ -10,6 +10,7 @@
     import {assetUrl, routeUrl} from "@tunbudi06/inertia-route-helper";
     import {toBlob} from "html-to-image";
     import {toast} from "svelte-sonner";
+    import {maxChartTitleLength, maxKeteranganLength, maxPenangananLength, maxPicLength} from "./KytParameter.ts";
 
     let {bgKyt,kytDate,kytTeam,kytData} = $props();
 
@@ -40,12 +41,6 @@
     let cropRect = $state<Rect | null>(null);
     let savedImageUrl = $state<string>("");
     let previewContainerEl = $state<HTMLDivElement>();
-
-    const maxChartTitleLength = 95;
-    const maxTeamLength = 26;
-    const maxPicLength = 10;
-    const maxKeteranganLength = 174;
-    const maxPenangananLength = 180;
 
     function saveState() {
         if (!canvas) return;
