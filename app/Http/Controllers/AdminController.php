@@ -26,7 +26,7 @@ class AdminController extends Controller
                     ->where('kyt_date_id', $week['id'])
                     ->first();
 
-                $weeklyKYT[$week['week_number']] = $kyt ? [
+                $weeklyKYT[$week['id']] = $kyt ? [
                     'id' => $kyt->id,
                     'image' => $kyt->result_path,
                     'title' => $kyt->title,

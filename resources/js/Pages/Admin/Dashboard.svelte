@@ -46,6 +46,7 @@
             const endDate = new Date(week.date_end);
 
             generatedWeeks.push({
+                id: week.id,
                 start: startDate,
                 end: endDate,
                 week_number: week.week_number || (i + 1)
@@ -231,7 +232,7 @@
                         <!-- Show 4 or 5 cards based on weeks in month -->
                         {#each weeks as week, weekIndex (weekIndex)}
                             {@const weekNumber = week.week_number || (weekIndex + 1)}
-                            {@const kytData = team.weeklyKYT[weekNumber]}
+                            {@const kytData = team.weeklyKYT[week.id]}
                             {@render cardImg(kytData, weekNumber, week.start, week.end, team.name)}
                         {/each}
                     </div>
