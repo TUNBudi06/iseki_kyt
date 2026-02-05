@@ -25,28 +25,28 @@
     }
 
     const weeks = $derived.by(() => {
-        // If no data from backend, generate dummy weeks
-        if (!weeksInCurrentMonth || weeksInCurrentMonth.length === 0) {
-            const currentDate = new Date();
-            const monthNames = ["January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"];
-            const monthIndex = monthNames.indexOf(currentMonthName);
-            const month = monthIndex >= 0 ? monthIndex : currentDate.getMonth();
-            const year = currentYear || currentDate.getFullYear();
-
-            // Generate 4 dummy weeks
-            const generatedWeeks = [];
-            for (let i = 0; i < 4; i++) {
-                const startDay = i * 7 + 1;
-                const endDay = Math.min((i + 1) * 7, new Date(year, month + 1, 0).getDate());
-                generatedWeeks.push({
-                    start: new Date(year, month, startDay),
-                    end: new Date(year, month, endDay),
-                    week_number: i + 1
-                });
-            }
-            return generatedWeeks;
-        }
+        // // If no data from backend, generate dummy weeks
+        // if (!weeksInCurrentMonth || weeksInCurrentMonth.length === 0) {
+        //     const currentDate = new Date();
+        //     const monthNames = ["January", "February", "March", "April", "May", "June",
+        //         "July", "August", "September", "October", "November", "December"];
+        //     const monthIndex = monthNames.indexOf(currentMonthName);
+        //     const month = monthIndex >= 0 ? monthIndex : currentDate.getMonth();
+        //     const year = currentYear || currentDate.getFullYear();
+        //
+        //     // Generate 4 dummy weeks
+        //     const generatedWeeks = [];
+        //     for (let i = 0; i < 4; i++) {
+        //         const startDay = i * 7 + 1;
+        //         const endDay = Math.min((i + 1) * 7, new Date(year, month + 1, 0).getDate());
+        //         generatedWeeks.push({
+        //             start: new Date(year, month, startDay),
+        //             end: new Date(year, month, endDay),
+        //             week_number: i + 1
+        //         });
+        //     }
+        //     return generatedWeeks;
+        // }
 
         // Convert date strings to Date objects
         const generatedWeeks = [];
@@ -59,6 +59,7 @@
             const endDate = new Date(week.date_end);
 
             generatedWeeks.push({
+                id: week.id,
                 start: startDate,
                 end: endDate,
                 week_number: week.week_number || (i + 1)
@@ -160,7 +161,8 @@
                         <!-- Show cards based on weeks in month -->
                         {#each weeks as week, weekIndex (weekIndex)}
                             {@const weekNumber = week.week_number || (weekIndex + 1)}
-                            {@const kytData = team.weeklyKYT[weekNumber]}
+                            {@const kytData = team.weeklyKYT[week.id]}
+                            <!--{@debug weekNumber}-->
                             {@const isNextMonthWeek = isNextMonth(week, currentMonthName)}
                             <div class="group relative aspect-video rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer {isNextMonthWeek ? 'ring-2 ring-blue-400' : ''}">
                                 {#if kytData && kytData.image_url}

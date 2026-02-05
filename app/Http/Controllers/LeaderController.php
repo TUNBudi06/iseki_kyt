@@ -39,24 +39,24 @@ class LeaderController extends Controller
 
         // Get weeks for current and next month using trait method
         $weeksInCurrentMonth = $this->getWeeksForCurrentAndNextMonth();
+//        debugbar()->info($weeksInCurrentMonth);
 
-        // Get KYT submissions for this team
         $weeklyKYT = [];
         foreach ($weeksInCurrentMonth as $week) {
             $kyt = KYTList::where('team_k_y_t_id', $team->id)
                 ->where('kyt_date_id', $week['id'])
                 ->first();
+            debugbar()->info($kyt,$team->id,$week['week_number']);
 
-            // Use week_number as key instead of index
-            $weeklyKYT[$week['week_number']] = $kyt ? [
+            $weeklyKYT[$week['id']] = $kyt ? [
                 'id' => $kyt->id,
-                'image_url' => $kyt->result_path, // Use result_path field from database
+                'image_url' => $kyt->result_path,
                 'status' => 'submitted',
                 'submitted_at' => $kyt->created_at,
                 'week_number' => $week['week_number'],
-                'kyt_date_id' => $week['id'], // Add kyt_date_id for linking
+                'kyt_date_id' => $week['id'],
             ] : [
-                'kyt_date_id' => $week['id'], // Add kyt_date_id for empty weeks too
+                'kyt_date_id' => $week['id'],
             ];
         }
 

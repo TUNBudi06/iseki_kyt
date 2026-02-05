@@ -17,7 +17,7 @@ class AdminController extends Controller
     public function index()
     {
         $weeksInCurrentMonth = $this->getWeeksForCurrentAndNextMonth();
-
+//        debugbar()->info($weeksInCurrentMonth);
         $teams = TeamKYT::all()->map(function ($team) use ($weeksInCurrentMonth) {
             $weeklyKYT = [];
 
