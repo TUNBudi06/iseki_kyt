@@ -62,7 +62,9 @@
                 <div class="rounded-lg overflow-hidden shadow-lg bg-gray-100">
                     <img
                         src={assetUrl(selectedKyt.result_path,{query:{
-                            t: Date.now()
+                            t: dateparams
+
+
                         }})}
                         alt={selectedKyt.title}
                         class="w-full h-auto object-contain"
@@ -136,7 +138,9 @@
                         <div class="rounded-lg overflow-hidden shadow-md bg-gray-100">
                             <img
                                 src={assetUrl(selectedKyt.foto_path,{query:{
-                                    t: Date.now()
+                                    t: dateparams
+
+
                                 }})}
                                 alt="Original KYT"
                                 class="w-full h-auto object-contain"

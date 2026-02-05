@@ -13,6 +13,13 @@
     import {toast} from "svelte-sonner";
     import {router} from "@inertiajs/svelte";
     import {list as kytListRoute} from "$routes/admin/kyt";
+    import {onMount} from "svelte";
+
+    let dateparams:number = $state(0);
+
+    onMount(() => {
+        dateparams = Date.now();
+    });
 
     let {kytLists, teamKyt, auth, availableMonths, selectedMonthYear} = $props();
 
@@ -227,7 +234,7 @@
                             <div class="rounded-lg overflow-hidden shadow-lg bg-gray-100">
                                 <img
                                     src={assetUrl(kyt.result_path,{query:{
-                                    t: Date.now()
+                                    t: dateparams
                                 }})}
                                     alt={kyt.title}
                                     class="w-full h-auto object-contain"
