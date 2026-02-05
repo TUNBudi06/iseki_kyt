@@ -17,4 +17,5 @@ class KytDateList extends Model
     {
         return $this->hasMany(KYTList::class, 'kyt_date_id', 'id');
     }
+
 }

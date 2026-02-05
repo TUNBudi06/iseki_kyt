@@ -7,7 +7,13 @@
     import {downloadKytPptx, downloadKytImage } from '$lib/download/index.ts';
     import {router} from "@inertiajs/svelte";
     import {toast} from "svelte-sonner";
+    import {onMount} from "svelte";
     // import *
+    let dateparams:number = $state(0);
+
+    onMount(() => {
+        dateparams = Date.now();
+    });
 
     let {isOpen:isViewDialogOpen = $bindable<boolean>(false), selectedKyt, team} = $props();
     function deleteKyt(kytId:number) {
@@ -154,7 +160,7 @@
                     <div class="flex gap-2">
                         <Button
                             variant="outline"
-                            onclick={() => downloadKytImage(selectedKyt)}
+                            onclick={() => downloadKytImage(selectedKyt,dateparams)}
                             class="flex items-center gap-2 bg-blue-50 hover:bg-blue-100"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

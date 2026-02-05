@@ -102,6 +102,7 @@ class LeaderController extends Controller
                 if ($team) {
                     $query->where('team_k_y_t_id', $team->id)->with(['kytDateList']);
                 }
+                $query->with('penanganans');
             }])
             ->orderBy('kyt_date', 'desc')
             ->get();
@@ -175,7 +176,7 @@ class LeaderController extends Controller
             // Handle foto_path upload (edited canvas image)
             if ($request->hasFile('foto_path')) {
                 $fotoFile = $request->file('foto_path');
-                $fotoFilename = 'foto_'.$teamKYT->team_name.'.'.$fotoFile->getClientOriginalExtension();
+                $fotoFilename = 'fotoKyt_'.$teamKYT->team_name.'.'.$fotoFile->getClientOriginalExtension();
                 $fotoPath = $fotoFile->move($dir, $fotoFilename);
                 $kyt->foto_path = $dir.'/'.$fotoFilename;
             }
@@ -183,7 +184,7 @@ class LeaderController extends Controller
             // Handle result_path upload (full preview thumbnail)
             if ($request->hasFile('result_path')) {
                 $resultFile = $request->file('result_path');
-                $resultFilename = 'result_'.$teamKYT->team_name.'.'.$resultFile->getClientOriginalExtension();
+                $resultFilename = 'resultKyt_'.$teamKYT->team_name.'.'.$resultFile->getClientOriginalExtension();
                 $resultPath = $resultFile->move($dir, $resultFilename);
                 $kyt->result_path = $dir.'/'.$resultFilename;
             }
@@ -317,7 +318,7 @@ class LeaderController extends Controller
             // Handle foto_path upload (edited canvas image)
             if ($request->hasFile('foto_path')) {
                 $fotoFile = $request->file('foto_path');
-                $fotoFilename = 'foto_'.$kyt->teamKYT->team_name.'.'.$fotoFile->getClientOriginalExtension();
+                $fotoFilename = 'fotoKyt_'.$kyt->teamKYT->team_name.'.'.$fotoFile->getClientOriginalExtension();
                 $fotoPath = $fotoFile->move($dir, $fotoFilename);
                 $kyt->foto_path = $dir.'/'.$fotoFilename;
             }
@@ -325,7 +326,7 @@ class LeaderController extends Controller
             // Handle result_path upload (full preview thumbnail)
             if ($request->hasFile('result_path')) {
                 $resultFile = $request->file('result_path');
-                $resultFilename = 'result_'.$kyt->teamKYT->team_name.'.'.$resultFile->getClientOriginalExtension();
+                $resultFilename = 'resultKyt_'.$kyt->teamKYT->team_name.'.'.$resultFile->getClientOriginalExtension();
                 $resultPath = $resultFile->move($dir, $resultFilename);
                 $kyt->result_path = $dir.'/'.$resultFilename;
             }
@@ -333,6 +334,68 @@ class LeaderController extends Controller
             $kyt->save();
 
             return back()->with('success', 'KYT berhasil diperbarui!');
+        });
+    }
+
+    public function addPenanganan(string $kytListId)
+    {
+        $kyt = KYTList::findOrFail($kytListId);
+
+        return Inertia::render('Leader/penanganan/Penanganan-create', [
+            'kyt' => $kyt
+        ]);
+    }
+
+    public function submitPenanganan(Request $request, string $id)
+    {
+        $validated = $request->validate([
+            'penanganan' => 'required|string',
+        ]);
+
+        $kyt = KYTList::findOrFail($id);
+
+        // Check if the KYT belongs to the current user's team
+        $user = auth()->user();
+        $team = TeamKYT::where('user_id', $user->id)->first();
+
+        if (! $team || $kyt->team_k_y_t_id !== $team->id) {
+            return back()->with(['error' => 'You are not authorized to update this KYT.']);
+        }
+
+        $kyt->penanganan = $validated['penanganan'];
+        $kyt->save();
+
+        return back()->with(['success' => 'Penanganan berhasil disubmit!']);
+    }
+
+    /**
+     * @throws \Throwable
+     */
+    public function storePenanganan(Request $request)
+    {
+        $data = $request->validate([
+            'kyt_list_id' => 'required|exists:k_y_t_lists,id',
+            'title' => 'required|string|max:255',
+            'foto_path' => 'nullable|image|max:8192',
+        ]);
+
+        $kytList = KYTList::with(['kytDateList'])->findOrFail($data['kyt_list_id']);
+
+        return DB::transaction(function () use ($request, $data,$kytList) {
+            $penanganan = new \App\Models\KytPenanganan();
+            $penanganan->kyt_list_id = $data['kyt_list_id'];
+            $penanganan->penanganan_title = $data['title'];
+            $date = Carbon::parse($kytList->kytDateList->kyt_date);
+            // Handle result_path upload
+            if ($request->hasFile('foto_path')) {
+                $file = $request->file('foto_path');
+                $dir = $this->basePath.'/'.$date->format('Y-m').'_'.'week-'.$kytList->kytDateList->number_of_Weeks;
+                $filename = 'penangananKyt_'.$kytList->teamKYT->team_name.'_'.time().'.'.$file->getClientOriginalExtension();
+                $filePath = $file->move($dir, $filename);
+                $penanganan->result_path = $dir.'/'.$filename;
+            }
+            $penanganan->save();
+            return redirect()->route('leader.kytedit', ['id' => $data['kyt_list_id']])->with('success', 'Penanganan berhasil ditambahkan!');
         });
     }
 }

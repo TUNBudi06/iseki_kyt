@@ -38,6 +38,7 @@
 		"html-to-image": "^1.11.13",
 		"lucide": "^0.563.0",
 		"pptxgenjs": "^4.0.1",
-		"svelte": "^5.49.1"
+		"svelte": "^5.49.1",
+		"svelte-dropzone-runes": "^1.0.6"
 	}
 }

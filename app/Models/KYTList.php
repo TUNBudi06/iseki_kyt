@@ -28,4 +28,10 @@ class KYTList extends Model
     {
         return $this->belongsTo(TeamKYT::class, 'team_k_y_t_id', 'id');
     }
+
+
+    public function penanganans()
+    {
+        return $this->hasOne(kytPenanganan::class, 'kyt_list_id', 'id');
+    }
 }

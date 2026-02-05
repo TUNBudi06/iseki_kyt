@@ -12,6 +12,11 @@ Route::prefix('kyt')->group(function () {
     Route::delete('/delete/{id}', [LeaderController::class, 'deleteKyt'])->name('leader.kytdelete');
     Route::get('/edit/{id}', [LeaderController::class, 'editKyt'])->name('leader.kytedit');
     Route::post('/update/{id}', [LeaderController::class, 'updateKyt'])->name('leader.kytupdate');
+    Route::post('/submit-penanganan/{id}', [LeaderController::class, 'submitPenanganan'])->name('leader.kytsubmitpenanganan');
+    Route::prefix('penanganan')->group(function () {
+        Route::get('/add/{kytListId}', [LeaderController::class, 'addPenanganan'])->name('leader.penangananadd');
+        Route::post('/store', [LeaderController::class, 'storePenanganan'])->name('leader.penangananstore');
+    });
 });
 
 // Settings Routes

@@ -1,7 +1,7 @@
 import {assetUrl} from "@tunbudi06/inertia-route-helper";
 import {toast} from "svelte-sonner";
 
-export async function downloadKytImage({result_path, title}: {result_path: string, title: string}) {
+export async function downloadKytImage({result_path, title}: {result_path: string, title: string},dateparams:number) {
     try {
         const imageUrl = assetUrl(result_path,{query:{
                 t: dateparams

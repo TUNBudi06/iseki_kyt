@@ -11,7 +11,7 @@ createInertiaApp({
         return pages[`./Pages/${name}.svelte`]();
     },
     setup({ el, App, props }) {
-        // console.log('Inertia props:', props);
+        console.log('Inertia props:', props);
         initRouteHelper(props);
         if (el && el.dataset.serverRendered === 'true') {
             hydrate(App, { target: el, props });

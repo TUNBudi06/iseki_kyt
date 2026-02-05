@@ -9,6 +9,10 @@
 
     let { children } = $props();
     let mobileMenuOpen = $state(false);
+    let hasContent = $state(false);
+    if (children) {
+        hasContent = true;
+    }
 
     const navItems = [
         { name: 'Dashboard', href: routeUrl(leader.dashboard()), icon: '📊' },
@@ -139,6 +143,8 @@
 
     <!-- Main Content -->
     <main class="flex-1 container mx-auto px-4 py-6">
-        {@render children()}
+        {#if hasContent}
+            {@render children()}
+        {/if}
     </main>
 </DefaultLayouts>

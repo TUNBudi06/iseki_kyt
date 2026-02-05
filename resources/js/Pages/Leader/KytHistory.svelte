@@ -1,23 +1,28 @@
-<script>
+<script lang="ts">
     import {Input} from "$shadcn/components/ui/input/index.ts";
     import {Combobox} from "$shadcn/components/ui/combobox/index.js";
     import * as Field from "$shadcn/components/ui/field/index.js";
     import LeaderLayout from "$/Layouts/LeaderLayout.svelte";
     import * as Card from "$shadcn/components/ui/card/index.ts";
-    import * as Dialog from "$shadcn/components/ui/dialog/index.ts";
     import {Datatable, TableHandler, ThSort} from "@vincjo/datatables";
     import {Button} from "$shadcn/components/ui/button/index.ts";
     import * as Table from "$shadcn/components/ui/table/index.ts";
     import {Badge} from "$shadcn/components/ui/badge/index.ts";
     import leader, {kytdelete, kyt} from "$routes/leader/index.ts";
-    import {routeUrl, assetUrl, buildRoute} from "@tunbudi06/inertia-route-helper";
+    import {routeUrl} from "@tunbudi06/inertia-route-helper";
     import {inertia as InertiaLink, router} from "@inertiajs/svelte";
     import {toast} from "svelte-sonner";
     import ModalKYTShow from "$/lib/component/ModalKYTShow.svelte";
     import {downloadKytImage} from "$/lib/download/KytImage.ts";
     import {downloadKytPptx} from "$/lib/download/KytPptx.ts";
+    import {onMount} from "svelte";
 
     let {kytListDates, team, availableMonths, selectedMonthYear} = $props();
+    let dateparams:number = $state(0);
+
+    onMount(() => {
+        dateparams = Date.now();
+    });
 
     // Month filter state - reactive to prop changes
     let monthFilter = $state('');
@@ -54,7 +59,7 @@
 
     // Function to download as image
     async function downloadAsImage(kytData) {
-        await downloadKytImage({result_path: kytData.result_path, title: kytData.title});
+        await downloadKytImage({result_path: kytData.result_path, title: kytData.title},dateparams);
     }
 
     // Function to download as PowerPoint (create from scratch like KYT Preview)
@@ -89,6 +94,16 @@
         const formattedData = kytListDates.map(dateList => {
             const kytEntries = dateList.kyt_lists || [];
             const hasSubmission = kytEntries.length > 0;
+            const penanganans = hasSubmission ? kytEntries[0].penanganans : null;
+            let status_text = "Not Submitted";
+
+            console.log(penanganans,dateList.id);
+
+            if(penanganans){
+                status_text = 'Submitted';
+            }else if(hasSubmission){
+                status_text = 'menunggu penanganan';
+            }
 
             return {
                 ...dateList,
@@ -104,8 +119,9 @@
                     month: 'long'
                 }) + " Minggu Ke " + dateList.number_of_Weeks,
                 formatted_created: new Date(dateList.created_at).toLocaleDateString('id-ID'),
-                status_text: hasSubmission ? 'Submitted' : 'Not Submitted',
-                has_submission: hasSubmission
+                status_text:status_text,
+                has_submission: hasSubmission,
+                need_penanganan: hasSubmission && !penanganans
             };
         });
         console.log(formattedData);
@@ -209,6 +225,20 @@
                                                         Edit
                                                     </Button>
                                                 </a>
+                                                {#if row.need_penanganan}
+                                                        <a use:InertiaLink href={routeUrl(leader.penangananadd({kytListId: row.kyt_lists.id}))}>
+                                                        <Button
+                                                            variant="outline"
+                                                            size="sm"
+                                                            class="flex items-center gap-1 bg-yellow-50 hover:bg-yellow-100"
+                                                        >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                                                            </svg>
+                                                            Add Penanganan
+                                                        </Button>
+                                                    </a>
+                                                {/if}
                                                 <Button
                                                     variant="outline"
                                                     size="sm"
