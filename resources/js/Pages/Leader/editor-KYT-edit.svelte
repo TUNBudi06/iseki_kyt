@@ -6,7 +6,7 @@
     import {Button} from "$shadcn/components/ui/button";
     import {useForm} from "@inertiajs/svelte";
     import KytPreview from "$/Components/KytPreview.svelte";
-    import {kytstore, kytupdate} from "$routes/leader";
+    import {kytupdate} from "$routes/leader";
     import {assetUrl, routeUrl} from "@tunbudi06/inertia-route-helper";
     import {toBlob} from "html-to-image";
     import {toast} from "svelte-sonner";
@@ -139,7 +139,7 @@
         reader.readAsDataURL(file);
     }
 
-    function addHighlight() {
+    function addHighlightYellow() {
         if (!canvas) return;
         const rect = new Rect({
             left: 100,
@@ -147,9 +147,23 @@
             width: 120,
             height: 60,
             fill: "transparent",
-            stroke: "orange",
+            stroke: "#FACC15", // use a clear yellow (Tailwind amber-400 equivalent)
             strokeWidth: 2,
-            cornerColor: "orange"
+            cornerColor: "#FACC15"
+        });
+        canvas.add(rect);
+    }
+    function addHighlightRed() {
+        if (!canvas) return;
+        const rect = new Rect({
+            left: 100,
+            top: 100,
+            width: 120,
+            height: 60,
+            fill: "transparent",
+            stroke: "#EF4444", // red-500
+            strokeWidth: 2,
+            cornerColor: "#EF4444"
         });
         canvas.add(rect);
     }
@@ -543,8 +557,13 @@
                 </Card.Header>
                 <Card.Content>
                     <div class="flex flex-col gap-2">
-                        <Button variant="outline" onclick={addHighlight} class="justify-start">
-                            🟡 Highlight
+                        <Button variant="outline" onclick={addHighlightRed} class="justify-start">
+                            <span class="inline-block w-3 h-3 rounded-sm mr-2 bg-red-500" aria-hidden="true"></span>
+                            Highlight Red
+                        </Button>
+                        <Button variant="outline" onclick={addHighlightYellow} class="justify-start">
+                            <span class="inline-block w-3 h-3 rounded-sm mr-2 bg-yellow-500" aria-hidden="true"></span>
+                            Highlight Yellow
                         </Button>
                         <Button variant="outline" onclick={addCircle} class="justify-start">
                             🔴 Circle

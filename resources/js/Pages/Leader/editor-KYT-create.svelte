@@ -148,7 +148,7 @@
         reader.readAsDataURL(file);
     }
 
-    function addHighlight() {
+    function addHighlightYellow() {
         if (!canvas) return;
         const rect = new Rect({
             left: 100,
@@ -157,6 +157,20 @@
             height: 60,
             fill: "transparent",
             stroke: "orange",
+            strokeWidth: 2,
+            cornerColor: "orange"
+        });
+        canvas.add(rect);
+    }
+    function addHighlightRed() {
+        if (!canvas) return;
+        const rect = new Rect({
+            left: 100,
+            top: 100,
+            width: 120,
+            height: 60,
+            fill: "transparent",
+            stroke: "red",
             strokeWidth: 2,
             cornerColor: "orange"
         });
@@ -552,8 +566,13 @@
                 </Card.Header>
                 <Card.Content>
                     <div class="flex flex-col gap-2">
-                        <Button variant="outline" onclick={addHighlight} class="justify-start">
-                            🟡 Highlight
+                        <Button variant="outline" onclick={addHighlightRed} class="justify-start">
+                            <span class="inline-block w-3 h-3 rounded-sm mr-2 bg-red-500" aria-hidden="true"></span>
+                            Highlight Red
+                        </Button>
+                        <Button variant="outline" onclick={addHighlightYellow} class="justify-start">
+                            <span class="inline-block w-3 h-3 rounded-sm mr-2 bg-yellow-500" aria-hidden="true"></span>
+                            Highlight Yellow
                         </Button>
                         <Button variant="outline" onclick={addCircle} class="justify-start">
                             🔴 Circle

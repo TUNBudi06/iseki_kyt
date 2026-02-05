@@ -66,7 +66,7 @@
         for (const team of teamKyt) {
             const kytData = row.kyt_lists.find((kyt: any) => kyt.team_k_y_t_id === team.id);
             if (kytData) {
-                await SliceAdderKyt(pptx, kytData, team.team_name);
+                await SliceAdderKyt(pptx, kytData, team);
             } else {
                 await EmptySliceAdderKyt(pptx, team);
             }
