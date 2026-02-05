@@ -5,6 +5,7 @@
     import { page, Link } from "@inertiajs/svelte";
     import {assetUrl, routeUrl} from "@tunbudi06/inertia-route-helper";
     import {kytadd, kytedit} from "$routes/leader";
+    import {onMount} from "svelte";
 
     let { weeksInCurrentMonth = [], team = null, currentYear = 2026, currentMonthName = "January" } = $props();
 
@@ -13,6 +14,13 @@
     // Dialog state
     let isDialogOpen = $state(false);
     let selectedKyt = $state<any>(null);
+
+    let dateparams:number = $state(0);
+
+    onMount(() => {
+        dateparams = Date.now();
+    })
+
 
     // Function to open dialog with KYT data
     function openKytDialog(kytData: any, weekNumber: number, week: any) {

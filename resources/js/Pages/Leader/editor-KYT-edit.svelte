@@ -14,6 +14,8 @@
 
     let {bgKyt,kytDate,kytTeam,kytData} = $props();
 
+    let dateparams:number = $state(0);
+
     const form  = useForm({
         foto_path: null as File | null,
         result_path: null as File | null,
@@ -21,18 +23,6 @@
         potensi: '',
         user_name: '',
         title: '',
-    });
-
-    onMount(() => {
-        $form.penanganan = kytData?.penanganan || '';
-        $form.potensi = kytData?.potensi || '';
-        $form.user_name = kytData?.user_name || '';
-        $form.title = kytData?.title || '';
-        savedImageUrl = assetUrl(kytData?.foto_path || '',{query:{
-                t: dateparams
-
-
-            }});
     });
 
     // Use plain Svelte variables and explicit nullable types.
@@ -69,6 +59,17 @@
     }
 
     onMount(() => {
+        dateparams = Date.now();
+        $form.penanganan = kytData?.penanganan || '';
+        $form.potensi = kytData?.potensi || '';
+        $form.user_name = kytData?.user_name || '';
+        $form.title = kytData?.title || '';
+        savedImageUrl = assetUrl(kytData?.foto_path || '',{
+            query:{
+                t: dateparams
+            }
+        });
+
         // Wait until canvasEl is bound by Svelte. onMount runs after first render,
         // but guard to be safe in case of unexpected timing.
         if (!canvasEl) {

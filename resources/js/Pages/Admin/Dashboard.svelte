@@ -1,15 +1,22 @@
-<script>
+<script lang="ts">
     import * as Card from "$shadcn/components/ui/card/index.js";
     import * as Dialog from "$shadcn/components/ui/dialog/index.js";
     import { page } from "@inertiajs/svelte";
     import AdminLayout from "$/Layouts/AdminLayout.svelte";
     import {assetUrl} from "@tunbudi06/inertia-route-helper";
+    import {onMount} from "svelte";
 
     let { weeksInCurrentMonth = [], teams = [], currentYear = 2026, currentMonthName = "January" } = $props();
 
     // Dialog state for viewing KYT details
     let isDialogOpen = $state(false);
     let selectedKyt = $state(null);
+
+    let dateparams:number = $state(0);
+
+    onMount(() => {
+        dateparams = Date.now();
+    })
 
     const weeks = $derived.by(() => {
         // If no data from backend, generate dummy weeks
