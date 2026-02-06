@@ -96,13 +96,16 @@
             const hasSubmission = kytEntries.length > 0;
             const penanganans = hasSubmission ? kytEntries[0].penanganans : null;
             let status_text = "Not Submitted";
+            let status_color = "red";
 
             console.log(penanganans,dateList.id);
 
             if(penanganans){
                 status_text = 'Submitted';
+                status_color = 'green';
             }else if(hasSubmission){
                 status_text = 'menunggu penanganan';
+                status_color = 'yellow';
             }
 
             return {
@@ -120,6 +123,7 @@
                 }) + " Minggu Ke " + dateList.number_of_Weeks,
                 formatted_created: new Date(dateList.created_at).toLocaleDateString('id-ID'),
                 status_text:status_text,
+                status_color:status_color,
                 has_submission: hasSubmission,
                 need_penanganan: hasSubmission && !penanganans
             };
@@ -193,7 +197,7 @@
                                     <Table.Cell>{row.weeks}</Table.Cell>
                                     <Table.Cell>
                                         {#if row.has_submission}
-                                            <Badge variant="default" class="bg-green-500">{row.status_text}</Badge>
+                                            <Badge variant="default" class="data-[bg=green]:bg-green-500 data-[bg=yellow]:bg-yellow-300" data-bg={row.status_color}>{row.status_text}</Badge>
                                         {:else}
                                             <Badge variant="secondary">{row.status_text}</Badge>
                                         {/if}

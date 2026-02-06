@@ -11,11 +11,11 @@
     // import *
     let dateparams:number = $state(0);
 
+
+    let {isOpen:isViewDialogOpen = $bindable<boolean>(false), selectedKyt, team} = $props();
     onMount(() => {
         dateparams = Date.now();
     });
-
-    let {isOpen:isViewDialogOpen = $bindable<boolean>(false), selectedKyt, team} = $props();
     function deleteKyt(kytId:number) {
         if (confirm('Are you sure you want to delete this KYT? This action cannot be undone.')) {
             router.delete(routeUrl(kytdelete({id: kytId})), {
@@ -152,6 +152,27 @@
                                 class="w-full h-auto object-contain"
                             />
                         </div>
+                    </div>
+                {/if}
+
+                <!-- Original Photo (if exists) -->
+                {#if selectedKyt.penanganans}
+                    <div class="space-y-3">
+                        <div class="text-sm font-semibold text-gray-500 uppercase">Penanganan</div>
+                        <div class="text-sm font-bold">Hasil Penanganan yang dilakukan:</div>
+                        <div class="rounded-lg overflow-hidden shadow-md bg-gray-100">
+                            <img
+                                src={assetUrl(selectedKyt?.penanganans.result_path,{query:{
+                                    t: dateparams
+                                }})}
+                                alt="Original KYT"
+                                class="w-full h-auto object-contain"
+                            />
+                        </div>
+                    </div>
+                {:else}
+                    <div class="space-y-2">
+                        <div class="text-lg font-semibold text-gray-500 uppercase">Belum ada penanganan</div>
                     </div>
                 {/if}
 
