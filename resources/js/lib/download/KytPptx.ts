@@ -35,26 +35,12 @@ export async function downloadKytPptx(kytData: KytData, team: Team | null) {
     const pptx = await initPptxKyt(kytData.user_name, kytData.title);
     // Create main KYT slide
     SliceAdderKyt(pptx, kytData, team);
-    PenangananSliceKyt(pptx, kytData.penanganans.penanganan_title, kytData.penanganans.foto_path || null);
-
+        if(kytData.penanganans){
+            PenangananSliceKyt(pptx, kytData.penanganans.penanganan_title, kytData.penanganans.foto_path);
+        } else  {
+            PenangananSliceKyt(pptx, "Penanganan Belum submit");
+        }
     return pptx
-}
-
-export async function downloadPenangananPptx(penangananData: PenangananData) {
-    const PptxGenJS = (await import('pptxgenjs')).default;
-    const pptx = new PptxGenJS();
-
-    // Set presentation properties to match PPT size
-    pptx.layout = 'LAYOUT_16x9';
-    if (penangananData.user_name) {
-        pptx.author = penangananData.user_name;
-    }
-    pptx.title = `Penanganan - ${penangananData.title}`;
-
-    // Add penanganan slide
-    PenangananSliceKyt(pptx, penangananData.title, penangananData.foto_path || null);
-
-    return pptx;
 }
 
 export async function initPptxKyt(user_name:string, title:string) {
@@ -121,7 +107,7 @@ export function SliceAdderKyt(pptx: PptxGenJS, kytData: KytData, team: Team | nu
         y: 0.53,
         w: 5.31,
         h: 0.5,
-        fontSize: 15,
+        fontSize: 13,
         bold: true,
         color: '000000',
         align: 'center',

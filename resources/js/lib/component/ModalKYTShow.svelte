@@ -149,7 +149,7 @@
 
                                 }})}
                                 alt="Original KYT"
-                                class="w-full h-auto object-contain"
+                                class="w-full h-auto object-fit"
                             />
                         </div>
                     </div>
@@ -166,7 +166,7 @@
                                     t: dateparams
                                 }})}
                                 alt="Original KYT"
-                                class="w-full h-auto object-contain"
+                                class="w-300 h-170 object-fit"
                             />
                         </div>
                     </div>

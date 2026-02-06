@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Seed KYT Date Lists first
-//        $this->call(KytDateListSeeder::class);
+        $this->call(KytDateListSeeder::class);
 
         User::insert([
             [

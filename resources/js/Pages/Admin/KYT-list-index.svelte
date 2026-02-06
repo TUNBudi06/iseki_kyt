@@ -88,7 +88,7 @@
                 if(kytData.penanganans){
                     PenangananSliceKyt(pptx, kytData.penanganans.penanganan_title, kytData.penanganans.foto_path);
                 } else  {
-                    PenangananSliceKyt(pptx, "Tidak Ada Penanganan");
+                    PenangananSliceKyt(pptx, "Penanganan Belum submit");
                 }
             } else {
                 EmptySliceAdderKyt(pptx, team);
@@ -309,14 +309,14 @@
                                         Penanganan:
                                     </h3>
                                 </div>
-                                <!-- KYT Result Image -->
+                                <!-- KYT Penanganan Result Image -->
                                 <div class="rounded-lg overflow-auto shadow-lg bg-gray-100">
                                     <img
                                         src={assetUrl(kyt.penanganans.result_path,{query:{
                                     t: dateparams
                                 }})}
                                         alt={kyt.penanganans.title}
-                                        class="w-full h-auto object-contain"
+                                        class="w-300 h-170 object-contain"
                                     />
                                 </div>
                             {:else}

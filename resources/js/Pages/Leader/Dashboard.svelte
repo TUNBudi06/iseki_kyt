@@ -183,7 +183,7 @@
 
                                 }})}
                                         alt="KYT Week {weekNumber}"
-                                        class="w-full h-full object-cover"
+                                        class="w-full h-full object-contain"
                                     />
 
                                     <!-- Gradient Overlay -->

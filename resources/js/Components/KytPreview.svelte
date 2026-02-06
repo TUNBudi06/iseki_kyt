@@ -17,7 +17,7 @@
     <img
         src={bgKyt}
         alt="KYT Background"
-        class="rounded-lg border border-border object-cover w-full h-full"
+        class="rounded-lg border border-border object-contain w-full h-full"
     />
 
     <!-- Team Name Text - Positioned to match PPT layout (offsetX: 750, offsetY: 0, width: 530, height: 10) -->
@@ -36,7 +36,7 @@
     {#if kytTitle}
     <div class="absolute left-12.5 top-20 w-170 h-12.5 flex items-center justify-center">
         <span
-            class="font-bold text-2xl leading-tight text-center text-black uppercase"
+            class="font-bold text-xl tracking-tight leading-tight text-center text-black uppercase"
         >
             {kytTitle}
         </span>

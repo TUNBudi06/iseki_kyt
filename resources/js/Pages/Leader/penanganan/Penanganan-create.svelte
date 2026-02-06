@@ -602,7 +602,7 @@
                 </Card.Header>
                 <Card.Content class="p-4">
                     <div class="overflow-x-auto">
-                        <div bind:this={previewContainerEl} class="relative mx-auto w-7xl h-170 bg-pink-200 border-4 p-2 border-black flex items-center justify-center">
+                        <div bind:this={previewContainerEl} class="relative mx-auto w-300 h-170 bg-pink-200 border-4 p-2 border-black flex items-center justify-center">
                             {#if (penangananUrlImage) }
                                 <!-- Title at top when photo exists -->
                                 <div class="absolute top-0 left-0 w-full flex items-center max-w-300 justify-center pt-2">
