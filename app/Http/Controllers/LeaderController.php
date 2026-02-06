@@ -376,8 +376,8 @@ class LeaderController extends Controller
         $data = $request->validate([
             'kyt_list_id' => 'required|exists:k_y_t_lists,id',
             'title' => 'required|string|max:255',
-            'foto_path' => 'nullable|image|max:8192',
-            'result_path' => 'nullable|image|max:8192',
+            'foto_path' => 'nullable|max:8192',
+            'result_path' => 'nullable|max:8192',
         ]);
 
         $kytList = KYTList::with(['kytDateList'])->findOrFail($data['kyt_list_id']);

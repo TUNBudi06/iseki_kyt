@@ -291,14 +291,6 @@
         penangananUrlImage = URL.createObjectURL(blob);
     }
 
-    function handleFileChange(e: Event) {
-        const input = e.target as HTMLInputElement;
-        if (input.files?.length) {
-            Array.from(input.files).forEach((file) => loadImage(file));
-            input.value = "";
-        }
-    }
-
     function bringForward() {
         if (!canvas) return;
         const activeObject = canvas.getActiveObject();
