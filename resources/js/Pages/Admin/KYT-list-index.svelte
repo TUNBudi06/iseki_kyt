@@ -231,7 +231,7 @@
                             </div>
 
                             <!-- KYT Result Image -->
-                            <div class="rounded-lg overflow-hidden shadow-lg bg-gray-100">
+                            <div class="rounded-lg overflow-auto shadow-lg bg-gray-100">
                                 <img
                                     src={assetUrl(kyt.result_path,{query:{
                                     t: dateparams

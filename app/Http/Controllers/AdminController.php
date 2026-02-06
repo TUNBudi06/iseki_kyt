@@ -31,6 +31,7 @@ class AdminController extends Controller
                     'image' => $kyt->result_path,
                     'title' => $kyt->title,
                     'desc' => $kyt->potensi,
+                    'status' => $kyt->penanganans ?: false,
                     'submittedBy' => $kyt->user_name,
                     'week_number' => $week['week_number'],
                     'kyt_date_id' => $week['id'],

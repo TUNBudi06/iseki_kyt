@@ -309,6 +309,22 @@
                             <p class="text-base">{selectedKyt.submittedBy}</p>
                         </div>
                     </div>
+                    <div class="rounded-lg bg-yellow-50 p-4 border-l-4 border-yellow-400">
+                        {#if !selectedKyt.status}
+                            <div class="text-2xl tracking-tight">Tidak Ada Penanganan</div>
+                        {:else}
+                            <div class="text-2xl tracking-tight">Penanganan yang dilakukan:</div>
+                            <img
+                                src={assetUrl(selectedKyt.status.result_path,{query:{
+                                    t: dateparams
+
+
+                                }})}
+                                alt={selectedKyt.title}
+                                class="w-full h-auto object-contain"
+                            />
+                        {/if}
+                    </div>
                 </div>
             {/if}
         </Dialog.Content>
