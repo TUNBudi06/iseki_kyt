@@ -2,8 +2,8 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import tailwindcss from '@tailwindcss/vite';
 import laravel from 'laravel-vite-plugin';
-import path from 'path';
 import { defineConfig } from 'vite';
+import path from 'path';
 import {wayfinder} from "@laravel/vite-plugin-wayfinder";
 
 export default defineConfig({
