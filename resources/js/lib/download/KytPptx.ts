@@ -105,9 +105,7 @@ export function SliceAdderKyt(pptx: PptxGenJS, kytData: KytData, team: Team | nu
     // Convert: x=0.39", y=1.04", w=5.31", h=3.92"
     if (kytData.foto_path) {
         const fotoUrl = assetUrl(kytData.foto_path,{query:{
-                t: dateparams
-
-
+                t: Date.now()
             }});
         slide.addImage({
             path: fotoUrl,
@@ -247,9 +245,9 @@ export function SliceAdderKyt(pptx: PptxGenJS, kytData: KytData, team: Team | nu
         wrap: true,
         bullet: true
     });
-
-
 }
+
+// export function
 
 export function EmptySliceAdderKyt(pptx: PptxGenJS,team: Team | null) {
     // Create an empty slide

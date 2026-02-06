@@ -11,6 +11,7 @@ class KytPenanganan extends Model
     protected $fillable = [
         'kyt_list_id',
         'penanganan_title',
+        'foto_path',
         'result_path',
     ];
 

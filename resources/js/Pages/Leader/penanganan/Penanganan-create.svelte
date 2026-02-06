@@ -3,8 +3,8 @@
     import * as Tooltip from "$shadcn/components/ui/tooltip/index.ts";
     import * as Card from "$shadcn/components/ui/card";
     import * as Field from "$shadcn/components/ui/field";
-    import {assetUrl, route, routeUrl} from "@tunbudi06/inertia-route-helper";
-    import {Form, useForm} from "@inertiajs/svelte";
+    import {assetUrl, route} from "@tunbudi06/inertia-route-helper";
+    import {useForm} from "@inertiajs/svelte";
     import {Input} from "$shadcn/components/ui/input";
     import {Button} from "$shadcn/components/ui/button";
     import {Canvas, Circle, FabricImage, Rect} from "fabric";
@@ -31,6 +31,7 @@
         title: '',
         kyt_list_id: 0,
         foto_path: null as File | null,
+        result_path: null as File | null,
     });
 
     // Use plain Svelte variables and explicit nullable types.
@@ -414,7 +415,7 @@
 
             // Create File object from Blob with timestamp
             const timestamp = new Date().getTime();
-            $form.foto_path = new File([blob], `kyt-preview-${timestamp}.png`, {
+            $form.result_path = new File([blob], `kyt-preview-${timestamp}.png`, {
                 type: "image/png"
             });
 

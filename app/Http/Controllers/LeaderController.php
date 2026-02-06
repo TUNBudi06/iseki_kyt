@@ -377,6 +377,7 @@ class LeaderController extends Controller
             'kyt_list_id' => 'required|exists:k_y_t_lists,id',
             'title' => 'required|string|max:255',
             'foto_path' => 'nullable|image|max:8192',
+            'result_path' => 'nullable|image|max:8192',
         ]);
 
         $kytList = KYTList::with(['kytDateList'])->findOrFail($data['kyt_list_id']);
@@ -392,10 +393,17 @@ class LeaderController extends Controller
                 $dir = $this->basePath.'/'.$date->format('Y-m').'_'.'week-'.$kytList->kytDateList->number_of_Weeks;
                 $filename = 'penangananKyt_'.$kytList->teamKYT->team_name.'_'.time().'.'.$file->getClientOriginalExtension();
                 $filePath = $file->move($dir, $filename);
+                $penanganan->foto_path = $dir.'/'.$filename;
+            }
+            if( $request->hasFile('result_path')) {
+                $file = $request->file('result_path');
+                $dir = $this->basePath.'/'.$date->format('Y-m').'_'.'week-'.$kytList->kytDateList->number_of_Weeks;
+                $filename = 'penangananResultKyt_'.$kytList->teamKYT->team_name.'_'.time().'.'.$file->getClientOriginalExtension();
+                $filePath = $file->move($dir, $filename);
                 $penanganan->result_path = $dir.'/'.$filename;
             }
             $penanganan->save();
-            return redirect()->route('leader.kytedit', ['id' => $data['kyt_list_id']])->with('success', 'Penanganan berhasil ditambahkan!');
+            return redirect()->route('leader.kyt', ['id' => $data['kyt_list_id']])->with('success', 'Penanganan berhasil ditambahkan!');
         });
     }
 }
