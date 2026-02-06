@@ -18,4 +18,9 @@ class TeamKYT extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function kytLists()
+    {
+        return $this->hasMany(KYTList::class, 'team_k_y_t_id');
+    }
 }

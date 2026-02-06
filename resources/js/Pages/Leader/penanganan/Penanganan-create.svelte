@@ -613,7 +613,7 @@
                                     </span>
                                 </div>
                                 <!-- Photo in the middle -->
-                                <div class="absolute inset-0 left-10 top-16 w-300 h-150">
+                                <div class="absolute inset-0 left-0 top-16 w-300 h-150">
                                     <img
                                         src={penangananUrlImage}
                                         alt="Hasil editing KYT"

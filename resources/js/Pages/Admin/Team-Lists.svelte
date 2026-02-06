@@ -92,6 +92,13 @@
                     id: 'delete-team-success',
                 });
                 router.reload({only:['teams']})
+            },
+            onError: (errors) => {
+                openDelete = false;
+                deletingTeamId = null;
+                toast.error('Gagal menghapus team: ' + (errors?.message || 'Unknown error'), {
+                    id: 'delete-team-error',
+                });
             }
         });
     }

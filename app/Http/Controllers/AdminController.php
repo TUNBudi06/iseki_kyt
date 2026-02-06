@@ -17,7 +17,7 @@ class AdminController extends Controller
     public function index()
     {
         $weeksInCurrentMonth = $this->getWeeksForCurrentAndNextMonth();
-//        debugbar()->info($weeksInCurrentMonth);
+        //        debugbar()->info($weeksInCurrentMonth);
         $teams = TeamKYT::all()->map(function ($team) use ($weeksInCurrentMonth) {
             $weeklyKYT = [];
 
@@ -150,10 +150,14 @@ class AdminController extends Controller
 
     public function teamDelete($id)
     {
-        $team = TeamKYT::findOrFail($id);
-        $team->delete();
+        try {
+            $team = TeamKYT::findOrFail($id);
+            $team->delete();
 
-        return back()->with(['success' => 'Team deleted successfully.']);
+            return back()->with(['success' => 'Team deleted successfully.']);
+        } catch (\Exception $e) {
+            return back()->with(['error' => 'Failed to delete team: '.$e->getMessage()]);
+        }
     }
 
     public function kytList(Request $request)
@@ -177,7 +181,7 @@ class AdminController extends Controller
         $kytList = KytDateList::whereYear('kyt_date', $year)
             ->whereMonth('kyt_date', $month)
             ->with(['kytLists' => function ($q) {
-                $q->with(['kytDateList', 'teamKYT', 'Penanganans' ]);
+                $q->with(['kytDateList', 'teamKYT', 'Penanganans']);
             }])
             ->orderBy('kyt_date', 'asc')
             ->get();
