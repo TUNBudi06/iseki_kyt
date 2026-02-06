@@ -264,8 +264,8 @@ export function SliceAdderKyt(pptx: PptxGenJS, kytData: KytData, team: Team | nu
 export function PenangananSliceKyt(pptx: PptxGenJS, title: string, foto_path?: string | null) {
     const slide = pptx.addSlide();
 
-    // Add Background - white/light background to match preview
-    // slide.background = { color: 'FFFFFF' };
+    // Add pink background to match preview
+    slide.background = { color: 'FFC0CB' };
 
     if (foto_path) {
         const fotoUrl = assetUrl(foto_path, {
@@ -275,41 +275,45 @@ export function PenangananSliceKyt(pptx: PptxGenJS, title: string, foto_path?: s
         });
 
         // Add Title at top when photo exists
-        // Position similar to preview: top, centered
-        slide.addText(title, {
+        // Preview: top padding ~8px (0.06"), centered
+        slide.addText(title.toUpperCase(), {
             x: 0.5,
-            y: 0.3,
+            y: 0.2,
             w: 9,
-            h: 0.5,
+            h: 0.6,
             fontSize: 24,
             bold: true,
             color: '000000',
             align: 'center',
-            valign: 'top'
+            valign: 'middle'
         });
 
-        // Add Photo in the middle - centered
-        // Dimensions: width ~5.5", height ~4" to fit nicely on slide
+        // Add Photo in the middle
+        // Preview container: 1200x680px, Photo area: starts at left-10 top-16 (40px, 64px)
+        // Photo size: 1200x600px to fit within container
+        // PPT 16:9 = 10" x 5.625"
+        // Photo position: x=0.4" (40px from left), y=0.9" (64px from top + title space)
+        // Photo size: w=9.2", h=4.6" (maintaining aspect ratio of preview)
         slide.addImage({
             path: fotoUrl,
-            x: 1.75,
-            y: 1.0,
-            w: 5.5,
-            h: 4.5,
+            x: 0.4,
+            y: 0.9,
+            w: 9.2,
+            h: 4.6,
             sizing: {
                 type: 'contain',
-                w: 5.5,
-                h: 4.5
+                w: 9.2,
+                h: 4.6
             }
         });
     } else {
         // When no photo, center title
-        slide.addText(title, {
+        slide.addText(title.toUpperCase(), {
             x: 0.5,
-            y: 2.5,
+            y: 2.3,
             w: 9,
             h: 1,
-            fontSize: 32,
+            fontSize: 36,
             bold: true,
             color: '000000',
             align: 'center',
