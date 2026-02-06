@@ -43,15 +43,15 @@ class LeaderController extends Controller
 
         $weeklyKYT = [];
         foreach ($weeksInCurrentMonth as $week) {
-            $kyt = KYTList::where('team_k_y_t_id', $team->id)
+            $kyt = KYTList::with('Penanganans')->where('team_k_y_t_id', $team->id)
                 ->where('kyt_date_id', $week['id'])
                 ->first();
-            debugbar()->info($kyt,$team->id,$week['week_number']);
+//            debugbar()->info($kyt,$team->id,$week['week_number']);
 
             $weeklyKYT[$week['id']] = $kyt ? [
                 'id' => $kyt->id,
                 'image_url' => $kyt->result_path,
-                'status' => 'submitted',
+                'status' => $kyt->Penanganans ? true : false,
                 'submitted_at' => $kyt->created_at,
                 'week_number' => $week['week_number'],
                 'kyt_date_id' => $week['id'],

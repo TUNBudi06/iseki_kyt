@@ -2,10 +2,11 @@
     import LeaderLayout from "$/Layouts/LeaderLayout.svelte";
     import * as Card from "$shadcn/components/ui/card/index.js";
     import * as Dialog from "$shadcn/components/ui/dialog/index.js";
-    import { page, Link } from "@inertiajs/svelte";
+    import { page, Link,inertia as InertiaLink } from "@inertiajs/svelte";
     import {assetUrl, routeUrl} from "@tunbudi06/inertia-route-helper";
-    import {kytadd, kytedit} from "$routes/leader";
+    import leader, {kytadd, kytedit} from "$routes/leader";
     import {onMount} from "svelte";
+    import {Button} from "$shadcn/components/ui/button";
 
     let { weeksInCurrentMonth = [], team = null, currentYear = 2026, currentMonthName = "January" } = $props();
 
@@ -209,9 +210,15 @@
 
                                         <!-- Submitted Date -->
                                         <div class="flex items-center text-xs sm:text-sm md:text-base">
-                                            <span class="text-white/90 font-medium">
-                                                ✅ Submitted
-                                            </span>
+                                            {#if kytData.status}
+                                                <span class="text-white/90 font-medium">
+                                                    ✅ Submitted
+                                                </span>
+                                            {:else}
+                                                <span class="text-white font-medium">
+                                                    ⛔ Menunggu penanganan
+                                                </span>
+                                            {/if}
                                         </div>
                                     </div>
 
@@ -317,12 +324,31 @@
                         <!-- Right side - KYT Information (takes 1/4 on large screens) -->
                         <div class="lg:col-span-1 flex flex-col space-y-4 overflow-y-auto h-full pr-2">
                             <!-- Status Card -->
-                            <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-green-500">
+                            <div class="bg-white rounded-lg space-y-2 shadow-md p-4 border-l-4 border-green-500">
                                 <div class="text-xs font-semibold text-gray-500 uppercase mb-1.5">Status</div>
                                 <div class="flex items-center gap-2">
-                                    <span class="text-3xl">✅</span>
-                                    <span class="text-lg font-bold text-green-600">Submitted</span>
+                                    {#if (selectedKyt.status)}
+                                        <span class="text-3xl">✅</span>
+                                        <span class="text-lg font-bold text-green-600">Submitted</span>
+                                    {:else}
+                                        <span class="text-3xl">⛔</span>
+                                        <span class="text-lg font-bold text-red-600">Menunggu penanganan</span>
+                                    {/if}
                                 </div>
+                                {#if !selectedKyt.status}
+                                    <a class="pt-4" use:InertiaLink href={routeUrl(leader.penangananadd({kytListId: selectedKyt.id}))}>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            class="flex items-center w-full gap-1 bg-yellow-50 hover:bg-yellow-100"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                                            </svg>
+                                            Add Penanganan
+                                        </Button>
+                                    </a>
+                                {/if}
                             </div>
 
                             <!-- Tanggal Submit Card -->

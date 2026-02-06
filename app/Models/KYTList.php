@@ -30,7 +30,7 @@ class KYTList extends Model
     }
 
 
-    public function penanganans()
+    public function Penanganans()
     {
         return $this->hasOne(kytPenanganan::class, 'kyt_list_id', 'id');
     }
