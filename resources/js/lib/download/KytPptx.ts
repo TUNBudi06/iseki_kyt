@@ -18,15 +18,43 @@ export interface KytData {
 	result_path?: string | null;
     kyt_date_list: {
         kyt_date: string | number | Date;
+    },
+    penanganans: {
+        penanganan_title: string;
+        foto_path?: string | null;
     }
+}
+
+export interface PenangananData {
+	title: string;
+	foto_path?: string | null;
+	user_name?: string;
 }
 
 export async function downloadKytPptx(kytData: KytData, team: Team | null) {
     const pptx = await initPptxKyt(kytData.user_name, kytData.title);
     // Create main KYT slide
     SliceAdderKyt(pptx, kytData, team);
+    PenangananSliceKyt(pptx, kytData.penanganans.penanganan_title, kytData.penanganans.foto_path || null);
 
     return pptx
+}
+
+export async function downloadPenangananPptx(penangananData: PenangananData) {
+    const PptxGenJS = (await import('pptxgenjs')).default;
+    const pptx = new PptxGenJS();
+
+    // Set presentation properties to match PPT size
+    pptx.layout = 'LAYOUT_16x9';
+    if (penangananData.user_name) {
+        pptx.author = penangananData.user_name;
+    }
+    pptx.title = `Penanganan - ${penangananData.title}`;
+
+    // Add penanganan slide
+    PenangananSliceKyt(pptx, penangananData.title, penangananData.foto_path || null);
+
+    return pptx;
 }
 
 export async function initPptxKyt(user_name:string, title:string) {
@@ -247,7 +275,62 @@ export function SliceAdderKyt(pptx: PptxGenJS, kytData: KytData, team: Team | nu
     });
 }
 
-// export function
+export function PenangananSliceKyt(pptx: PptxGenJS, title: string, foto_path: string | null) {
+    const slide = pptx.addSlide();
+
+    // Add Background - white/light background to match preview
+    // slide.background = { color: 'FFFFFF' };
+
+    if (foto_path) {
+        const fotoUrl = assetUrl(foto_path, {
+            query: {
+                t: Date.now()
+            }
+        });
+
+        // Add Title at top when photo exists
+        // Position similar to preview: top, centered
+        slide.addText(title, {
+            x: 0.5,
+            y: 0.3,
+            w: 9,
+            h: 0.5,
+            fontSize: 24,
+            bold: true,
+            color: '000000',
+            align: 'center',
+            valign: 'top'
+        });
+
+        // Add Photo in the middle - centered
+        // Dimensions: width ~5.5", height ~4" to fit nicely on slide
+        slide.addImage({
+            path: fotoUrl,
+            x: 1.75,
+            y: 1.0,
+            w: 5.5,
+            h: 4.5,
+            sizing: {
+                type: 'contain',
+                w: 5.5,
+                h: 4.5
+            }
+        });
+    } else {
+        // When no photo, center title
+        slide.addText(title, {
+            x: 0.5,
+            y: 2.5,
+            w: 9,
+            h: 1,
+            fontSize: 32,
+            bold: true,
+            color: '000000',
+            align: 'center',
+            valign: 'middle'
+        });
+    }
+}
 
 export function EmptySliceAdderKyt(pptx: PptxGenJS,team: Team | null) {
     // Create an empty slide
@@ -255,7 +338,7 @@ export function EmptySliceAdderKyt(pptx: PptxGenJS,team: Team | null) {
 
     // Add Background Image (bg-kyt.jpg) - Full slide
     slide.addImage({
-        path: buildRoute('/assets/img/bg-kyt.jpg'),
+        path: assetUrl('/assets/img/bg-kyt.jpg'),
         x: 0,
         y: 0,
         w: '100%',

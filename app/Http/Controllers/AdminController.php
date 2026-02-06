@@ -22,7 +22,7 @@ class AdminController extends Controller
             $weeklyKYT = [];
 
             foreach ($weeksInCurrentMonth as $week) {
-                $kyt = KYTList::where('team_k_y_t_id', $team->id)
+                $kyt = KYTList::with('Penanganans')->where('team_k_y_t_id', $team->id)
                     ->where('kyt_date_id', $week['id'])
                     ->first();
 
