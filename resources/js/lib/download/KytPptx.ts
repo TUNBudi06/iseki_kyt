@@ -275,7 +275,7 @@ export function SliceAdderKyt(pptx: PptxGenJS, kytData: KytData, team: Team | nu
     });
 }
 
-export function PenangananSliceKyt(pptx: PptxGenJS, title: string, foto_path: string | null) {
+export function PenangananSliceKyt(pptx: PptxGenJS, title: string, foto_path?: string | null) {
     const slide = pptx.addSlide();
 
     // Add Background - white/light background to match preview

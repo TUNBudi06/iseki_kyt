@@ -177,7 +177,7 @@ class AdminController extends Controller
         $kytList = KytDateList::whereYear('kyt_date', $year)
             ->whereMonth('kyt_date', $month)
             ->with(['kytLists' => function ($q) {
-                $q->with(['kytDateList', 'teamKYT']);
+                $q->with(['kytDateList', 'teamKYT', 'Penanganans' ]);
             }])
             ->orderBy('kyt_date', 'asc')
             ->get();

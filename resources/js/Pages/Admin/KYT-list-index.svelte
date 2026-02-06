@@ -9,11 +9,12 @@
     import {Button} from "$shadcn/components/ui/button/index.js";
     import dayjs from "dayjs";
     import {assetUrl, routeUrl} from "@tunbudi06/inertia-route-helper";
-    import {EmptySliceAdderKyt, initPptxKyt, SliceAdderKyt} from "$lib/download/KytPptx.ts";
+    import {EmptySliceAdderKyt, initPptxKyt, PenangananSliceKyt, SliceAdderKyt} from "$lib/download/KytPptx.ts";
     import {toast} from "svelte-sonner";
     import {router} from "@inertiajs/svelte";
     import {list as kytListRoute} from "$routes/admin/kyt";
     import {onMount} from "svelte";
+    import * as Tooltip from "$shadcn/components/ui/tooltip/index.js";
 
     let dateparams:number = $state(0);
 
@@ -41,18 +42,28 @@
     });
 
     $effect(() => {
-        let data = kytLists.map((item: any, index: number) => ({
-            no: index + 1,
-            id: item.id,
-            minggu_kyt: dayjs(item.kyt_date).format("MMM YYYY") +` Week ${item.number_of_Weeks}`,
-            kyt_date: item.kyt_date,
-            kyt_lists: item.kyt_lists, // Store full kyt_lists for reference
-            ...teamKyt.reduce((acc: any, team: any) => {
-                const teamKyt = item.kyt_lists.find((t: any) => t.team_k_y_t_id === team.id);
-                acc[team.team_name] = teamKyt ? '✓' : '✗';
-                return acc;
-            }, {}),
-        }));
+        let data = kytLists.map((item: any, index: number) => {
+            return {
+                no: index + 1,
+                id: item.id,
+                minggu_kyt: dayjs(item.kyt_date).format("MMM YYYY") +` Week ${item.number_of_Weeks}`,
+                kyt_date: item.kyt_date,
+                kyt_lists: item.kyt_lists, // Store full kyt_lists for reference
+                ...teamKyt.reduce((acc: any, team: any) => {
+                    const teamKyt = item.kyt_lists.find((t: any) => t.team_k_y_t_id === team.id);
+                    if (teamKyt) {
+                        if(teamKyt.penanganans){
+                            acc[team.team_name] = '✓';
+                        } else {
+                            acc[team.team_name] = '-';
+                        }
+                    } else {
+                        acc[team.team_name] = '✗';
+                    }
+                    return acc;
+                }, {}),
+            }
+        });
 
 
         table.setRows(data);
@@ -73,9 +84,15 @@
         for (const team of teamKyt) {
             const kytData = row.kyt_lists.find((kyt: any) => kyt.team_k_y_t_id === team.id);
             if (kytData) {
-                await SliceAdderKyt(pptx, kytData, team);
+                SliceAdderKyt(pptx, kytData, team);
+                if(kytData.penanganans){
+                    PenangananSliceKyt(pptx, kytData.penanganans.penanganan_title, kytData.penanganans.foto_path);
+                } else  {
+                    PenangananSliceKyt(pptx, "Tidak Ada Penanganan");
+                }
             } else {
-                await EmptySliceAdderKyt(pptx, team);
+                EmptySliceAdderKyt(pptx, team);
+                PenangananSliceKyt(pptx, "KYT Tidak Diajukan");
             }
         }
         try {
@@ -100,6 +117,15 @@
     });
 
 </script>
+
+{#snippet tooltips(icon,text,className)}
+    <Tooltip.Root>
+        <Tooltip.Trigger class={className}>{icon}</Tooltip.Trigger>
+        <Tooltip.Content>
+            {text}
+        </Tooltip.Content>
+    </Tooltip.Root>
+{/snippet}
 
 <AdminLayout>
     <Card.Root>
@@ -156,9 +182,19 @@
                                 <Table.Cell>{@html row.minggu_kyt}</Table.Cell>
                                 {#each teamKyt as team}
                                     <Table.Cell class="text-center">
-                                        <span class={row[team.team_name] === '✓' ? 'text-green-600 font-bold text-lg' : 'text-red-600 font-bold text-lg'}>
-                                            {row[team.team_name]}
-                                        </span>
+                                        {#if row[team.team_name] === '✓'}
+                                            {@render tooltips(row[team.team_name],
+                                                "KYT submitted Dan Sudah ditangani",
+                                                "inline-block bg-green-100 rounded-full p-1")}
+                                        {:else if row[team.team_name] === '-'}
+                                            {@render tooltips(row[team.team_name],
+                                                "KYT submitted Dan Belum ditangani",
+                                                "inline-block bg-yellow-100 rounded-full p-1")}
+                                        {:else}
+                                            {@render tooltips(row[team.team_name],
+                                                "KYT BELUM DI SUBMIT",
+                                                "inline-block bg-red-100 rounded-full p-1")}
+                                        {/if}
                                     </Table.Cell>
                                 {/each}
                                 <Table.Cell class="text-end flex gap-2">
@@ -267,6 +303,30 @@
                                     <p class="text-base whitespace-pre-line">{kyt.penanganan}</p>
                                 </div>
                             </div>
+                            {#if kyt.penanganans}
+                                <div class="flex items-center pt-4 justify-between border-b-2 border-pink-200 pb-3">
+                                    <h3 class="text-xl font-bold text-yellow-600">
+                                        Penanganan:
+                                    </h3>
+                                </div>
+                                <!-- KYT Result Image -->
+                                <div class="rounded-lg overflow-auto shadow-lg bg-gray-100">
+                                    <img
+                                        src={assetUrl(kyt.penanganans.result_path,{query:{
+                                    t: dateparams
+                                }})}
+                                        alt={kyt.penanganans.title}
+                                        class="w-full h-auto object-contain"
+                                    />
+                                </div>
+                            {:else}
+                                <div class="flex items-center pt-4 justify-between border-b-2 border-pink-200 pb-3">
+                                    <h3 class="text-xl font-bold text-yellow-600">
+                                        Belum Ada Penanganan
+                                    </h3>
+                                </div>
+                            {/if}
+
                         </div>
                     {/each}
                 {/if}
