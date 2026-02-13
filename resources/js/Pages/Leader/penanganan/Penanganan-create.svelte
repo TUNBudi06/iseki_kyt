@@ -189,26 +189,55 @@
 
     function startCrop() {
         if (cropRect || !canvas) return;
+
+        // Get canvas dimensions
+        const canvasWidth = canvas.getWidth();
+        const canvasHeight = canvas.getHeight();
+
+        // Define crop rect size
+        const cropWidth = 300;
+        const cropHeight = 200;
+
+        // Center the crop rectangle
+        const left = (canvasWidth - cropWidth) / 2;
+        const top = (canvasHeight - cropHeight) / 2;
+
         cropRect = new Rect({
-            left: 80,
-            top: 80,
-            width: 200,
-            height: 150,
-            fill: "rgba(0,0,0,0.2)",
-            stroke: "white",
-            strokeDashArray: [6, 4],
+            left: left,
+            top: top,
+            width: cropWidth,
+            height: cropHeight,
+            fill: "rgba(0,0,0,0.5)",
+            stroke: "#FFFFFF",
+            strokeWidth: 3,
+            strokeDashArray: [10, 5],
             hasRotatingPoint: false,
-            cornerColor: "white"
+            cornerColor: "#FFFFFF",
+            cornerSize: 12,
+            transparentCorners: false,
+            cornerStrokeColor: "#000000",
+            borderColor: "#FFFFFF"
         });
+
+        // Add to canvas and bring to front to ensure it's on top
         canvas.add(cropRect);
+        canvas.bringObjectToFront(cropRect);
         canvas.setActiveObject(cropRect);
+        canvas.renderAll();
     }
 
     function applyCrop() {
         if (!cropRect || !canvas) return;
 
+        // Save the bounding rect BEFORE removing the cropRect
         const rect = cropRect.getBoundingRect();
-        // Add required multiplier parameter for Fabric v7
+
+        // Remove crop rectangle from canvas FIRST
+        canvas.remove(cropRect);
+        cropRect = null;
+        canvas.renderAll();
+
+        // Now crop the canvas based on the saved rect
         const dataUrl = canvas.toDataURL({
             left: rect.left,
             top: rect.top,
@@ -219,8 +248,7 @@
         });
 
         FabricImage.fromURL(dataUrl).then((img) => {
-            // By design this replaces the canvas with the cropped result. Keep the
-            // behavior but guard canvas is present.
+            // Clear canvas
             canvas!.clear();
 
             // Get canvas dimensions
@@ -240,7 +268,7 @@
             const left = (canvasWidth - scaledWidth) / 2;
             const top = (canvasHeight - scaledHeight) / 2;
 
-            // Set cropped image to full size and LOCK IT
+            // Set cropped image properties - NOT LOCKED so it can be edited
             img.set({
                 originX: "left",
                 originY: "top",
@@ -248,24 +276,23 @@
                 scaleY: scale,
                 left: left,
                 top: top,
-                selectable: false,
-                evented: false,
-                lockMovementX: true,
-                lockMovementY: true,
-                lockScalingX: true,
-                lockScalingY: true,
-                lockRotation: true,
-                hasControls: false,
-                hasBorders: false,
+                selectable: true,
+                evented: true,
+                lockMovementX: false,
+                lockMovementY: false,
+                lockScalingX: false,
+                lockScalingY: false,
+                lockRotation: false,
+                hasControls: true,
+                hasBorders: true,
             });
             img.setCoords();
 
             canvas!.add(img);
+            canvas!.setActiveObject(img);
             canvas!.renderAll();
             saveState();
         });
-
-        cropRect = null;
     }
 
     async function exportImage() {
@@ -343,9 +370,27 @@
     }
 
     function keyPressFunction(event: KeyboardEvent) {
-        if (event.key === "Delete") {
-            if(!canvas?.getActiveObject()) return;
+        if (!canvas) return;
+
+        // Undo: Ctrl+Z
+        if (event.ctrlKey && event.key === 'z' && !event.shiftKey) {
+            event.preventDefault();
+            undo();
+            return;
+        }
+
+        // Redo: Ctrl+Y or Ctrl+Shift+Z
+        if ((event.ctrlKey && event.key === 'y') || (event.ctrlKey && event.shiftKey && event.key === 'z')) {
+            event.preventDefault();
+            redo();
+            return;
+        }
+
+        // Delete: Delete or Backspace (only if an object is selected)
+        if ((event.key === 'Delete' || event.key === 'Backspace') && canvas.getActiveObject()) {
+            event.preventDefault();
             removeSelected();
+            return;
         }
     }
 
@@ -567,15 +612,16 @@
                             ✅ Apply Crop
                         </Button>
                     </div>
-                    <div class="overflow-x-auto overflow-y-hidden bg-muted/30 p-4 rounded-lg">
-                        <div class="mx-auto bg-white" style="width: 1200px; height: 600px;">
+                    <div class="overflow-x-auto overflow-y-hidden bg-muted/30 p-4 rounded-lg touch-pan-x">
+                        <div class="mx-auto bg-white min-w-[1200px]" style="width: 1200px; height: 600px;">
                             <canvas
                                 bind:this={canvasEl}
-                                class="border border-border rounded-lg shadow-sm w-7xl h-150"
+                                class="border border-border rounded-lg shadow-sm"
+                                style="width: 1200px; height: 600px;"
                             ></canvas>
                         </div>
                     </div>
-                    <div class="flex flex-row gap-2">
+                    <div class="flex flex-col sm:flex-row gap-2">
                         <Button variant="outline" onclick={undo} class="justify-start flex-1">
                             ↩️ Undo
                         </Button>

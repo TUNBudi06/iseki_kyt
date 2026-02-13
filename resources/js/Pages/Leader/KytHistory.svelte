@@ -177,41 +177,41 @@
                         <Table.Header>
                             <Table.Row>
                                 <ThSort {table} field="id">
-                                    <Table.Head>ID</Table.Head>
+                                    <Table.Head class="w-16 px-2 py-2 text-xs">ID</Table.Head>
                                 </ThSort>
                                 <ThSort {table} field="kyt_date">
-                                    <Table.Head>KYT Date</Table.Head>
+                                    <Table.Head class="px-3 py-2 text-xs">KYT Date</Table.Head>
                                 </ThSort>
                                 <ThSort {table} field="number_of_Weeks">
-                                    <Table.Head>Week Number</Table.Head>
+                                    <Table.Head class="px-3 py-2 text-xs">Week Number</Table.Head>
                                 </ThSort>
-                                <Table.Head>Status</Table.Head>
-                                <Table.Head class="text-end">Actions</Table.Head>
+                                <Table.Head class="px-3 py-2 text-xs">Status</Table.Head>
+                                <Table.Head class="text-end px-3 py-2 text-xs">Actions</Table.Head>
                             </Table.Row>
                         </Table.Header>
                         <Table.Body>
                             {#each table.rows as row}
-                                <Table.Row>
-                                    <Table.Cell class="font-medium">{row.id}</Table.Cell>
-                                    <Table.Cell>{row.formatted_date}</Table.Cell>
-                                    <Table.Cell>{row.weeks}</Table.Cell>
-                                    <Table.Cell>
+                                <Table.Row class="hover:bg-muted/50">
+                                    <Table.Cell class="font-medium px-2 py-2 text-xs">{row.id}</Table.Cell>
+                                    <Table.Cell class="px-3 py-2 text-xs text-balance">{row.formatted_date}</Table.Cell>
+                                    <Table.Cell class="px-3 py-2 text-xs">{row.weeks}</Table.Cell>
+                                    <Table.Cell class="px-3 py-2">
                                         {#if row.has_submission}
-                                            <Badge variant="default" class="data-[bg=green]:bg-green-500 data-[bg=yellow]:bg-yellow-300" data-bg={row.status_color}>{row.status_text}</Badge>
+                                            <Badge variant="default" class="data-[bg=green]:bg-green-500 data-[bg=yellow]:bg-yellow-300 text-xs px-2 py-0.5" data-bg={row.status_color}>{row.status_text}</Badge>
                                         {:else}
-                                            <Badge variant="secondary">{row.status_text}</Badge>
+                                            <Badge variant="secondary" class="text-xs px-2 py-0.5">{row.status_text}</Badge>
                                         {/if}
                                     </Table.Cell>
-                                    <Table.Cell class="text-end">
+                                    <Table.Cell class="text-end px-3 py-2">
                                         {#if row.has_submission}
-                                            <div class="flex gap-2 justify-end flex-wrap">
+                                            <div class="flex gap-1 justify-end flex-wrap">
                                                 <Button
                                                     variant="outline"
                                                     size="sm"
                                                     onclick={() => viewKyt(row.kyt_lists)}
-                                                    class="flex items-center gap-1"
+                                                    class="flex items-center gap-1 h-8 px-2 text-xs"
                                                 >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                                                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                                                         <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
                                                     </svg>
@@ -221,25 +221,25 @@
                                                     <Button
                                                         variant="outline"
                                                         size="sm"
-                                                        class="flex items-center gap-1"
+                                                        class="flex items-center gap-1 h-8 px-2 text-xs"
                                                     >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                                                             <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                                                         </svg>
                                                         Edit
                                                     </Button>
                                                 </a>
                                                 {#if row.need_penanganan}
-                                                        <a use:InertiaLink href={routeUrl(leader.penangananadd({kytListId: row.kyt_lists.id}))}>
+                                                    <a use:InertiaLink href={routeUrl(leader.penangananadd({kytListId: row.kyt_lists.id}))}>
                                                         <Button
                                                             variant="outline"
                                                             size="sm"
-                                                            class="flex items-center gap-1 bg-yellow-50 hover:bg-yellow-100"
+                                                            class="flex items-center gap-1 h-8 px-2 text-xs bg-yellow-50 hover:bg-yellow-100"
                                                         >
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                                                                 <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                                                             </svg>
-                                                            Add Penanganan
+                                                            Penanganan
                                                         </Button>
                                                     </a>
                                                 {/if}
@@ -247,9 +247,9 @@
                                                     variant="outline"
                                                     size="sm"
                                                     onclick={() => downloadAsImage(row.kyt_lists)}
-                                                    class="flex items-center gap-1 bg-blue-50 hover:bg-blue-100"
+                                                    class="flex items-center gap-1 h-8 px-2 text-xs bg-blue-50 hover:bg-blue-100"
                                                 >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                                                         <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
                                                     </svg>
                                                     Image
@@ -258,9 +258,9 @@
                                                     variant="outline"
                                                     size="sm"
                                                     onclick={() => downloadAsPPT(row.kyt_lists)}
-                                                    class="flex items-center gap-1 bg-orange-50 hover:bg-orange-100"
+                                                    class="flex items-center gap-1 h-8 px-2 text-xs bg-orange-50 hover:bg-orange-100"
                                                 >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                                                         <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
                                                     </svg>
                                                     PPT
@@ -269,9 +269,9 @@
                                                     variant="destructive"
                                                     size="sm"
                                                     onclick={() => deleteKyt(row.kyt_lists.id)}
-                                                    class="flex items-center gap-1"
+                                                    class="flex items-center gap-1 h-8 px-2 text-xs"
                                                 >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                                                         <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                                     </svg>
                                                     Delete
@@ -279,8 +279,8 @@
                                             </div>
                                         {:else}
                                             <a use:InertiaLink href={routeUrl(leader.kytadd({IdKytDate: row.id}))}>
-                                                <Button size="sm" class="flex items-center self-end gap-1">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                <Button size="sm" class="flex items-center self-end gap-1 h-8 px-2 text-xs">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                                                         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                                                     </svg>
                                                     Tambahkan KYT
@@ -296,5 +296,5 @@
             </div>
         </Card.Content>
     </Card.Root>
-    <ModalKYTShow bind:isOpen={isViewDialogOpen} {selectedKyt} />
+    <ModalKYTShow bind:isOpen={isViewDialogOpen} {selectedKyt} {team} />
 </LeaderLayout>

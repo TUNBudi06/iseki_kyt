@@ -11,8 +11,16 @@
     import {toBlob} from "html-to-image";
     import {toast} from "svelte-sonner";
     import {maxChartTitleLength, maxKeteranganLength, maxPenangananLength, maxPicLength} from "./KytParameter.ts";
+    import Dropzone, { type DropzoneEvent } from 'svelte-dropzone-runes';
 
     let {bgKyt,kytDate,kytTeam,kytTeamId,kytDateId} = $props();
+
+    function handleFilesSelect(e: DropzoneEvent<File>) {
+        console.log(e.acceptedFiles);
+        e.acceptedFiles.forEach((file: File) => {
+            loadImage(file);
+        });
+    }
 
     const form  = useForm({
         foto_path: null as File | null,
@@ -192,26 +200,55 @@
 
     function startCrop() {
         if (cropRect || !canvas) return;
+
+        // Get canvas dimensions
+        const canvasWidth = canvas.getWidth();
+        const canvasHeight = canvas.getHeight();
+
+        // Define crop rect size
+        const cropWidth = 200;
+        const cropHeight = 150;
+
+        // Center the crop rectangle
+        const left = (canvasWidth - cropWidth) / 2;
+        const top = (canvasHeight - cropHeight) / 2;
+
         cropRect = new Rect({
-            left: 80,
-            top: 80,
-            width: 200,
-            height: 150,
-            fill: "rgba(0,0,0,0.2)",
-            stroke: "white",
-            strokeDashArray: [6, 4],
+            left: left,
+            top: top,
+            width: cropWidth,
+            height: cropHeight,
+            fill: "rgba(0,0,0,0.5)",
+            stroke: "#FFFFFF",
+            strokeWidth: 3,
+            strokeDashArray: [10, 5],
             hasRotatingPoint: false,
-            cornerColor: "white"
+            cornerColor: "#FFFFFF",
+            cornerSize: 12,
+            transparentCorners: false,
+            cornerStrokeColor: "#000000",
+            borderColor: "#FFFFFF"
         });
+
+        // Add to canvas and bring to front to ensure it's on top
         canvas.add(cropRect);
+        canvas.bringObjectToFront(cropRect);
         canvas.setActiveObject(cropRect);
+        canvas.renderAll();
     }
 
     function applyCrop() {
         if (!cropRect || !canvas) return;
 
+        // Save the bounding rect BEFORE removing the cropRect
         const rect = cropRect.getBoundingRect();
-        // Add required multiplier parameter for Fabric v7
+
+        // Remove crop rectangle from canvas FIRST
+        canvas.remove(cropRect);
+        cropRect = null;
+        canvas.renderAll();
+
+        // Now crop the canvas based on the saved rect
         const dataUrl = canvas.toDataURL({
             left: rect.left,
             top: rect.top,
@@ -222,8 +259,7 @@
         });
 
         FabricImage.fromURL(dataUrl).then((img) => {
-            // By design this replaces the canvas with the cropped result. Keep the
-            // behavior but guard canvas is present.
+            // Clear canvas
             canvas!.clear();
 
             // Get canvas dimensions
@@ -243,7 +279,7 @@
             const left = (canvasWidth - scaledWidth) / 2;
             const top = (canvasHeight - scaledHeight) / 2;
 
-            // Set cropped image to full size and LOCK IT
+            // Set cropped image properties - NOT LOCKED so it can be edited
             img.set({
                 originX: "left",
                 originY: "top",
@@ -251,24 +287,23 @@
                 scaleY: scale,
                 left: left,
                 top: top,
-                selectable: false,
-                evented: false,
-                lockMovementX: true,
-                lockMovementY: true,
-                lockScalingX: true,
-                lockScalingY: true,
-                lockRotation: true,
-                hasControls: false,
-                hasBorders: false,
+                selectable: true,
+                evented: true,
+                lockMovementX: false,
+                lockMovementY: false,
+                lockScalingX: false,
+                lockScalingY: false,
+                lockRotation: false,
+                hasControls: true,
+                hasBorders: true,
             });
             img.setCoords();
 
             canvas!.add(img);
+            canvas!.setActiveObject(img);
             canvas!.renderAll();
             saveState();
         });
-
-        cropRect = null;
     }
 
     async function exportImage() {
@@ -292,14 +327,6 @@
         // Create URL for preview
         savedImageUrl = URL.createObjectURL(blob);
     }
-
-    function handleFileChange(e: Event) {
-         const input = e.target as HTMLInputElement;
-         if (input.files?.length) {
-             Array.from(input.files).forEach((file) => loadImage(file));
-             input.value = "";
-         }
-     }
 
     function bringForward() {
         if (!canvas) return;
@@ -444,6 +471,31 @@
     }
 </script>
 
+<svelte:window onkeydown={(e) => {
+    if (!canvas) return;
+
+    // Undo: Ctrl+Z
+    if (e.ctrlKey && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        undo();
+        return;
+    }
+
+    // Redo: Ctrl+Y or Ctrl+Shift+Z
+    if ((e.ctrlKey && e.key === 'y') || (e.ctrlKey && e.shiftKey && e.key === 'z')) {
+        e.preventDefault();
+        redo();
+        return;
+    }
+
+    // Delete: Delete or Backspace (only if an object is selected)
+    if ((e.key === 'Delete' || e.key === 'Backspace') && canvas.getActiveObject()) {
+        e.preventDefault();
+        removeSelected();
+        return;
+    }
+}} />
+
 <LeaderLayout>
     <div class="space-y-6">
         <div>
@@ -526,19 +578,11 @@
                         ></textarea>
                     </div>
 
-                    <div class="relative">
-                        <input
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onchange={handleFileChange}
-                            class="block w-full text-sm text-muted-foreground
-                                file:mr-4 file:py-2 file:px-4
-                                file:rounded-md file:border-0
-                                file:text-sm file:font-medium
-                                file:bg-primary file:text-primary-foreground
-                                hover:file:bg-primary/90 file:cursor-pointer"
-                        />
+                    <div class="flex flex-col gap-2">
+                        <label for="foto-upload" class="text-sm font-medium">
+                            Upload Gambar
+                        </label>
+                        <Dropzone id="foto-upload" multiple onDrop={handleFilesSelect} />
                     </div>
                 </div>
             </Card.Content>
@@ -549,11 +593,14 @@
             <!-- Canvas Editor -->
             <Card.Root>
                 <Card.Content class="p-4">
-                    <div class="overflow-x-auto overflow-y-auto max-w-full p-4 bg-white md:overflow-x-hidden md:overflow-y-hidden md:p-0 md:bg-transparent">
-                        <canvas
-                            bind:this={canvasEl}
-                            class="border border-border rounded-lg w-170 h-125.5"
-                        ></canvas>
+                    <div class="overflow-x-auto overflow-y-hidden bg-muted/30 p-4 rounded-lg touch-pan-x">
+                        <div class="mx-auto bg-white min-w-[680px]" style="width: 680px; height: 502px;">
+                            <canvas
+                                bind:this={canvasEl}
+                                class="border border-border rounded-lg shadow-sm"
+                                style="width: 680px; height: 502px;"
+                            ></canvas>
+                        </div>
                     </div>
                 </Card.Content>
             </Card.Root>

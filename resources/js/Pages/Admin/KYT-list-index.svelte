@@ -162,50 +162,52 @@
                     <Table.Header>
                         <Table.Row>
                             <ThSort {table} field="no" >
-                                <Table.Head class="w-2.5">No</Table.Head>
+                                <Table.Head class="w-12 px-2 py-2 text-xs">No</Table.Head>
                             </ThSort>
                             <ThSort {table} field="minggu_kyt" >
-                                <Table.Head>Minggu KYT</Table.Head>
+                                <Table.Head class="px-3 py-2 text-xs">Minggu KYT</Table.Head>
                             </ThSort>
                             {#each teamKyt as team}
                                 <ThSort {table} field={team.team_name} >
-                                    <Table.Head>{team.team_name}</Table.Head>
+                                    <Table.Head class="max-w-20 px-2 py-2 text-xs">
+                                        <p class="text-balance text-center leading-tight">{team.team_name}</p>
+                                    </Table.Head>
                                 </ThSort>
                             {/each}
-                            <Table.Head class="text-end">Actions</Table.Head>
+                            <Table.Head class="text-end px-3 py-2 text-xs">Actions</Table.Head>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
                         {#each table.rows as row (row.no)}
-                            <Table.Row>
-                                <Table.Cell class="font-medium">{row.no}</Table.Cell>
-                                <Table.Cell>{@html row.minggu_kyt}</Table.Cell>
+                            <Table.Row class="hover:bg-muted/50">
+                                <Table.Cell class="font-medium px-2 py-2 text-xs">{row.no}</Table.Cell>
+                                <Table.Cell class="px-3 py-2 text-xs">{@html row.minggu_kyt}</Table.Cell>
                                 {#each teamKyt as team}
-                                    <Table.Cell class="text-center">
+                                    <Table.Cell class="text-center px-2 py-2 text-xs">
                                         {#if row[team.team_name] === '✓'}
                                             {@render tooltips(row[team.team_name],
                                                 "KYT submitted Dan Sudah ditangani",
-                                                "inline-block bg-green-100 rounded-full p-1")}
+                                                "inline-block bg-green-100 rounded-full px-2 py-0.5")}
                                         {:else if row[team.team_name] === '-'}
                                             {@render tooltips(row[team.team_name],
                                                 "KYT submitted Dan Belum ditangani",
-                                                "inline-block bg-yellow-100 rounded-full p-1")}
+                                                "inline-block bg-yellow-100 rounded-full px-2 py-0.5")}
                                         {:else}
                                             {@render tooltips(row[team.team_name],
                                                 "KYT BELUM DI SUBMIT",
-                                                "inline-block bg-red-100 rounded-full p-1")}
+                                                "inline-block bg-red-100 rounded-full px-2 py-0.5")}
                                         {/if}
                                     </Table.Cell>
                                 {/each}
-                                <Table.Cell class="text-end flex gap-2">
+                                <Table.Cell class="text-end flex gap-1 px-3 py-2">
                                     <Button
                                         variant="outline"
                                         size="sm"
                                         onclick={() => viewKytDetails(row)}
                                         disabled={row.kyt_lists.length === 0}
-                                        class="flex items-center gap-1"
+                                        class="flex items-center gap-1 h-8 px-2 text-xs"
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                                             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                                             <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
                                         </svg>
@@ -216,9 +218,9 @@
                                         size="sm"
                                         onclick={() => downloadAsPPT(row)}
                                         disabled={row.kyt_lists.length === 0}
-                                        class="flex items-center gap-1 bg-orange-50 hover:bg-orange-100"
+                                        class="flex items-center gap-1 h-8 px-2 text-xs bg-orange-50 hover:bg-orange-100"
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
                                         </svg>
                                         PPT

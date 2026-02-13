@@ -157,8 +157,8 @@ function startCrop() {
         top: 80,
         width: 200,
         height: 150,
-        fill: "rgba(0,0,0,0.2)",
-        stroke: "white",
+        fill: "rgba(0,0,0,0.5)",
+        stroke: "red",
         strokeDashArray: [6, 4],
         hasRotatingPoint: false,
         cornerColor: "white"
