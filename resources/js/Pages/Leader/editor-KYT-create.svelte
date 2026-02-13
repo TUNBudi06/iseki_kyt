@@ -59,6 +59,7 @@
     let kytPic = $state<string>("");
     let kytPotensi = $state<string>("");
     let kytPenanganan = $state<string>("");
+    let strokeSize = $state<number>(4);
 
     function saveState() {
         if (!canvas || isLoadingState) return;
@@ -199,9 +200,9 @@
             width: 120,
             height: 60,
             fill: "transparent",
-            stroke: "orange",
-            strokeWidth: 2,
-            cornerColor: "orange"
+            stroke: "#FACC15", // use a clear yellow (Tailwind amber-400 equivalent)
+            strokeWidth: strokeSize,
+            cornerColor: "#FACC15"
         });
         canvas.add(rect);
     }
@@ -213,9 +214,9 @@
             width: 120,
             height: 60,
             fill: "transparent",
-            stroke: "red",
-            strokeWidth: 2,
-            cornerColor: "orange"
+            stroke: "#EF4444", // red-500
+            strokeWidth: strokeSize,
+            cornerColor: "#EF4444"
         });
         canvas.add(rect);
     }
@@ -228,7 +229,7 @@
             radius: 40,
             fill: "transparent",
             stroke: "red",
-            strokeWidth: 4
+            strokeWidth: strokeSize,
         });
         canvas.add(circle);
     }
@@ -278,12 +279,33 @@
         // Save the bounding rect BEFORE removing the cropRect
         const rect = cropRect.getBoundingRect();
 
+        // Get all objects in canvas (excluding the crop rectangle)
+        const allObjects = canvas.getObjects().filter(obj => obj !== cropRect);
+
+        // Find objects that are within or intersecting the crop rectangle
+        const objectsToRemove: any[] = [];
+        allObjects.forEach(obj => {
+            const objBounds = obj.getBoundingRect();
+
+            // Check if object intersects with crop rectangle
+            const intersects = !(
+                objBounds.left + objBounds.width < rect.left ||
+                objBounds.left > rect.left + rect.width ||
+                objBounds.top + objBounds.height < rect.top ||
+                objBounds.top > rect.top + rect.height
+            );
+
+            if (intersects) {
+                objectsToRemove.push(obj);
+            }
+        });
+
         // Remove crop rectangle from canvas FIRST
         canvas.remove(cropRect);
         cropRect = null;
         canvas.renderAll();
 
-        // Now crop the canvas based on the saved rect
+        // Capture the crop area (with objects that will be removed)
         const dataUrl = canvas.toDataURL({
             left: rect.left,
             top: rect.top,
@@ -293,28 +315,31 @@
             format: "png"
         });
 
-        FabricImage.fromURL(dataUrl).then((img) => {
-            // Clear canvas
-            canvas!.clear();
+        // Remove objects that were in the crop area
+        objectsToRemove.forEach(obj => {
+            canvas!.remove(obj);
+        });
 
+        // Load cropped image
+        FabricImage.fromURL(dataUrl).then((img) => {
             // Get canvas dimensions
             const canvasWidth = canvas!.getWidth();
             const canvasHeight = canvas!.getHeight();
 
-            // Calculate scale to FIT entire image within canvas (like CSS background-size: contain)
+            // Calculate scale to fit cropped image within canvas (optional, keep original size if fits)
             const scaleX = canvasWidth / (img.width || 1);
             const scaleY = canvasHeight / (img.height || 1);
-            const scale = Math.min(scaleX, scaleY); // Use min to fit completely
+            const scale = Math.min(scaleX, scaleY, 1); // Don't upscale, max 1
 
             // Calculate scaled dimensions
             const scaledWidth = (img.width || 0) * scale;
             const scaledHeight = (img.height || 0) * scale;
 
-            // Center the image
+            // Center the cropped image on canvas
             const left = (canvasWidth - scaledWidth) / 2;
             const top = (canvasHeight - scaledHeight) / 2;
 
-            // Set cropped image properties - NOT LOCKED so it can be edited
+            // Position the cropped image at center
             img.set({
                 originX: "left",
                 originY: "top",
@@ -614,6 +639,24 @@
                     </div>
 
                     <div class="flex flex-col gap-2">
+                        <label for="stroke-size" class="text-sm font-medium">
+                            Ketebalan Garis (Stroke Size)
+                            <span class="text-xs text-muted-foreground ml-2">
+                                ({strokeSize}px)
+                            </span>
+                        </label>
+                        <input
+                            id="stroke-size"
+                            type="range"
+                            bind:value={strokeSize}
+                            min="1"
+                            max="20"
+                            step="1"
+                            class="w-full"
+                        />
+                    </div>
+
+                    <div class="flex flex-col gap-2">
                         <label for="foto-upload" class="text-sm font-medium">
                             Upload Gambar
                         </label>
@@ -648,6 +691,10 @@
                 </Card.Header>
                 <Card.Content>
                     <div class="flex flex-col gap-2">
+                        <div class="text-xs text-muted-foreground mb-1">
+                            Ketebalan Garis: {strokeSize}px
+                        </div>
+
                         <Button variant="outline" onclick={addHighlightRed} class="justify-start">
                             <span class="inline-block w-3 h-3 rounded-sm mr-2 bg-red-500" aria-hidden="true"></span>
                             Highlight Red

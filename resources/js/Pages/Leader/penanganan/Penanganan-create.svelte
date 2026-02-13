@@ -267,12 +267,33 @@
         // Save the bounding rect BEFORE removing the cropRect
         const rect = cropRect.getBoundingRect();
 
+        // Get all objects in canvas (excluding the crop rectangle)
+        const allObjects = canvas.getObjects().filter(obj => obj !== cropRect);
+
+        // Find objects that are within or intersecting the crop rectangle
+        const objectsToRemove: any[] = [];
+        allObjects.forEach(obj => {
+            const objBounds = obj.getBoundingRect();
+
+            // Check if object intersects with crop rectangle
+            const intersects = !(
+                objBounds.left + objBounds.width < rect.left ||
+                objBounds.left > rect.left + rect.width ||
+                objBounds.top + objBounds.height < rect.top ||
+                objBounds.top > rect.top + rect.height
+            );
+
+            if (intersects) {
+                objectsToRemove.push(obj);
+            }
+        });
+
         // Remove crop rectangle from canvas FIRST
         canvas.remove(cropRect);
         cropRect = null;
         canvas.renderAll();
 
-        // Now crop the canvas based on the saved rect
+        // Capture the crop area (with objects that will be removed)
         const dataUrl = canvas.toDataURL({
             left: rect.left,
             top: rect.top,
@@ -282,28 +303,31 @@
             format: "png"
         });
 
-        FabricImage.fromURL(dataUrl).then((img) => {
-            // Clear canvas
-            canvas!.clear();
+        // Remove objects that were in the crop area
+        objectsToRemove.forEach(obj => {
+            canvas!.remove(obj);
+        });
 
+        // Load cropped image
+        FabricImage.fromURL(dataUrl).then((img) => {
             // Get canvas dimensions
             const canvasWidth = canvas!.getWidth();
             const canvasHeight = canvas!.getHeight();
 
-            // Calculate scale to FIT entire image within canvas (like CSS background-size: contain)
+            // Calculate scale to fit cropped image within canvas (optional, keep original size if fits)
             const scaleX = canvasWidth / (img.width || 1);
             const scaleY = canvasHeight / (img.height || 1);
-            const scale = Math.min(scaleX, scaleY); // Use min to fit completely
+            const scale = Math.min(scaleX, scaleY, 1); // Don't upscale, max 1
 
             // Calculate scaled dimensions
             const scaledWidth = (img.width || 0) * scale;
             const scaledHeight = (img.height || 0) * scale;
 
-            // Center the image
+            // Center the cropped image on canvas
             const left = (canvasWidth - scaledWidth) / 2;
             const top = (canvasHeight - scaledHeight) / 2;
 
-            // Set cropped image properties - NOT LOCKED so it can be edited
+            // Position the cropped image at center
             img.set({
                 originX: "left",
                 originY: "top",
