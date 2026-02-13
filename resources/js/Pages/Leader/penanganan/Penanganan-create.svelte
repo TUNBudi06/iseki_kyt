@@ -40,33 +40,58 @@
     let canvas = $state<Canvas>();
     let history = $state<string[]>([]);
     let redoStack = $state<string[]>([]);
+    let isLoadingState = $state(false);
     let cropRect = $state<Rect | null>(null);
     let penangananUrlImage = $state<string>("");
     let strokeSize = $state<number>(4);
     let dateparams = $state()
 
     function saveState() {
-        if (!canvas) return;
-        const json = canvas.toJSON();
-        history.push(JSON.stringify(json));
-        if (history.length > 30) history.shift();
+        if (!canvas || isLoadingState) return;
+        const json = JSON.stringify(canvas.toJSON());
+        history = [...history, json];
+        if (history.length > 30) history = history.slice(1);
         redoStack = [];
     }
 
     function undo() {
-        if (!canvas || !history.length) {
-            return;
-        }
-        redoStack.push(JSON.stringify(canvas.toJSON()));
-        const state = history.pop()!;
-        canvas.loadFromJSON(state).then(() => canvas!.renderAll());
+        if (!canvas || history.length === 0) return;
+
+        isLoadingState = true;
+
+        // Save current state to redo stack
+        const currentState = JSON.stringify(canvas.toJSON());
+        redoStack = [...redoStack, currentState];
+
+        // Get previous state
+        const previousState = history[history.length - 1];
+        history = history.slice(0, -1);
+
+        // Load previous state
+        canvas.loadFromJSON(JSON.parse(previousState)).then(() => {
+            canvas!.renderAll();
+            isLoadingState = false;
+        });
     }
 
     function redo() {
-        if (!canvas || !redoStack.length) return;
-        history.push(JSON.stringify(canvas.toJSON()));
-        const state = redoStack.pop()!;
-        canvas.loadFromJSON(state).then(() => canvas!.renderAll());
+        if (!canvas || redoStack.length === 0) return;
+
+        isLoadingState = true;
+
+        // Save current state to history
+        const currentState = JSON.stringify(canvas.toJSON());
+        history = [...history, currentState];
+
+        // Get next state from redo stack
+        const nextState = redoStack[redoStack.length - 1];
+        redoStack = redoStack.slice(0, -1);
+
+        // Load next state
+        canvas.loadFromJSON(JSON.parse(nextState)).then(() => {
+            canvas!.renderAll();
+            isLoadingState = false;
+        });
     }
 
     onMount(() => {
@@ -90,9 +115,19 @@
             height: 600
         });
 
-        canvas.on("object:added", saveState);
-        canvas.on("object:modified", saveState);
-        canvas.on("object:removed", saveState);
+        // Save initial empty state
+        history = [JSON.stringify(canvas.toJSON())];
+
+        // Save state after each action
+        canvas.on("object:added", () => {
+            if (!isLoadingState) saveState();
+        });
+        canvas.on("object:modified", () => {
+            if (!isLoadingState) saveState();
+        });
+        canvas.on("object:removed", () => {
+            if (!isLoadingState) saveState();
+        });
 
         return () => {
             canvas?.dispose();
