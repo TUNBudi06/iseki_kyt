@@ -8,7 +8,7 @@
     import {Button} from "$shadcn/components/ui/button/index.ts";
     import * as Table from "$shadcn/components/ui/table/index.ts";
     import {Badge} from "$shadcn/components/ui/badge/index.ts";
-    import leader, {kytdelete, kyt} from "$routes/leader/index.ts";
+    import leader, {kytdelete, kyt, penanangananedit} from "$routes/leader/index.ts";
     import {routeUrl} from "@tunbudi06/inertia-route-helper";
     import {inertia as InertiaLink, router} from "@inertiajs/svelte";
     import {toast} from "svelte-sonner";
@@ -125,7 +125,8 @@
                 status_text:status_text,
                 status_color:status_color,
                 has_submission: hasSubmission,
-                need_penanganan: hasSubmission && !penanganans
+                need_penanganan: hasSubmission && !penanganans,
+                penanganan_id: penanganans ? penanganans.id : null,
             };
         });
         console.log(formattedData);
@@ -240,6 +241,19 @@
                                                                 <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                                                             </svg>
                                                             Penanganan
+                                                        </Button>
+                                                    </a>
+                                                {:else if row.has_submission && row.penanganan_id}
+                                                    <a use:InertiaLink href={routeUrl(penanangananedit({id: row.penanganan_id}))}>
+                                                        <Button
+                                                            variant="outline"
+                                                            size="sm"
+                                                            class="flex items-center gap-1 h-8 px-2 text-xs bg-green-50 hover:bg-green-100"
+                                                        >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                                            </svg>
+                                                            Edit Penanganan
                                                         </Button>
                                                     </a>
                                                 {/if}

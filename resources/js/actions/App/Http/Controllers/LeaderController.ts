@@ -1,5 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../wayfinder'
-import settings69f00b from './settings'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\LeaderController::dashboard
  * @see app/Http/Controllers/LeaderController.php:24
@@ -44,69 +43,69 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\LeaderController::kyt
+* @see \App\Http\Controllers\LeaderController::kytHistory
  * @see app/Http/Controllers/LeaderController.php:76
  * @route '/leader/kyt'
  */
-export const kyt = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: kyt.url(options),
+export const kytHistory = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: kytHistory.url(options),
     method: 'get',
 })
 
-kyt.definition = {
+kytHistory.definition = {
     methods: ["get","head"],
     url: '/leader/kyt',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \App\Http\Controllers\LeaderController::kyt
+* @see \App\Http\Controllers\LeaderController::kytHistory
  * @see app/Http/Controllers/LeaderController.php:76
  * @route '/leader/kyt'
  */
-kyt.url = (options?: RouteQueryOptions) => {
-    return kyt.definition.url + queryParams(options)
+kytHistory.url = (options?: RouteQueryOptions) => {
+    return kytHistory.definition.url + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\LeaderController::kyt
+* @see \App\Http\Controllers\LeaderController::kytHistory
  * @see app/Http/Controllers/LeaderController.php:76
  * @route '/leader/kyt'
  */
-kyt.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: kyt.url(options),
+kytHistory.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: kytHistory.url(options),
     method: 'get',
 })
 /**
-* @see \App\Http\Controllers\LeaderController::kyt
+* @see \App\Http\Controllers\LeaderController::kytHistory
  * @see app/Http/Controllers/LeaderController.php:76
  * @route '/leader/kyt'
  */
-kyt.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: kyt.url(options),
+kytHistory.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: kytHistory.url(options),
     method: 'head',
 })
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytadd
+* @see \App\Http\Controllers\LeaderController::addKyt
  * @see app/Http/Controllers/LeaderController.php:121
  * @route '/leader/kyt/add/{IdKytDate}'
  */
-export const kytadd = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: kytadd.url(args, options),
+export const addKyt = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: addKyt.url(args, options),
     method: 'get',
 })
 
-kytadd.definition = {
+addKyt.definition = {
     methods: ["get","head"],
     url: '/leader/kyt/add/{IdKytDate}',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytadd
+* @see \App\Http\Controllers\LeaderController::addKyt
  * @see app/Http/Controllers/LeaderController.php:121
  * @route '/leader/kyt/add/{IdKytDate}'
  */
-kytadd.url = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions) => {
+addKyt.url = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { IdKytDate: args }
     }
@@ -124,85 +123,85 @@ kytadd.url = (args: { IdKytDate: string | number } | [IdKytDate: string | number
                         IdKytDate: args.IdKytDate,
                 }
 
-    return kytadd.definition.url
+    return addKyt.definition.url
             .replace('{IdKytDate}', parsedArgs.IdKytDate.toString())
             .replace(/\/+$/, '') + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytadd
+* @see \App\Http\Controllers\LeaderController::addKyt
  * @see app/Http/Controllers/LeaderController.php:121
  * @route '/leader/kyt/add/{IdKytDate}'
  */
-kytadd.get = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: kytadd.url(args, options),
+addKyt.get = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: addKyt.url(args, options),
     method: 'get',
 })
 /**
-* @see \App\Http\Controllers\LeaderController::kytadd
+* @see \App\Http\Controllers\LeaderController::addKyt
  * @see app/Http/Controllers/LeaderController.php:121
  * @route '/leader/kyt/add/{IdKytDate}'
  */
-kytadd.head = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: kytadd.url(args, options),
+addKyt.head = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: addKyt.url(args, options),
     method: 'head',
 })
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytstore
+* @see \App\Http\Controllers\LeaderController::storeKyt
  * @see app/Http/Controllers/LeaderController.php:136
  * @route '/leader/kyt/store'
  */
-export const kytstore = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: kytstore.url(options),
+export const storeKyt = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: storeKyt.url(options),
     method: 'post',
 })
 
-kytstore.definition = {
+storeKyt.definition = {
     methods: ["post"],
     url: '/leader/kyt/store',
 } satisfies RouteDefinition<["post"]>
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytstore
+* @see \App\Http\Controllers\LeaderController::storeKyt
  * @see app/Http/Controllers/LeaderController.php:136
  * @route '/leader/kyt/store'
  */
-kytstore.url = (options?: RouteQueryOptions) => {
-    return kytstore.definition.url + queryParams(options)
+storeKyt.url = (options?: RouteQueryOptions) => {
+    return storeKyt.definition.url + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytstore
+* @see \App\Http\Controllers\LeaderController::storeKyt
  * @see app/Http/Controllers/LeaderController.php:136
  * @route '/leader/kyt/store'
  */
-kytstore.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: kytstore.url(options),
+storeKyt.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: storeKyt.url(options),
     method: 'post',
 })
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytdelete
+* @see \App\Http\Controllers\LeaderController::deleteKyt
  * @see app/Http/Controllers/LeaderController.php:223
  * @route '/leader/kyt/delete/{id}'
  */
-export const kytdelete = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
-    url: kytdelete.url(args, options),
+export const deleteKyt = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+    url: deleteKyt.url(args, options),
     method: 'delete',
 })
 
-kytdelete.definition = {
+deleteKyt.definition = {
     methods: ["delete"],
     url: '/leader/kyt/delete/{id}',
 } satisfies RouteDefinition<["delete"]>
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytdelete
+* @see \App\Http\Controllers\LeaderController::deleteKyt
  * @see app/Http/Controllers/LeaderController.php:223
  * @route '/leader/kyt/delete/{id}'
  */
-kytdelete.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
+deleteKyt.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { id: args }
     }
@@ -220,42 +219,42 @@ kytdelete.url = (args: { id: string | number } | [id: string | number ] | string
                         id: args.id,
                 }
 
-    return kytdelete.definition.url
+    return deleteKyt.definition.url
             .replace('{id}', parsedArgs.id.toString())
             .replace(/\/+$/, '') + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytdelete
+* @see \App\Http\Controllers\LeaderController::deleteKyt
  * @see app/Http/Controllers/LeaderController.php:223
  * @route '/leader/kyt/delete/{id}'
  */
-kytdelete.delete = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
-    url: kytdelete.url(args, options),
+deleteKyt.delete = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+    url: deleteKyt.url(args, options),
     method: 'delete',
 })
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytedit
+* @see \App\Http\Controllers\LeaderController::editKyt
  * @see app/Http/Controllers/LeaderController.php:254
  * @route '/leader/kyt/edit/{id}'
  */
-export const kytedit = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: kytedit.url(args, options),
+export const editKyt = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: editKyt.url(args, options),
     method: 'get',
 })
 
-kytedit.definition = {
+editKyt.definition = {
     methods: ["get","head"],
     url: '/leader/kyt/edit/{id}',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytedit
+* @see \App\Http\Controllers\LeaderController::editKyt
  * @see app/Http/Controllers/LeaderController.php:254
  * @route '/leader/kyt/edit/{id}'
  */
-kytedit.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
+editKyt.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { id: args }
     }
@@ -273,51 +272,51 @@ kytedit.url = (args: { id: string | number } | [id: string | number ] | string |
                         id: args.id,
                 }
 
-    return kytedit.definition.url
+    return editKyt.definition.url
             .replace('{id}', parsedArgs.id.toString())
             .replace(/\/+$/, '') + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytedit
+* @see \App\Http\Controllers\LeaderController::editKyt
  * @see app/Http/Controllers/LeaderController.php:254
  * @route '/leader/kyt/edit/{id}'
  */
-kytedit.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: kytedit.url(args, options),
+editKyt.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: editKyt.url(args, options),
     method: 'get',
 })
 /**
-* @see \App\Http\Controllers\LeaderController::kytedit
+* @see \App\Http\Controllers\LeaderController::editKyt
  * @see app/Http/Controllers/LeaderController.php:254
  * @route '/leader/kyt/edit/{id}'
  */
-kytedit.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: kytedit.url(args, options),
+editKyt.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: editKyt.url(args, options),
     method: 'head',
 })
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytupdate
+* @see \App\Http\Controllers\LeaderController::updateKyt
  * @see app/Http/Controllers/LeaderController.php:286
  * @route '/leader/kyt/update/{id}'
  */
-export const kytupdate = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: kytupdate.url(args, options),
+export const updateKyt = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: updateKyt.url(args, options),
     method: 'post',
 })
 
-kytupdate.definition = {
+updateKyt.definition = {
     methods: ["post"],
     url: '/leader/kyt/update/{id}',
 } satisfies RouteDefinition<["post"]>
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytupdate
+* @see \App\Http\Controllers\LeaderController::updateKyt
  * @see app/Http/Controllers/LeaderController.php:286
  * @route '/leader/kyt/update/{id}'
  */
-kytupdate.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
+updateKyt.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { id: args }
     }
@@ -335,42 +334,42 @@ kytupdate.url = (args: { id: string | number } | [id: string | number ] | string
                         id: args.id,
                 }
 
-    return kytupdate.definition.url
+    return updateKyt.definition.url
             .replace('{id}', parsedArgs.id.toString())
             .replace(/\/+$/, '') + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytupdate
+* @see \App\Http\Controllers\LeaderController::updateKyt
  * @see app/Http/Controllers/LeaderController.php:286
  * @route '/leader/kyt/update/{id}'
  */
-kytupdate.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: kytupdate.url(args, options),
+updateKyt.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: updateKyt.url(args, options),
     method: 'post',
 })
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytsubmitpenanganan
+* @see \App\Http\Controllers\LeaderController::submitPenanganan
  * @see app/Http/Controllers/LeaderController.php:424
  * @route '/leader/kyt/submit-penanganan/{id}'
  */
-export const kytsubmitpenanganan = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: kytsubmitpenanganan.url(args, options),
+export const submitPenanganan = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: submitPenanganan.url(args, options),
     method: 'post',
 })
 
-kytsubmitpenanganan.definition = {
+submitPenanganan.definition = {
     methods: ["post"],
     url: '/leader/kyt/submit-penanganan/{id}',
 } satisfies RouteDefinition<["post"]>
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytsubmitpenanganan
+* @see \App\Http\Controllers\LeaderController::submitPenanganan
  * @see app/Http/Controllers/LeaderController.php:424
  * @route '/leader/kyt/submit-penanganan/{id}'
  */
-kytsubmitpenanganan.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
+submitPenanganan.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { id: args }
     }
@@ -388,42 +387,42 @@ kytsubmitpenanganan.url = (args: { id: string | number } | [id: string | number 
                         id: args.id,
                 }
 
-    return kytsubmitpenanganan.definition.url
+    return submitPenanganan.definition.url
             .replace('{id}', parsedArgs.id.toString())
             .replace(/\/+$/, '') + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\LeaderController::kytsubmitpenanganan
+* @see \App\Http\Controllers\LeaderController::submitPenanganan
  * @see app/Http/Controllers/LeaderController.php:424
  * @route '/leader/kyt/submit-penanganan/{id}'
  */
-kytsubmitpenanganan.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: kytsubmitpenanganan.url(args, options),
+submitPenanganan.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: submitPenanganan.url(args, options),
     method: 'post',
 })
 
 /**
-* @see \App\Http\Controllers\LeaderController::penangananadd
+* @see \App\Http\Controllers\LeaderController::addPenanganan
  * @see app/Http/Controllers/LeaderController.php:340
  * @route '/leader/kyt/penanganan/add/{kytListId}'
  */
-export const penangananadd = (args: { kytListId: string | number } | [kytListId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: penangananadd.url(args, options),
+export const addPenanganan = (args: { kytListId: string | number } | [kytListId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: addPenanganan.url(args, options),
     method: 'get',
 })
 
-penangananadd.definition = {
+addPenanganan.definition = {
     methods: ["get","head"],
     url: '/leader/kyt/penanganan/add/{kytListId}',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \App\Http\Controllers\LeaderController::penangananadd
+* @see \App\Http\Controllers\LeaderController::addPenanganan
  * @see app/Http/Controllers/LeaderController.php:340
  * @route '/leader/kyt/penanganan/add/{kytListId}'
  */
-penangananadd.url = (args: { kytListId: string | number } | [kytListId: string | number ] | string | number, options?: RouteQueryOptions) => {
+addPenanganan.url = (args: { kytListId: string | number } | [kytListId: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { kytListId: args }
     }
@@ -441,85 +440,85 @@ penangananadd.url = (args: { kytListId: string | number } | [kytListId: string |
                         kytListId: args.kytListId,
                 }
 
-    return penangananadd.definition.url
+    return addPenanganan.definition.url
             .replace('{kytListId}', parsedArgs.kytListId.toString())
             .replace(/\/+$/, '') + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\LeaderController::penangananadd
+* @see \App\Http\Controllers\LeaderController::addPenanganan
  * @see app/Http/Controllers/LeaderController.php:340
  * @route '/leader/kyt/penanganan/add/{kytListId}'
  */
-penangananadd.get = (args: { kytListId: string | number } | [kytListId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: penangananadd.url(args, options),
+addPenanganan.get = (args: { kytListId: string | number } | [kytListId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: addPenanganan.url(args, options),
     method: 'get',
 })
 /**
-* @see \App\Http\Controllers\LeaderController::penangananadd
+* @see \App\Http\Controllers\LeaderController::addPenanganan
  * @see app/Http/Controllers/LeaderController.php:340
  * @route '/leader/kyt/penanganan/add/{kytListId}'
  */
-penangananadd.head = (args: { kytListId: string | number } | [kytListId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: penangananadd.url(args, options),
+addPenanganan.head = (args: { kytListId: string | number } | [kytListId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: addPenanganan.url(args, options),
     method: 'head',
 })
 
 /**
-* @see \App\Http\Controllers\LeaderController::penangananstore
+* @see \App\Http\Controllers\LeaderController::storePenanganan
  * @see app/Http/Controllers/LeaderController.php:449
  * @route '/leader/kyt/penanganan/store'
  */
-export const penangananstore = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: penangananstore.url(options),
+export const storePenanganan = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: storePenanganan.url(options),
     method: 'post',
 })
 
-penangananstore.definition = {
+storePenanganan.definition = {
     methods: ["post"],
     url: '/leader/kyt/penanganan/store',
 } satisfies RouteDefinition<["post"]>
 
 /**
-* @see \App\Http\Controllers\LeaderController::penangananstore
+* @see \App\Http\Controllers\LeaderController::storePenanganan
  * @see app/Http/Controllers/LeaderController.php:449
  * @route '/leader/kyt/penanganan/store'
  */
-penangananstore.url = (options?: RouteQueryOptions) => {
-    return penangananstore.definition.url + queryParams(options)
+storePenanganan.url = (options?: RouteQueryOptions) => {
+    return storePenanganan.definition.url + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\LeaderController::penangananstore
+* @see \App\Http\Controllers\LeaderController::storePenanganan
  * @see app/Http/Controllers/LeaderController.php:449
  * @route '/leader/kyt/penanganan/store'
  */
-penangananstore.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: penangananstore.url(options),
+storePenanganan.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: storePenanganan.url(options),
     method: 'post',
 })
 
 /**
-* @see \App\Http\Controllers\LeaderController::penanangananedit
+* @see \App\Http\Controllers\LeaderController::editPenanganan
  * @see app/Http/Controllers/LeaderController.php:349
  * @route '/leader/kyt/penanganan/edit/{id}'
  */
-export const penanangananedit = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: penanangananedit.url(args, options),
+export const editPenanganan = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: editPenanganan.url(args, options),
     method: 'get',
 })
 
-penanangananedit.definition = {
+editPenanganan.definition = {
     methods: ["get","head"],
     url: '/leader/kyt/penanganan/edit/{id}',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \App\Http\Controllers\LeaderController::penanangananedit
+* @see \App\Http\Controllers\LeaderController::editPenanganan
  * @see app/Http/Controllers/LeaderController.php:349
  * @route '/leader/kyt/penanganan/edit/{id}'
  */
-penanangananedit.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
+editPenanganan.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { id: args }
     }
@@ -537,51 +536,51 @@ penanangananedit.url = (args: { id: string | number } | [id: string | number ] |
                         id: args.id,
                 }
 
-    return penanangananedit.definition.url
+    return editPenanganan.definition.url
             .replace('{id}', parsedArgs.id.toString())
             .replace(/\/+$/, '') + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\LeaderController::penanangananedit
+* @see \App\Http\Controllers\LeaderController::editPenanganan
  * @see app/Http/Controllers/LeaderController.php:349
  * @route '/leader/kyt/penanganan/edit/{id}'
  */
-penanangananedit.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: penanangananedit.url(args, options),
+editPenanganan.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: editPenanganan.url(args, options),
     method: 'get',
 })
 /**
-* @see \App\Http\Controllers\LeaderController::penanangananedit
+* @see \App\Http\Controllers\LeaderController::editPenanganan
  * @see app/Http/Controllers/LeaderController.php:349
  * @route '/leader/kyt/penanganan/edit/{id}'
  */
-penanangananedit.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: penanangananedit.url(args, options),
+editPenanganan.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: editPenanganan.url(args, options),
     method: 'head',
 })
 
 /**
-* @see \App\Http\Controllers\LeaderController::penangananupdate
+* @see \App\Http\Controllers\LeaderController::updatePenanganan
  * @see app/Http/Controllers/LeaderController.php:373
  * @route '/leader/kyt/penanganan/update/{id}'
  */
-export const penangananupdate = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: penangananupdate.url(args, options),
+export const updatePenanganan = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: updatePenanganan.url(args, options),
     method: 'post',
 })
 
-penangananupdate.definition = {
+updatePenanganan.definition = {
     methods: ["post"],
     url: '/leader/kyt/penanganan/update/{id}',
 } satisfies RouteDefinition<["post"]>
 
 /**
-* @see \App\Http\Controllers\LeaderController::penangananupdate
+* @see \App\Http\Controllers\LeaderController::updatePenanganan
  * @see app/Http/Controllers/LeaderController.php:373
  * @route '/leader/kyt/penanganan/update/{id}'
  */
-penangananupdate.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
+updatePenanganan.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { id: args }
     }
@@ -599,18 +598,18 @@ penangananupdate.url = (args: { id: string | number } | [id: string | number ] |
                         id: args.id,
                 }
 
-    return penangananupdate.definition.url
+    return updatePenanganan.definition.url
             .replace('{id}', parsedArgs.id.toString())
             .replace(/\/+$/, '') + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\LeaderController::penangananupdate
+* @see \App\Http\Controllers\LeaderController::updatePenanganan
  * @see app/Http/Controllers/LeaderController.php:373
  * @route '/leader/kyt/penanganan/update/{id}'
  */
-penangananupdate.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: penangananupdate.url(args, options),
+updatePenanganan.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: updatePenanganan.url(args, options),
     method: 'post',
 })
 
@@ -656,20 +655,40 @@ settings.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: settings.url(options),
     method: 'head',
 })
-const leader = {
-    dashboard: Object.assign(dashboard, dashboard),
-kyt: Object.assign(kyt, kyt),
-kytadd: Object.assign(kytadd, kytadd),
-kytstore: Object.assign(kytstore, kytstore),
-kytdelete: Object.assign(kytdelete, kytdelete),
-kytedit: Object.assign(kytedit, kytedit),
-kytupdate: Object.assign(kytupdate, kytupdate),
-kytsubmitpenanganan: Object.assign(kytsubmitpenanganan, kytsubmitpenanganan),
-penangananadd: Object.assign(penangananadd, penangananadd),
-penangananstore: Object.assign(penangananstore, penangananstore),
-penanangananedit: Object.assign(penanangananedit, penanangananedit),
-penangananupdate: Object.assign(penangananupdate, penangananupdate),
-settings: Object.assign(settings, settings69f00b),
+
+/**
+* @see \App\Http\Controllers\LeaderController::changePassword
+ * @see app/Http/Controllers/LeaderController.php:204
+ * @route '/leader/settings/change-password'
+ */
+export const changePassword = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: changePassword.url(options),
+    method: 'post',
+})
+
+changePassword.definition = {
+    methods: ["post"],
+    url: '/leader/settings/change-password',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \App\Http\Controllers\LeaderController::changePassword
+ * @see app/Http/Controllers/LeaderController.php:204
+ * @route '/leader/settings/change-password'
+ */
+changePassword.url = (options?: RouteQueryOptions) => {
+    return changePassword.definition.url + queryParams(options)
 }
 
-export default leader
+/**
+* @see \App\Http\Controllers\LeaderController::changePassword
+ * @see app/Http/Controllers/LeaderController.php:204
+ * @route '/leader/settings/change-password'
+ */
+changePassword.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: changePassword.url(options),
+    method: 'post',
+})
+const LeaderController = { dashboard, kytHistory, addKyt, storeKyt, deleteKyt, editKyt, updateKyt, submitPenanganan, addPenanganan, storePenanganan, editPenanganan, updatePenanganan, settings, changePassword }
+
+export default LeaderController

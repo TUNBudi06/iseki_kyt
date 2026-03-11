@@ -39,14 +39,14 @@ class LeaderController extends Controller
 
         // Get weeks for current and next month using trait method
         $weeksInCurrentMonth = $this->getWeeksForCurrentAndNextMonth();
-//        debugbar()->info($weeksInCurrentMonth);
+        //        debugbar()->info($weeksInCurrentMonth);
 
         $weeklyKYT = [];
         foreach ($weeksInCurrentMonth as $week) {
             $kyt = KYTList::with('Penanganans')->where('team_k_y_t_id', $team->id)
                 ->where('kyt_date_id', $week['id'])
                 ->first();
-//            debugbar()->info($kyt,$team->id,$week['week_number']);
+            //            debugbar()->info($kyt,$team->id,$week['week_number']);
 
             $weeklyKYT[$week['id']] = $kyt ? [
                 'id' => $kyt->id,
@@ -342,8 +342,83 @@ class LeaderController extends Controller
         $kyt = KYTList::findOrFail($kytListId);
 
         return Inertia::render('Leader/penanganan/Penanganan-create', [
-            'kyt' => $kyt
+            'kyt' => $kyt,
         ]);
+    }
+
+    public function editPenanganan(string $id)
+    {
+        $penanganan = \App\Models\KytPenanganan::with('kytList')->findOrFail($id);
+
+        // Check authorization
+        $user = auth()->user();
+        $team = TeamKYT::where('user_id', $user->id)->first();
+
+        if (! $team || $penanganan->kytList->team_k_y_t_id !== $team->id) {
+            return back()->with(['error' => 'You are not authorized to edit this penanganan.']);
+        }
+
+        return Inertia::render('Leader/penanganan/Penanganan-edit', [
+            'penanganan' => [
+                'id' => $penanganan->id,
+                'penanganan_title' => $penanganan->penanganan_title,
+                'foto_path' => $penanganan->foto_path,
+                'result_path' => $penanganan->result_path,
+                'kyt_list_id' => $penanganan->kyt_list_id,
+            ],
+            'kyt' => $penanganan->kytList,
+        ]);
+    }
+
+    public function updatePenanganan(Request $request, string $id)
+    {
+        $penanganan = \App\Models\KytPenanganan::with(['kytList.kytDateList', 'kytList.teamKYT'])->findOrFail($id);
+
+        // Check authorization
+        $user = auth()->user();
+        $team = TeamKYT::where('user_id', $user->id)->first();
+
+        if (! $team || $penanganan->kytList->team_k_y_t_id !== $team->id) {
+            return back()->with(['error' => 'You are not authorized to update this penanganan.']);
+        }
+
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'foto_path' => 'nullable|max:8192',
+            'result_path' => 'nullable|max:8192',
+        ]);
+
+        return DB::transaction(function () use ($request, $data, $penanganan) {
+            $penanganan->penanganan_title = $data['title'];
+            $date = Carbon::parse($penanganan->kytList->kytDateList->kyt_date);
+            $dir = $this->basePath.'/'.$date->format('Y-m').'_'.'week-'.$penanganan->kytList->kytDateList->number_of_Weeks;
+
+            if ($request->hasFile('foto_path')) {
+                // Remove old file
+                if ($penanganan->foto_path && file_exists(public_path($penanganan->foto_path))) {
+                    unlink(public_path($penanganan->foto_path));
+                }
+                $file = $request->file('foto_path');
+                $filename = 'penangananKyt_'.$penanganan->kytList->teamKYT->team_name.'_'.time().'.'.$file->getClientOriginalExtension();
+                $file->move($dir, $filename);
+                $penanganan->foto_path = $dir.'/'.$filename;
+            }
+
+            if ($request->hasFile('result_path')) {
+                // Remove old file
+                if ($penanganan->result_path && file_exists(public_path($penanganan->result_path))) {
+                    unlink(public_path($penanganan->result_path));
+                }
+                $file = $request->file('result_path');
+                $filename = 'penangananResultKyt_'.$penanganan->kytList->teamKYT->team_name.'_'.time().'.'.$file->getClientOriginalExtension();
+                $file->move($dir, $filename);
+                $penanganan->result_path = $dir.'/'.$filename;
+            }
+
+            $penanganan->save();
+
+            return redirect()->route('leader.kyt')->with('success', 'Penanganan berhasil diperbarui!');
+        });
     }
 
     public function submitPenanganan(Request $request, string $id)
@@ -382,8 +457,8 @@ class LeaderController extends Controller
 
         $kytList = KYTList::with(['kytDateList'])->findOrFail($data['kyt_list_id']);
 
-        return DB::transaction(function () use ($request, $data,$kytList) {
-            $penanganan = new \App\Models\KytPenanganan();
+        return DB::transaction(function () use ($request, $data, $kytList) {
+            $penanganan = new \App\Models\KytPenanganan;
             $penanganan->kyt_list_id = $data['kyt_list_id'];
             $penanganan->penanganan_title = $data['title'];
             $date = Carbon::parse($kytList->kytDateList->kyt_date);
@@ -395,7 +470,7 @@ class LeaderController extends Controller
                 $filePath = $file->move($dir, $filename);
                 $penanganan->foto_path = $dir.'/'.$filename;
             }
-            if( $request->hasFile('result_path')) {
+            if ($request->hasFile('result_path')) {
                 $file = $request->file('result_path');
                 $dir = $this->basePath.'/'.$date->format('Y-m').'_'.'week-'.$kytList->kytDateList->number_of_Weeks;
                 $filename = 'penangananResultKyt_'.$kytList->teamKYT->team_name.'_'.time().'.'.$file->getClientOriginalExtension();
@@ -403,6 +478,7 @@ class LeaderController extends Controller
                 $penanganan->result_path = $dir.'/'.$filename;
             }
             $penanganan->save();
+
             return redirect()->route('leader.kyt', ['id' => $data['kyt_list_id']])->with('success', 'Penanganan berhasil ditambahkan!');
         });
     }
