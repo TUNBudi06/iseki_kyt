@@ -45,7 +45,7 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\LeaderController::kyt
- * @see app/Http/Controllers/LeaderController.php:76
+ * @see app/Http/Controllers/LeaderController.php:82
  * @route '/leader/kyt'
  */
 export const kyt = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -60,7 +60,7 @@ kyt.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::kyt
- * @see app/Http/Controllers/LeaderController.php:76
+ * @see app/Http/Controllers/LeaderController.php:82
  * @route '/leader/kyt'
  */
 kyt.url = (options?: RouteQueryOptions) => {
@@ -69,7 +69,7 @@ kyt.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\LeaderController::kyt
- * @see app/Http/Controllers/LeaderController.php:76
+ * @see app/Http/Controllers/LeaderController.php:82
  * @route '/leader/kyt'
  */
 kyt.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -78,7 +78,7 @@ kyt.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\LeaderController::kyt
- * @see app/Http/Controllers/LeaderController.php:76
+ * @see app/Http/Controllers/LeaderController.php:82
  * @route '/leader/kyt'
  */
 kyt.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -88,7 +88,7 @@ kyt.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytadd
- * @see app/Http/Controllers/LeaderController.php:121
+ * @see app/Http/Controllers/LeaderController.php:127
  * @route '/leader/kyt/add/{IdKytDate}'
  */
 export const kytadd = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -103,7 +103,7 @@ kytadd.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytadd
- * @see app/Http/Controllers/LeaderController.php:121
+ * @see app/Http/Controllers/LeaderController.php:127
  * @route '/leader/kyt/add/{IdKytDate}'
  */
 kytadd.url = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -131,7 +131,7 @@ kytadd.url = (args: { IdKytDate: string | number } | [IdKytDate: string | number
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytadd
- * @see app/Http/Controllers/LeaderController.php:121
+ * @see app/Http/Controllers/LeaderController.php:127
  * @route '/leader/kyt/add/{IdKytDate}'
  */
 kytadd.get = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -140,7 +140,7 @@ kytadd.get = (args: { IdKytDate: string | number } | [IdKytDate: string | number
 })
 /**
 * @see \App\Http\Controllers\LeaderController::kytadd
- * @see app/Http/Controllers/LeaderController.php:121
+ * @see app/Http/Controllers/LeaderController.php:127
  * @route '/leader/kyt/add/{IdKytDate}'
  */
 kytadd.head = (args: { IdKytDate: string | number } | [IdKytDate: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -150,7 +150,7 @@ kytadd.head = (args: { IdKytDate: string | number } | [IdKytDate: string | numbe
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytstore
- * @see app/Http/Controllers/LeaderController.php:136
+ * @see app/Http/Controllers/LeaderController.php:142
  * @route '/leader/kyt/store'
  */
 export const kytstore = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -165,7 +165,7 @@ kytstore.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytstore
- * @see app/Http/Controllers/LeaderController.php:136
+ * @see app/Http/Controllers/LeaderController.php:142
  * @route '/leader/kyt/store'
  */
 kytstore.url = (options?: RouteQueryOptions) => {
@@ -174,7 +174,7 @@ kytstore.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytstore
- * @see app/Http/Controllers/LeaderController.php:136
+ * @see app/Http/Controllers/LeaderController.php:142
  * @route '/leader/kyt/store'
  */
 kytstore.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -184,7 +184,7 @@ kytstore.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytdelete
- * @see app/Http/Controllers/LeaderController.php:223
+ * @see app/Http/Controllers/LeaderController.php:229
  * @route '/leader/kyt/delete/{id}'
  */
 export const kytdelete = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -199,7 +199,7 @@ kytdelete.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytdelete
- * @see app/Http/Controllers/LeaderController.php:223
+ * @see app/Http/Controllers/LeaderController.php:229
  * @route '/leader/kyt/delete/{id}'
  */
 kytdelete.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -227,7 +227,7 @@ kytdelete.url = (args: { id: string | number } | [id: string | number ] | string
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytdelete
- * @see app/Http/Controllers/LeaderController.php:223
+ * @see app/Http/Controllers/LeaderController.php:229
  * @route '/leader/kyt/delete/{id}'
  */
 kytdelete.delete = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -237,7 +237,7 @@ kytdelete.delete = (args: { id: string | number } | [id: string | number ] | str
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytedit
- * @see app/Http/Controllers/LeaderController.php:254
+ * @see app/Http/Controllers/LeaderController.php:260
  * @route '/leader/kyt/edit/{id}'
  */
 export const kytedit = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -252,7 +252,7 @@ kytedit.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytedit
- * @see app/Http/Controllers/LeaderController.php:254
+ * @see app/Http/Controllers/LeaderController.php:260
  * @route '/leader/kyt/edit/{id}'
  */
 kytedit.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -280,7 +280,7 @@ kytedit.url = (args: { id: string | number } | [id: string | number ] | string |
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytedit
- * @see app/Http/Controllers/LeaderController.php:254
+ * @see app/Http/Controllers/LeaderController.php:260
  * @route '/leader/kyt/edit/{id}'
  */
 kytedit.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -289,7 +289,7 @@ kytedit.get = (args: { id: string | number } | [id: string | number ] | string |
 })
 /**
 * @see \App\Http\Controllers\LeaderController::kytedit
- * @see app/Http/Controllers/LeaderController.php:254
+ * @see app/Http/Controllers/LeaderController.php:260
  * @route '/leader/kyt/edit/{id}'
  */
 kytedit.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -299,7 +299,7 @@ kytedit.head = (args: { id: string | number } | [id: string | number ] | string 
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytupdate
- * @see app/Http/Controllers/LeaderController.php:286
+ * @see app/Http/Controllers/LeaderController.php:292
  * @route '/leader/kyt/update/{id}'
  */
 export const kytupdate = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -314,7 +314,7 @@ kytupdate.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytupdate
- * @see app/Http/Controllers/LeaderController.php:286
+ * @see app/Http/Controllers/LeaderController.php:292
  * @route '/leader/kyt/update/{id}'
  */
 kytupdate.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -342,7 +342,7 @@ kytupdate.url = (args: { id: string | number } | [id: string | number ] | string
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytupdate
- * @see app/Http/Controllers/LeaderController.php:286
+ * @see app/Http/Controllers/LeaderController.php:292
  * @route '/leader/kyt/update/{id}'
  */
 kytupdate.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -352,7 +352,7 @@ kytupdate.post = (args: { id: string | number } | [id: string | number ] | strin
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytsubmitpenanganan
- * @see app/Http/Controllers/LeaderController.php:424
+ * @see app/Http/Controllers/LeaderController.php:430
  * @route '/leader/kyt/submit-penanganan/{id}'
  */
 export const kytsubmitpenanganan = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -367,7 +367,7 @@ kytsubmitpenanganan.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytsubmitpenanganan
- * @see app/Http/Controllers/LeaderController.php:424
+ * @see app/Http/Controllers/LeaderController.php:430
  * @route '/leader/kyt/submit-penanganan/{id}'
  */
 kytsubmitpenanganan.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -395,7 +395,7 @@ kytsubmitpenanganan.url = (args: { id: string | number } | [id: string | number 
 
 /**
 * @see \App\Http\Controllers\LeaderController::kytsubmitpenanganan
- * @see app/Http/Controllers/LeaderController.php:424
+ * @see app/Http/Controllers/LeaderController.php:430
  * @route '/leader/kyt/submit-penanganan/{id}'
  */
 kytsubmitpenanganan.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -405,7 +405,7 @@ kytsubmitpenanganan.post = (args: { id: string | number } | [id: string | number
 
 /**
 * @see \App\Http\Controllers\LeaderController::penangananadd
- * @see app/Http/Controllers/LeaderController.php:340
+ * @see app/Http/Controllers/LeaderController.php:346
  * @route '/leader/kyt/penanganan/add/{kytListId}'
  */
 export const penangananadd = (args: { kytListId: string | number } | [kytListId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -420,7 +420,7 @@ penangananadd.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::penangananadd
- * @see app/Http/Controllers/LeaderController.php:340
+ * @see app/Http/Controllers/LeaderController.php:346
  * @route '/leader/kyt/penanganan/add/{kytListId}'
  */
 penangananadd.url = (args: { kytListId: string | number } | [kytListId: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -448,7 +448,7 @@ penangananadd.url = (args: { kytListId: string | number } | [kytListId: string |
 
 /**
 * @see \App\Http\Controllers\LeaderController::penangananadd
- * @see app/Http/Controllers/LeaderController.php:340
+ * @see app/Http/Controllers/LeaderController.php:346
  * @route '/leader/kyt/penanganan/add/{kytListId}'
  */
 penangananadd.get = (args: { kytListId: string | number } | [kytListId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -457,7 +457,7 @@ penangananadd.get = (args: { kytListId: string | number } | [kytListId: string |
 })
 /**
 * @see \App\Http\Controllers\LeaderController::penangananadd
- * @see app/Http/Controllers/LeaderController.php:340
+ * @see app/Http/Controllers/LeaderController.php:346
  * @route '/leader/kyt/penanganan/add/{kytListId}'
  */
 penangananadd.head = (args: { kytListId: string | number } | [kytListId: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -467,7 +467,7 @@ penangananadd.head = (args: { kytListId: string | number } | [kytListId: string 
 
 /**
 * @see \App\Http\Controllers\LeaderController::penangananstore
- * @see app/Http/Controllers/LeaderController.php:449
+ * @see app/Http/Controllers/LeaderController.php:455
  * @route '/leader/kyt/penanganan/store'
  */
 export const penangananstore = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -482,7 +482,7 @@ penangananstore.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::penangananstore
- * @see app/Http/Controllers/LeaderController.php:449
+ * @see app/Http/Controllers/LeaderController.php:455
  * @route '/leader/kyt/penanganan/store'
  */
 penangananstore.url = (options?: RouteQueryOptions) => {
@@ -491,7 +491,7 @@ penangananstore.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\LeaderController::penangananstore
- * @see app/Http/Controllers/LeaderController.php:449
+ * @see app/Http/Controllers/LeaderController.php:455
  * @route '/leader/kyt/penanganan/store'
  */
 penangananstore.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -501,7 +501,7 @@ penangananstore.post = (options?: RouteQueryOptions): RouteDefinition<'post'> =>
 
 /**
 * @see \App\Http\Controllers\LeaderController::penanangananedit
- * @see app/Http/Controllers/LeaderController.php:349
+ * @see app/Http/Controllers/LeaderController.php:355
  * @route '/leader/kyt/penanganan/edit/{id}'
  */
 export const penanangananedit = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -516,7 +516,7 @@ penanangananedit.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::penanangananedit
- * @see app/Http/Controllers/LeaderController.php:349
+ * @see app/Http/Controllers/LeaderController.php:355
  * @route '/leader/kyt/penanganan/edit/{id}'
  */
 penanangananedit.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -544,7 +544,7 @@ penanangananedit.url = (args: { id: string | number } | [id: string | number ] |
 
 /**
 * @see \App\Http\Controllers\LeaderController::penanangananedit
- * @see app/Http/Controllers/LeaderController.php:349
+ * @see app/Http/Controllers/LeaderController.php:355
  * @route '/leader/kyt/penanganan/edit/{id}'
  */
 penanangananedit.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -553,7 +553,7 @@ penanangananedit.get = (args: { id: string | number } | [id: string | number ] |
 })
 /**
 * @see \App\Http\Controllers\LeaderController::penanangananedit
- * @see app/Http/Controllers/LeaderController.php:349
+ * @see app/Http/Controllers/LeaderController.php:355
  * @route '/leader/kyt/penanganan/edit/{id}'
  */
 penanangananedit.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -563,7 +563,7 @@ penanangananedit.head = (args: { id: string | number } | [id: string | number ] 
 
 /**
 * @see \App\Http\Controllers\LeaderController::penangananupdate
- * @see app/Http/Controllers/LeaderController.php:373
+ * @see app/Http/Controllers/LeaderController.php:379
  * @route '/leader/kyt/penanganan/update/{id}'
  */
 export const penangananupdate = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -578,7 +578,7 @@ penangananupdate.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::penangananupdate
- * @see app/Http/Controllers/LeaderController.php:373
+ * @see app/Http/Controllers/LeaderController.php:379
  * @route '/leader/kyt/penanganan/update/{id}'
  */
 penangananupdate.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -606,7 +606,7 @@ penangananupdate.url = (args: { id: string | number } | [id: string | number ] |
 
 /**
 * @see \App\Http\Controllers\LeaderController::penangananupdate
- * @see app/Http/Controllers/LeaderController.php:373
+ * @see app/Http/Controllers/LeaderController.php:379
  * @route '/leader/kyt/penanganan/update/{id}'
  */
 penangananupdate.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -616,7 +616,7 @@ penangananupdate.post = (args: { id: string | number } | [id: string | number ] 
 
 /**
 * @see \App\Http\Controllers\LeaderController::settings
- * @see app/Http/Controllers/LeaderController.php:199
+ * @see app/Http/Controllers/LeaderController.php:205
  * @route '/leader/settings'
  */
 export const settings = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -631,7 +631,7 @@ settings.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::settings
- * @see app/Http/Controllers/LeaderController.php:199
+ * @see app/Http/Controllers/LeaderController.php:205
  * @route '/leader/settings'
  */
 settings.url = (options?: RouteQueryOptions) => {
@@ -640,7 +640,7 @@ settings.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\LeaderController::settings
- * @see app/Http/Controllers/LeaderController.php:199
+ * @see app/Http/Controllers/LeaderController.php:205
  * @route '/leader/settings'
  */
 settings.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -649,7 +649,7 @@ settings.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\LeaderController::settings
- * @see app/Http/Controllers/LeaderController.php:199
+ * @see app/Http/Controllers/LeaderController.php:205
  * @route '/leader/settings'
  */
 settings.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({

@@ -51,6 +51,11 @@ class LeaderController extends Controller
             $weeklyKYT[$week['id']] = $kyt ? [
                 'id' => $kyt->id,
                 'image_url' => $kyt->result_path,
+                'foto_path' => $kyt->foto_path,
+                'title' => $kyt->title,
+                'user_name' => $kyt->user_name,
+                'potensi' => $kyt->potensi,
+                'penanganan' => $kyt->penanganan,
                 'status' => $kyt->Penanganans ? true : false,
                 'submitted_at' => $kyt->created_at,
                 'week_number' => $week['week_number'],
@@ -70,6 +75,7 @@ class LeaderController extends Controller
             'weeksInCurrentMonth' => $weeksInCurrentMonth,
             'currentYear' => now()->year,
             'currentMonthName' => now()->format('F'),
+            'bgKyt' => asset('assets/img/bg-kyt.jpg'),
         ]);
     }
 

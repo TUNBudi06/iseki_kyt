@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\LeaderController::changePassword
- * @see app/Http/Controllers/LeaderController.php:204
+ * @see app/Http/Controllers/LeaderController.php:210
  * @route '/leader/settings/change-password'
  */
 export const changePassword = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ changePassword.definition = {
 
 /**
 * @see \App\Http\Controllers\LeaderController::changePassword
- * @see app/Http/Controllers/LeaderController.php:204
+ * @see app/Http/Controllers/LeaderController.php:210
  * @route '/leader/settings/change-password'
  */
 changePassword.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ changePassword.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\LeaderController::changePassword
- * @see app/Http/Controllers/LeaderController.php:204
+ * @see app/Http/Controllers/LeaderController.php:210
  * @route '/leader/settings/change-password'
  */
 changePassword.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({

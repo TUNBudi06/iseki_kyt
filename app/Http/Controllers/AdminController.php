@@ -29,10 +29,14 @@ class AdminController extends Controller
                 $weeklyKYT[$week['id']] = $kyt ? [
                     'id' => $kyt->id,
                     'image' => $kyt->result_path,
+                    'foto_path' => $kyt->foto_path,
                     'title' => $kyt->title,
                     'desc' => $kyt->potensi,
+                    'potensi' => $kyt->potensi,
+                    'penanganan' => $kyt->penanganan,
                     'status' => $kyt->penanganans ?: false,
                     'submittedBy' => $kyt->user_name,
+                    'user_name' => $kyt->user_name,
                     'week_number' => $week['week_number'],
                     'kyt_date_id' => $week['id'],
                 ] : null;
@@ -51,6 +55,7 @@ class AdminController extends Controller
             'teams' => $teams,
             'currentMonthName' => now()->format('F'),
             'currentYear' => now()->year,
+            'bgKyt' => asset('assets/img/bg-kyt.jpg'),
         ]);
     }
 
