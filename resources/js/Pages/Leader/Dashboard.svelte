@@ -2,13 +2,14 @@
     import LeaderLayout from "$/Layouts/LeaderLayout.svelte";
     import * as Card from "$shadcn/components/ui/card/index.js";
     import * as Dialog from "$shadcn/components/ui/dialog/index.js";
+    import KytPreview from "$/Components/KytPreview.svelte";
     import { page, Link,inertia as InertiaLink } from "@inertiajs/svelte";
     import {assetUrl, routeUrl} from "@tunbudi06/inertia-route-helper";
     import leader, {kytadd, kytedit} from "$routes/leader";
     import {onMount} from "svelte";
     import {Button} from "$shadcn/components/ui/button";
 
-    let { weeksInCurrentMonth = [], team = null, currentYear = 2026, currentMonthName = "January" } = $props();
+    let { weeksInCurrentMonth = [], team = null, currentYear = 2026, currentMonthName = "January", bgKyt = "" } = $props();
 
     $inspect($page.props)
 
@@ -284,121 +285,88 @@
         </Card.Root>
     </div>
 
-    <!-- KYT Detail Dialog - True Fullscreen -->
+    <!-- KYT Detail Dialog -->
     <Dialog.Root bind:open={isDialogOpen}>
-        <Dialog.Content class="max-w-screen w-screen h-screen sm:max-w-max max-h-screen p-0 flex flex-col rounded-none">
-            <!-- Header with gradient background -->
-            <div class="bg-linear-to-r from-pink-400 via-pink-500 to-pink-600 text-white px-6 py-4 shrink-0">
-                <Dialog.Header>
-                    <Dialog.Title class="text-2xl sm:text-3xl font-bold text-white">
-                        {#if selectedKyt}
-                            Detail KYT - Minggu {selectedKyt.weekNumber}
-                        {:else}
-                            Detail KYT
-                        {/if}
-                    </Dialog.Title>
-                    <Dialog.Description class="text-pink-50 text-base sm:text-lg mt-1">
-                        {#if selectedKyt}
-                            {formatWeekRange(selectedKyt.week.start, selectedKyt.week.end)} · {team?.team_name || 'Team'}
-                        {/if}
-                    </Dialog.Description>
-                </Dialog.Header>
-            </div>
+        <Dialog.Content class="md:max-w-5xl xl:max-w-7xl max-h-[90vh] overflow-y-auto">
+            <Dialog.Header>
+                <Dialog.Title class="text-2xl font-bold text-pink-600">
+                    {#if selectedKyt}
+                        Preview KYT - Minggu {selectedKyt.weekNumber}
+                    {:else}
+                        Preview KYT
+                    {/if}
+                </Dialog.Title>
+                <Dialog.Description>
+                    {#if selectedKyt}
+                        {formatWeekRange(selectedKyt.week.start, selectedKyt.week.end)} · {team?.team_name || 'Team'}
+                    {/if}
+                </Dialog.Description>
+            </Dialog.Header>
 
             {#if selectedKyt}
-                <div class="flex-1 overflow-hidden p-4">
-                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 h-full">
-                        <!-- Left side - KYT Image (takes 3/4 on large screens for bigger display) -->
-                        <div class="lg:col-span-3 flex items-center justify-center bg-gray-900 rounded-lg overflow-hidden shadow-xl h-full">
-                            <img
-                                src={assetUrl(selectedKyt.image_url,{query:{
-                                    t: dateparams
+                <div class="py-4 space-y-6">
+                    <!-- KYT Preview like editor -->
+                    <div>
+                        <KytPreview
+                            scaleToFit={true}
+                            bgKyt={bgKyt}
+                            kytDate={selectedKyt.week.start}
+                            kytTeam={team?.team_name || ''}
+                            kytTitle={selectedKyt.title || ''}
+                            savedImageUrl={selectedKyt.foto_path ? assetUrl(selectedKyt.foto_path,{query:{t: dateparams}}) : (selectedKyt.image_url ? assetUrl(selectedKyt.image_url,{query:{t: dateparams}}) : '')}
+                            kytPic={selectedKyt.user_name || ''}
+                            kytPotensi={selectedKyt.potensi || ''}
+                            kytPenanganan={selectedKyt.penanganan || ''}
+                        />
+                    </div>
 
-
-                                }})}
-                                alt="KYT Week {selectedKyt.weekNumber}"
-                                class="w-full h-full object-contain"
-                            />
-                        </div>
-
-                        <!-- Right side - KYT Information (takes 1/4 on large screens) -->
-                        <div class="lg:col-span-1 flex flex-col space-y-4 overflow-y-auto h-full pr-2">
-                            <!-- Status Card -->
-                            <div class="bg-white rounded-lg space-y-2 shadow-md p-4 border-l-4 border-green-500">
-                                <div class="text-xs font-semibold text-gray-500 uppercase mb-1.5">Status</div>
-                                <div class="flex items-center gap-2">
-                                    {#if (selectedKyt.status)}
-                                        <span class="text-3xl">✅</span>
-                                        <span class="text-lg font-bold text-green-600">Submitted</span>
-                                    {:else}
-                                        <span class="text-3xl">⛔</span>
-                                        <span class="text-lg font-bold text-red-600">Menunggu penanganan</span>
-                                    {/if}
-                                </div>
-                                {#if !selectedKyt.status}
-                                    <a class="pt-4" use:InertiaLink href={routeUrl(leader.penangananadd({kytListId: selectedKyt.id}))}>
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            class="flex items-center w-full gap-1 bg-yellow-50 hover:bg-yellow-100"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                                            </svg>
-                                            Add Penanganan
-                                        </Button>
-                                    </a>
-                                {/if}
-                            </div>
-
-                            <!-- Tanggal Submit Card -->
-                            <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-blue-500">
-                                <div class="text-xs font-semibold text-gray-500 uppercase mb-1.5">Tanggal Submit</div>
-                                <div class="text-sm font-medium text-gray-700 leading-tight">
-                                    {#if selectedKyt.submitted_at}
-                                        {new Date(selectedKyt.submitted_at).toLocaleDateString('id-ID', {
-                                            weekday: 'long',
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric',
-                                            hour: '2-digit',
-                                            minute: '2-digit'
-                                        })}
-                                    {:else}
-                                        -
-                                    {/if}
-                                </div>
-                            </div>
-
-                            <!-- Tim Card -->
-                            <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-pink-500">
-                                <div class="text-xs font-semibold text-gray-500 uppercase mb-1.5">Tim</div>
-                                <div class="text-lg font-bold text-pink-600">{team?.team_name || '-'}</div>
-                            </div>
-
-                            <!-- Minggu Ke Card -->
-                            <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-purple-500">
-                                <div class="text-xs font-semibold text-gray-500 uppercase mb-1.5">Minggu Ke</div>
-                                <div class="text-base font-medium text-gray-700">
-                                    Minggu {selectedKyt.weekNumber}
-                                </div>
-                                <div class="text-xs text-gray-500 mt-1">
-                                    {currentMonthName} {currentYear}
-                                </div>
-                            </div>
-
-                            <!-- Action Button -->
-                            <div class="flex-1 flex items-end">
-                                <Link
-                                    href={routeUrl(kytedit({id: selectedKyt.id}))}
-                                    class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-lg transition-all shadow-lg hover:shadow-xl text-base"
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t">
+                        <div class="flex flex-wrap items-center gap-2">
+                            {#if !selectedKyt.status}
+                                <a use:InertiaLink href={routeUrl(leader.penangananadd({kytListId: selectedKyt.id}))}>
+                                    <Button
+                                        variant="outline"
+                                        class="flex items-center gap-2 bg-yellow-50 hover:bg-yellow-100"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        Add Penanganan
+                                    </Button>
+                                </a>
+                            {/if}
+                            <Link
+                                href={routeUrl(kytedit({id: selectedKyt.id}))}
+                            >
+                                <Button
+                                    variant="outline"
+                                    class="flex items-center gap-2 bg-blue-50 hover:bg-blue-100"
                                 >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                                         <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                                     </svg>
                                     Edit KYT
-                                </Link>
-                            </div>
+                                </Button>
+                            </Link>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-muted-foreground">
+                                {#if selectedKyt.status}
+                                    ✅ Submitted
+                                {:else}
+                                    ⛔ Menunggu penanganan
+                                {/if}
+                            </span>
+                            {#if selectedKyt.submitted_at}
+                                <span class="text-xs text-muted-foreground">
+                                    {new Date(selectedKyt.submitted_at).toLocaleDateString('id-ID', {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: 'numeric'
+                                    })}
+                                </span>
+                            {/if}
                         </div>
                     </div>
                 </div>

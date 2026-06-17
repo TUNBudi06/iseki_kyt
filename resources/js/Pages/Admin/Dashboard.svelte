@@ -1,12 +1,13 @@
 <script lang="ts">
     import * as Card from "$shadcn/components/ui/card/index.js";
     import * as Dialog from "$shadcn/components/ui/dialog/index.js";
+    import KytPreview from "$/Components/KytPreview.svelte";
     import { page } from "@inertiajs/svelte";
     import AdminLayout from "$/Layouts/AdminLayout.svelte";
     import {assetUrl} from "@tunbudi06/inertia-route-helper";
     import {onMount} from "svelte";
 
-    let { weeksInCurrentMonth = [], teams = [], currentYear = 2026, currentMonthName = "January" } = $props();
+    let { weeksInCurrentMonth = [], teams = [], currentYear = 2026, currentMonthName = "January", bgKyt = "" } = $props();
 
     // Dialog state for viewing KYT details
     let isDialogOpen = $state(false);
@@ -275,56 +276,18 @@
             </Dialog.Header>
 
             {#if selectedKyt}
-                <div class="space-y-6 py-4">
-                    <!-- KYT Result Image -->
-                    <div class="rounded-lg overflow-hidden shadow-lg bg-gray-100">
-                        <img
-                            src={assetUrl(selectedKyt.image,{query:{
-                                    t: dateparams
-
-
-                                }})}
-                            alt={selectedKyt.title}
-                            class="w-full h-auto object-contain"
-                        />
-                    </div>
-
-                    <!-- KYT Information -->
-                    <div class="space-y-4">
-                        <!-- Title -->
-                        <div class="bg-pink-50 p-4 rounded-lg">
-                            <h3 class="text-sm font-semibold text-pink-800 mb-2">Judul KYT</h3>
-                            <p class="text-base font-medium">{selectedKyt.title}</p>
-                        </div>
-
-                        <!-- Description -->
-                        <div class="bg-blue-50 p-4 rounded-lg">
-                            <h3 class="text-sm font-semibold text-blue-800 mb-2">Potensi Bahaya</h3>
-                            <p class="text-base whitespace-pre-line">{selectedKyt.desc}</p>
-                        </div>
-
-                        <!-- Submitted By -->
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <h3 class="text-sm font-semibold text-gray-800 mb-2">Disampaikan Oleh</h3>
-                            <p class="text-base">{selectedKyt.submittedBy}</p>
-                        </div>
-                    </div>
-                    <div class="rounded-lg bg-yellow-50 p-4 border-l-4 border-yellow-400">
-                        {#if !selectedKyt.status}
-                            <div class="text-2xl tracking-tight">Tidak Ada Penanganan</div>
-                        {:else}
-                            <div class="text-2xl tracking-tight">Penanganan yang dilakukan:</div>
-                            <img
-                                src={assetUrl(selectedKyt.status.result_path,{query:{
-                                    t: dateparams
-
-
-                                }})}
-                                alt={selectedKyt.title}
-                                class="w-full h-auto object-contain"
-                            />
-                        {/if}
-                    </div>
+                <div class="py-4">
+                    <KytPreview
+                        scaleToFit={true}
+                        bgKyt={bgKyt}
+                        kytDate={selectedKyt.weekStart}
+                        kytTeam={selectedKyt.teamName}
+                        kytTitle={selectedKyt.title}
+                        savedImageUrl={selectedKyt.foto_path ? assetUrl(selectedKyt.foto_path,{query:{t: dateparams}}) : (selectedKyt.image ? assetUrl(selectedKyt.image,{query:{t: dateparams}}) : '')}
+                        kytPic={selectedKyt.submittedBy}
+                        kytPotensi={selectedKyt.desc}
+                        kytPenanganan={selectedKyt.penanganan || ''}
+                    />
                 </div>
             {/if}
         </Dialog.Content>

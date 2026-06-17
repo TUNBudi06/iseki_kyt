@@ -435,7 +435,7 @@
             canvas.remove(activeObject);
             saveState();
         }
-     }
+    }
 
     async function generatePreviewThumbnail() {
         if (!previewContainerEl) {
