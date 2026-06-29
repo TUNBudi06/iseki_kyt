@@ -16,7 +16,7 @@ const form = useForm({
 
 const errors = form.errors
 
-function onsubmit(e) {
+function onsubmit(e:Event) {
   e.preventDefault()
   form.submit('post', route(login()).url, {
     onSuccess: (res) => {
