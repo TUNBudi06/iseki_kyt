@@ -1,16 +1,17 @@
 import { createInertiaApp } from '@inertiajs/vue3'
-import { createApp, h } from 'vue'
+import { createApp, h, type DefineComponent } from 'vue'
 import './bootstrap'
 import { initRouteHelper } from '@tunbudi06/inertia-route-helper/init'
 
+const pages = import.meta.glob<{ default: DefineComponent }>('./Pages/**/*.vue', { eager: true })
+
 createInertiaApp({
-    resolve: async (name) => {
-        const pages = import.meta.glob('./Pages/**/*.vue')
-        const page = pages[`./Pages/${name}.vue`]
-        if (!page) {
+    resolve: (name) => {
+        const mod = pages[`./Pages/${name}.vue`]
+        if (!mod) {
             throw new Error(`Page not found: ${name}`)
         }
-        return page;
+        return mod
     },
     setup({ el, App, props, plugin }) {
         initRouteHelper(props)
