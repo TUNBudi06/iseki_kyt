@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 defineProps({
   title: { type: String, default: 'The GodFather' },
   desc: { type: String, default: '' },

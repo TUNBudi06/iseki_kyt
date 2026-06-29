@@ -10,13 +10,11 @@ createInertiaApp({
         if (!page) {
             throw new Error(`Page not found: ${name}`)
         }
-        const module = await page()
-        return module.default
+        return page;
     },
     setup({ el, App, props, plugin }) {
         initRouteHelper(props)
         const app = createApp({ render: () => h(App, props) })
-        app.use(plugin)
-        app.mount(el)
+        app.use(plugin).mount(el)
     },
 })

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import DefaultLayout from '@/Layouts/DefaultLayout.vue'
 import { usePage, router, Link } from '@inertiajs/vue3'
 import { Button } from '@/components/ui/button'

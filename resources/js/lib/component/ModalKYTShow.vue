@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
 } from '@/components/ui/dialog'

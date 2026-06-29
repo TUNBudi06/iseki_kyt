@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { Canvas, Circle, FabricImage, Rect } from 'fabric'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'

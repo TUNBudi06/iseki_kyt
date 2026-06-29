@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import LeaderLayout from '@/Layouts/LeaderLayout.vue'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import {

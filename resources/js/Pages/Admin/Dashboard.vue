@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,

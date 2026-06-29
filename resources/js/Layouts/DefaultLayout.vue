@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import '../../css/app.css'
 import { Toaster } from 'vue-sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'

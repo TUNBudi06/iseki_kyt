@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
