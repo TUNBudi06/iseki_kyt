@@ -1,5 +1,4 @@
-// import { wayfinder } from '@laravel/vite-plugin-wayfinder';
-import { svelte } from '@sveltejs/vite-plugin-svelte';
+import vue from '@vitejs/plugin-vue';
 import tailwindcss from '@tailwindcss/vite';
 import laravel from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
@@ -12,8 +11,7 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 manualChunks:{
-                    'vendor-svelte': ['svelte', 'svelte/animate', 'svelte/easing', 'svelte/motion', 'svelte/store', 'svelte/transition'],
-                    'vendor-icons': ['@lucide/svelte'],
+                    'vendor-vue': ['vue'],
                     'vendor-pptx': ['pptxgenjs'],
                 },
                 chunkFileNames: (chunkInfo) => {
@@ -29,7 +27,7 @@ export default defineConfig({
     },
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.ts'],
+            input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
         }),
         wayfinder({
@@ -38,12 +36,8 @@ export default defineConfig({
             actions: false,
             // patterns
         }),
+        vue(),
         tailwindcss(),
-        svelte({
-            compilerOptions: {
-                dev: process.env.NODE_ENV !== 'production',
-            },
-        }),
     ],
     resolve: {
         alias: {

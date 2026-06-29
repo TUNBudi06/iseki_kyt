@@ -1,5 +1,9 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap');
+/*---break---*/
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "shadcn-vue/tailwind.css";
 @custom-variant dark (&:is(.dark *));
 /*@plugin "tailwindcss-debug-screens";*/
 
@@ -13,92 +17,92 @@
   --radius: 0.625rem;
 
   /* Background dengan pink yang lebih terlihat */
-  --background: oklch(0.97 0.025 340); /* Light pink background - lebih terlihat */
-  --foreground: oklch(0.20 0 0); /* Hitam untuk text */
+  --background: oklch(1 0 0); /* Light pink background - lebih terlihat */
+  --foreground: oklch(0.145 0 0); /* Hitam untuk text */
 
   /* Cards putih murni untuk kontras */
   --card: oklch(1 0 0); /* Pure white cards */
-  --card-foreground: oklch(0.20 0 0); /* Hitam text on cards */
+  --card-foreground: oklch(0.145 0 0); /* Hitam text on cards */
   --popover: oklch(1 0 0); /* White popover */
-  --popover-foreground: oklch(0.20 0 0); /* Hitam text */
+  --popover-foreground: oklch(0.145 0 0); /* Hitam text */
 
   /* MERAH MUDA VIBRANT untuk elemen penting (button, navbar, sidebar) */
-  --primary: oklch(0.68 0.25 340); /* Vibrant pink - lebih saturated */
-  --primary-foreground: oklch(1 0 0); /* Putih text */
-  --secondary: oklch(0.92 0.08 340); /* Light pink secondary - terlihat */
-  --secondary-foreground: oklch(0.25 0 0); /* Dark gray text */
+  --primary: oklch(0.205 0 0); /* Vibrant pink - lebih saturated */
+  --primary-foreground: oklch(0.985 0 0); /* Putih text */
+  --secondary: oklch(0.97 0 0); /* Light pink secondary - terlihat */
+  --secondary-foreground: oklch(0.205 0 0); /* Dark gray text */
 
-  --muted: oklch(0.94 0.04 340); /* Light pink muted */
-  --muted-foreground: oklch(0.50 0 0); /* Medium gray */
-  --accent: oklch(0.88 0.10 340); /* Pink accent - lebih terlihat */
-  --accent-foreground: oklch(0.25 0 0); /* Dark gray text */
-  --destructive: oklch(0.55 0.25 15); /* Red-pink for errors */
+  --muted: oklch(0.97 0 0); /* Light pink muted */
+  --muted-foreground: oklch(0.556 0 0); /* Medium gray */
+  --accent: oklch(0.97 0 0); /* Pink accent - lebih terlihat */
+  --accent-foreground: oklch(0.205 0 0); /* Dark gray text */
+  --destructive: oklch(0.577 0.245 27.325); /* Red-pink for errors */
 
   /* Borders dengan hint pink yang terlihat */
-  --border: oklch(0.85 0.015 340); /* Light gray dengan pink tint */
-  --input: oklch(1 0 0); /* Putih for inputs */
-  --ring: oklch(0.68 0.25 340); /* Vibrant pink ring/focus */
+  --border: oklch(0.922 0 0); /* Light gray dengan pink tint */
+  --input: oklch(0.922 0 0); /* Putih for inputs */
+  --ring: oklch(0.708 0 0); /* Vibrant pink ring/focus */
 
-  --chart-1: oklch(0.68 0.25 340); /* Vibrant Pink */
-  --chart-2: oklch(0.78 0.20 340); /* Light pink */
-  --chart-3: oklch(0.58 0.25 340); /* Dark pink */
-  --chart-4: oklch(0.88 0.12 340); /* Very light pink */
-  --chart-5: oklch(0.72 0.22 340); /* Medium pink */
+  --chart-1: oklch(0.87 0 0); /* Vibrant Pink */
+  --chart-2: oklch(0.556 0 0); /* Light pink */
+  --chart-3: oklch(0.439 0 0); /* Dark pink */
+  --chart-4: oklch(0.371 0 0); /* Very light pink */
+  --chart-5: oklch(0.269 0 0); /* Medium pink */
 
   /* MERAH MUDA untuk sidebar - lebih bold */
-  --sidebar: oklch(0.70 0.22 340); /* Pink sidebar - lebih saturated */
-  --sidebar-foreground: oklch(1 0 0); /* Putih text */
-  --sidebar-primary: oklch(0.78 0.20 340); /* Light pink */
-  --sidebar-primary-foreground: oklch(1 0 0); /* Putih text */
-  --sidebar-accent: oklch(0.60 0.24 340); /* Dark pink accent */
-  --sidebar-accent-foreground: oklch(1 0 0); /* Putih text */
-  --sidebar-border: oklch(0.85 0.015 340); /* Light border */
-  --sidebar-ring: oklch(0.78 0.20 340); /* Pink ring */
+  --sidebar: oklch(0.985 0 0); /* Pink sidebar - lebih saturated */
+  --sidebar-foreground: oklch(0.145 0 0); /* Putih text */
+  --sidebar-primary: oklch(0.205 0 0); /* Light pink */
+  --sidebar-primary-foreground: oklch(0.985 0 0); /* Putih text */
+  --sidebar-accent: oklch(0.97 0 0); /* Dark pink accent */
+  --sidebar-accent-foreground: oklch(0.205 0 0); /* Putih text */
+  --sidebar-border: oklch(0.922 0 0); /* Light border */
+  --sidebar-ring: oklch(0.708 0 0); /* Pink ring */
 }
 
 .dark {
   /* Dark background dengan pink tint yang lebih terlihat */
-  --background: oklch(0.18 0.025 340); /* Dark with pink tint - lebih terlihat */
-  --foreground: oklch(0.95 0.005 340); /* Almost white text */
+  --background: oklch(0.145 0 0); /* Dark with pink tint - lebih terlihat */
+  --foreground: oklch(0.985 0 0); /* Almost white text */
 
   /* Cards dengan pink tint */
-  --card: oklch(0.22 0.030 340); /* Dark pink cards - lebih saturated */
-  --card-foreground: oklch(0.95 0.005 340); /* Almost white text */
-  --popover: oklch(0.22 0.030 340); /* Dark pink popover */
-  --popover-foreground: oklch(0.95 0.005 340); /* Almost white text */
+  --card: oklch(0.205 0 0); /* Dark pink cards - lebih saturated */
+  --card-foreground: oklch(0.985 0 0); /* Almost white text */
+  --popover: oklch(0.205 0 0); /* Dark pink popover */
+  --popover-foreground: oklch(0.985 0 0); /* Almost white text */
 
   /* MERAH MUDA VIBRANT untuk elemen penting di dark mode */
-  --primary: oklch(0.78 0.28 340); /* Bright vibrant pink - sangat terlihat */
-  --primary-foreground: oklch(1 0 0); /* Putih text */
-  --secondary: oklch(0.30 0.035 340); /* Dark pink secondary */
-  --secondary-foreground: oklch(0.90 0 0); /* Light gray text */
+  --primary: oklch(0.922 0 0); /* Bright vibrant pink - sangat terlihat */
+  --primary-foreground: oklch(0.205 0 0); /* Putih text */
+  --secondary: oklch(0.269 0 0); /* Dark pink secondary */
+  --secondary-foreground: oklch(0.985 0 0); /* Light gray text */
 
-  --muted: oklch(0.26 0.028 340); /* Dark pink muted */
-  --muted-foreground: oklch(0.70 0 0); /* Medium light gray */
-  --accent: oklch(0.35 0.040 340); /* Pink accent - lebih terlihat */
-  --accent-foreground: oklch(0.95 0 0); /* Light text */
-  --destructive: oklch(0.65 0.28 15); /* Bright red-pink for errors */
+  --muted: oklch(0.269 0 0); /* Dark pink muted */
+  --muted-foreground: oklch(0.708 0 0); /* Medium light gray */
+  --accent: oklch(0.269 0 0); /* Pink accent - lebih terlihat */
+  --accent-foreground: oklch(0.985 0 0); /* Light text */
+  --destructive: oklch(0.704 0.191 22.216); /* Bright red-pink for errors */
 
   /* Borders dengan pink tint yang terlihat */
-  --border: oklch(0.35 0.025 340); /* Medium dark border dengan pink */
-  --input: oklch(0.24 0.028 340); /* Dark pink input background */
-  --ring: oklch(0.78 0.28 340); /* Vibrant pink focus ring */
+  --border: oklch(1 0 0 / 10%); /* Medium dark border dengan pink */
+  --input: oklch(1 0 0 / 15%); /* Dark pink input background */
+  --ring: oklch(0.556 0 0); /* Vibrant pink focus ring */
 
-  --chart-1: oklch(0.78 0.28 340); /* Bright Pink */
-  --chart-2: oklch(0.68 0.25 340); /* Medium pink */
-  --chart-3: oklch(0.88 0.22 340); /* Light pink */
-  --chart-4: oklch(0.58 0.25 340); /* Dark pink */
-  --chart-5: oklch(0.73 0.26 340); /* Pink */
+  --chart-1: oklch(0.87 0 0); /* Bright Pink */
+  --chart-2: oklch(0.556 0 0); /* Medium pink */
+  --chart-3: oklch(0.439 0 0); /* Light pink */
+  --chart-4: oklch(0.371 0 0); /* Dark pink */
+  --chart-5: oklch(0.269 0 0); /* Pink */
 
   /* Pink sidebar di dark mode - bold dan terlihat */
-  --sidebar: oklch(0.25 0.030 340); /* Dark pink sidebar */
-  --sidebar-foreground: oklch(0.95 0.005 340); /* Light text */
-  --sidebar-primary: oklch(0.78 0.28 340); /* Bright pink primary */
-  --sidebar-primary-foreground: oklch(1 0 0); /* Putih text */
-  --sidebar-accent: oklch(0.68 0.25 340); /* Pink accent */
-  --sidebar-accent-foreground: oklch(1 0 0); /* Putih text */
-  --sidebar-border: oklch(0.35 0.025 340); /* Pink border */
-  --sidebar-ring: oklch(0.78 0.28 340); /* Bright pink ring */
+  --sidebar: oklch(0.205 0 0); /* Dark pink sidebar */
+  --sidebar-foreground: oklch(0.985 0 0); /* Light text */
+  --sidebar-primary: oklch(0.488 0.243 264.376); /* Bright pink primary */
+  --sidebar-primary-foreground: oklch(0.985 0 0); /* Putih text */
+  --sidebar-accent: oklch(0.269 0 0); /* Pink accent */
+  --sidebar-accent-foreground: oklch(0.985 0 0); /* Putih text */
+  --sidebar-border: oklch(1 0 0 / 10%); /* Pink border */
+  --sidebar-ring: oklch(0.556 0 0); /* Bright pink ring */
 }
 
 @theme inline {
@@ -137,6 +141,8 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --font-sans: 'Geist Variable', sans-serif;
+  --font-heading: var(--font-sans);
 }
 
 @layer base {
@@ -145,6 +151,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    @apply font-sans;
   }
 
   /* Custom table borders - Pink yang lebih terlihat */
