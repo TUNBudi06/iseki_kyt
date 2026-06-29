@@ -1,5 +1,5 @@
 import {assetUrl} from "@tunbudi06/inertia-route-helper";
-import {toast} from "svelte-sonner";
+import {toast} from "vue-sonner";
 
 export async function downloadKytImage({result_path, title}: {result_path: string, title: string},dateparams:number) {
     try {
