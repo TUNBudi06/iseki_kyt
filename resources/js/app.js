@@ -3,16 +3,15 @@ import { createApp, h } from 'vue'
 import './bootstrap'
 import { initRouteHelper } from '@tunbudi06/inertia-route-helper/init'
 
-const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
-
 createInertiaApp({
-    resolve: (name) => {
+    resolve: async (name) => {
+        const pages = import.meta.glob('./Pages/**/*.vue')
         const page = pages[`./Pages/${name}.vue`]
         if (!page) {
-            console.error(`Page not found: ./Pages/${name}.vue`)
-            console.log('Available pages:', Object.keys(pages))
+            throw new Error(`Page not found: ${name}`)
         }
-        return page
+        const module = await page()
+        return module.default
     },
     setup({ el, App, props, plugin }) {
         initRouteHelper(props)

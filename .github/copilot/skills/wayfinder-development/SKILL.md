@@ -70,9 +70,9 @@ show(1, { query: { page: 1 } }) // "/posts/1?page=1"
 ## Wayfinder + Inertia
 
 Use Wayfinder with the `<Form>` component:
-<code-snippet name="Wayfinder Form (Svelte)" lang="svelte">
+<code-snippet name="Wayfinder Form (Vue)" lang="vue">
 
-<Form {...store.form()}><input name="title" /></Form>
+<Form v-bind="store.form()"><input name="title" /></Form>
 
 </code-snippet>
 
