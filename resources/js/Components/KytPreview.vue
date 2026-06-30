@@ -52,7 +52,7 @@ function formattedDate(dateVal) {
     ref="rootRef"
     class="kytp-root"
     :class="scaleToFit ? 'kytp-scale' : 'kytp-native'"
-    :style="scaleToFit ? { height: (720 * kytpScale) + 'px', display: 'flex', justifyContent: 'center' } : {}"
+    :style="scaleToFit ? { height: (720 * kytpScale) + 'px' } : {}"
   >
     <div class="kytp-inner" :style="scaleToFit ? { transform: 'scale(' + kytpScale + ')', transformOrigin: 'top left', width: '1280px', height: '720px' } : {}">
       <div
@@ -158,6 +158,9 @@ function formattedDate(dateVal) {
 .kytp-root {
   position: relative;
   width: 100%;
+}
+.kytp-root.kytp-scale {
+  overflow: hidden;
 }
 .kytp-root.kytp-native {
   max-width: 1280px;
