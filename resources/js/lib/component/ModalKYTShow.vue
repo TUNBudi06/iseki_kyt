@@ -146,20 +146,20 @@ async function downloadAsPPT(kytData: KytItem) {
         </div>
 
         <!-- Original Photo -->
-        <div v-if="selectedKyt.foto_path" class="space-y-3">
+        <div v-if="selectedKyt.foto_path" class="space-y-3 px-2 md:px-6">
           <div class="text-sm font-semibold text-gray-500 uppercase">Original Photo</div>
           <div class="rounded-lg overflow-hidden shadow-md bg-gray-100">
             <img
               :src="assetUrl(selectedKyt.foto_path, { query: { t: dateparams } })"
               alt="Original KYT"
-              class="w-full h-auto object-fit"
+              class="w-full h-auto"
             />
           </div>
         </div>
 
         <!-- Penanganan Section -->
         <template v-if="selectedKyt.penanganans">
-          <div class="space-y-3">
+          <div class="space-y-3 px-2 md:px-6">
             <div class="text-sm font-semibold text-gray-500 uppercase">Penanganan</div>
             <div class="text-sm font-bold">Hasil Penanganan yang dilakukan:</div>
             <div class="rounded-lg overflow-hidden shadow-md bg-gray-100">
@@ -171,7 +171,7 @@ async function downloadAsPPT(kytData: KytItem) {
             </div>
           </div>
         </template>
-        <div v-else class="space-y-2">
+        <div v-else class="space-y-2 px-2 md:px-6">
           <div class="text-lg font-semibold text-gray-500 uppercase">Belum ada penanganan</div>
         </div>
 

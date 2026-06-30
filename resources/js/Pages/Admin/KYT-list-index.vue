@@ -358,8 +358,10 @@ function getTooltipClass(val: string) {
               <div class="flex items-center pt-4 justify-between border-b-2 border-pink-200 pb-3">
                 <h3 class="text-xl font-bold text-yellow-600">Penanganan:</h3>
               </div>
-              <div class="rounded-lg overflow-auto shadow-lg bg-gray-100">
-                <img :src="assetUrl(kyt.penanganans.result_path, { query: { t: dateparams } })" :alt="kyt.penanganans.title" class="w-full h-auto" />
+              <div class="px-2 md:px-6">
+                <div class="rounded-lg overflow-auto shadow-lg bg-gray-100">
+                  <img :src="assetUrl(kyt.penanganans.result_path, { query: { t: dateparams } })" :alt="kyt.penanganans.title" class="w-full h-auto" />
+                </div>
               </div>
             </template>
             <template v-else>
