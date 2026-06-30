@@ -21,12 +21,55 @@ import { downloadKytImage } from '$lib/download/KytImage.ts'
 import { downloadKytPptx } from '$lib/download/KytPptx.ts'
 import { ref, computed, watch, onMounted } from 'vue'
 
-const props = defineProps({
-  kytListDates: { type: Array, default: () => [] },
-  team: { type: Object, default: null },
-  availableMonths: { type: Array, default: () => [] },
-  selectedMonthYear: { type: String, default: '' },
-})
+interface TeamData {
+  team_name?: string
+  id?: number | string
+}
+
+interface KytListDate {
+  id?: number | string
+  kyt_date?: string
+  created_at?: string
+  number_of_Weeks?: number
+  kyt_lists?: KytEntry[]
+}
+
+interface KytEntry {
+  id?: number | string
+  result_path?: string
+  title?: string
+  user_name?: string
+  penanganans?: { id?: number | string; penanganan_title?: string; foto_path?: string; result_path?: string; title?: string } | null
+}
+
+interface FormattedRow {
+  [key: string]: unknown
+  id?: number | string
+  kyt_date?: string
+  created_at?: string
+  number_of_Weeks?: number
+  kyt_lists: KytEntry | null
+  formatted_date: string
+  weeks: string
+  formatted_created: string
+  status_text: string
+  status_color: string
+  has_submission: boolean
+  need_penanganan: boolean
+  penanganan_id: number | string | null
+}
+
+interface MonthItem {
+  value?: string
+  label?: string
+}
+
+const props = defineProps<{
+  kytListDates: KytListDate[]
+  team: TeamData | null
+  availableMonths: MonthItem[]
+  selectedMonthYear: string
+}>()
 
 const dateparams = ref(0)
 onMounted(() => { dateparams.value = Date.now() })
@@ -37,12 +80,12 @@ watch(() => props.selectedMonthYear, (val) => { monthFilter.value = val }, { imm
 const isViewDialogOpen = ref(false)
 const selectedKyt = ref(null)
 
-function viewKyt(kytData) {
+function viewKyt(kytData: KytEntry) {
   selectedKyt.value = kytData
   isViewDialogOpen.value = true
 }
 
-function deleteKyt(kytId) {
+function deleteKyt(kytId: number | string) {
   if (confirm('Are you sure you want to delete this KYT? This action cannot be undone.')) {
     router.delete(routeUrl(kytdelete({ id: kytId })), {
       onSuccess: () => toast.success('KYT deleted successfully!'),
@@ -54,11 +97,11 @@ function deleteKyt(kytId) {
   }
 }
 
-async function downloadAsImage(kytData) {
+async function downloadAsImage(kytData: KytEntry) {
   await downloadKytImage({ result_path: kytData.result_path, title: kytData.title }, dateparams.value)
 }
 
-async function downloadAsPPT(kytData) {
+async function downloadAsPPT(kytData: KytEntry) {
   const pptx = await downloadKytPptx(kytData, props.team)
   try {
     await pptx.writeFile({ fileName: `KYT_${kytData.title.replace(/\s+/g, '-')}.pptx` })
@@ -69,7 +112,15 @@ async function downloadAsPPT(kytData) {
   }
 }
 
-// Month filter watch
+// Month filter
+function changeMonth(direction: number) {
+  const current = monthFilter.value || props.selectedMonthYear
+  if (!current) return
+  const [year, month] = current.split('-').map(Number)
+  const d = new Date(year, month - 1 + direction, 1)
+  monthFilter.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+}
+
 watch(monthFilter, (val) => {
   if (val !== props.selectedMonthYear && val !== '') {
     router.get(routeUrl(leader.kyt({ query: { month_year: val } })), {}, {
@@ -80,7 +131,7 @@ watch(monthFilter, (val) => {
 
 // Data formatting
 const formattedData = computed(() => {
-  return (props.kytListDates || []).map(dateList => {
+  return (props.kytListDates || []).map((dateList: KytListDate): FormattedRow => {
     const kytEntries = dateList.kyt_lists || []
     const hasSubmission = kytEntries.length > 0
     const penanganans = hasSubmission ? kytEntries[0].penanganans : null
@@ -117,7 +168,7 @@ const search = ref('')
 const filteredData = computed(() => {
   if (!search.value) return formattedData.value
   const q = search.value.toLowerCase()
-  return formattedData.value.filter(row =>
+  return formattedData.value.filter((row: FormattedRow) =>
     String(row.id).includes(q) ||
     (row.formatted_date || '').toLowerCase().includes(q) ||
     (row.status_text || '').toLowerCase().includes(q) ||
@@ -155,34 +206,42 @@ const totalPages = computed(() => Math.max(1, Math.ceil(filteredData.value.lengt
       </CardHeader>
 
       <CardContent class="p-6">
-        <div class="flex items-center gap-4 mb-4">
-          <div class="max-w-md flex-1">
+        <div class="flex items-start gap-4 mb-4">
+          <div class="flex-1">
             <Label>Filter by Month:</Label>
-            <Popover>
-              <PopoverTrigger as-child>
-                <Button variant="outline" class="w-full justify-start text-left font-normal">
-                  {{ monthFilter || 'Select month or search...' }}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent class="w-[200px] p-0">
-                <Command>
-                  <CommandInput placeholder="Search month..." />
-                  <CommandEmpty>No months found.</CommandEmpty>
-                  <CommandList>
-                    <CommandGroup>
-                      <CommandItem
-                        v-for="item in availableMonths"
-                        :key="item.value || item"
-                        :value="item.value || item"
-                        @select="monthFilter = item.value || item"
-                      >
-                        {{ item.label || item }}
-                      </CommandItem>
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
+            <div class="flex items-center gap-2">
+              <Button variant="outline" size="icon" @click="changeMonth(-1)" title="Previous month">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+              </Button>
+              <Popover>
+                <PopoverTrigger as-child>
+                  <Button variant="outline" class="w-40 justify-start text-left font-normal">
+                    {{ monthFilter || 'Select month...' }}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent class="w-[200px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search month..." />
+                    <CommandEmpty>No months found.</CommandEmpty>
+                    <CommandList>
+                      <CommandGroup>
+                        <CommandItem
+                          v-for="item in availableMonths"
+                          :key="item.value"
+                          :value="item.value"
+                          @select="monthFilter = item.value"
+                        >
+                          {{ item.label }}
+                        </CommandItem>
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <Button variant="outline" size="icon" @click="changeMonth(1)" title="Next month">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </Button>
+            </div>
           </div>
           <div class="flex-1">
             <Label>Search:</Label>
@@ -190,7 +249,7 @@ const totalPages = computed(() => Math.max(1, Math.ceil(filteredData.value.lengt
           </div>
         </div>
 
-        <div>
+        <div class="overflow-x-auto">
           <Table>
             <TableCaption>A list of KYT dates and weeks.</TableCaption>
             <TableHeader>

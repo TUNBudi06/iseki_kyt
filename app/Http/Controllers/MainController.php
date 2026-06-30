@@ -32,7 +32,11 @@ class MainController extends Controller
         }
         Auth::login($user);
 
-        return back()->with('success', 'Login successful!');
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.home')->with('success', 'Login successful! Welcome Admin.');
+        }
+
+        return redirect()->route('leader.dashboard')->with('success', 'Login successful! Welcome back.');
     }
 
     public function logout()

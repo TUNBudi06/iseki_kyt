@@ -10,7 +10,7 @@ import { Head } from '@inertiajs/vue3'
 
   <DefaultLayout>
     <div class="max-h-[700px] bg-pink-50 p-4 text-blue-900">
-      <div class="mx-auto max-w-[1400px]">
+      <div class="w-full">
         <div class="mb-3 flex flex-wrap items-center justify-between gap-3">
           <div class="text-3xl font-serif font-extrabold tracking-tight text-pink-600">
             KIKEN YOCHI TRAINING (KYT)

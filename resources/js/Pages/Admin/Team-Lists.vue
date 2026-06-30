@@ -20,14 +20,27 @@ import { list as userList } from '$routes/admin/user'
 import { route, routeUrl } from '@tunbudi06/inertia-route-helper'
 import { ref, computed, watch, onMounted } from 'vue'
 
+interface TeamItem {
+  id?: number | string
+  team_name?: string
+  team_description?: string
+  user_id?: number | string
+  user?: { username?: string }
+}
+
+interface UserInfo {
+  id?: number | string
+  username?: string
+}
+
 const page = usePage()
-const props = defineProps({
-  teams: { type: Array, default: () => [] },
-  users: { type: Array, default: () => [] },
-})
+const props = defineProps<{
+  teams: TeamItem[]
+  users: UserInfo[]
+}>()
 
 // Reactive data
-const data = ref([])
+const data = ref<TeamItem[]>([])
 watch(() => props.teams, (val) => { data.value = val || [] }, { immediate: true })
 
 // Search/filter
@@ -35,7 +48,7 @@ const search = ref('')
 const filteredData = computed(() => {
   if (!search.value) return data.value
   const q = search.value.toLowerCase()
-  return data.value.filter(row =>
+  return data.value.filter((row: TeamItem) =>
     String(row.id).includes(q) ||
     (row.team_name || '').toLowerCase().includes(q) ||
     (row.team_description || '').toLowerCase().includes(q) ||
@@ -65,9 +78,9 @@ function toggleSort(field) {
 }
 const sortedData = computed(() => {
   if (!sortField.value) return paginatedData.value
-  return [...paginatedData.value].sort((a, b) => {
-    let aVal = a[sortField.value]
-    let bVal = b[sortField.value]
+  return [...paginatedData.value].sort((a: TeamItem, b: TeamItem) => {
+    let aVal = a[sortField.value as keyof TeamItem]
+    let bVal = b[sortField.value as keyof TeamItem]
     if (typeof aVal === 'string') aVal = aVal.toLowerCase()
     if (typeof bVal === 'string') bVal = bVal.toLowerCase()
     if (aVal < bVal) return sortDir.value === 'asc' ? -1 : 1
@@ -90,7 +103,7 @@ const userOptions = computed(() =>
   (props.users || []).map(u => ({ value: String(u.id), label: u.username }))
 )
 
-function submitButton(e) {
+function submitButton(e: Event) {
   e.preventDefault()
   form.post(route(addTeam()).url, {
     onSuccess: () => {
@@ -102,7 +115,7 @@ function submitButton(e) {
   })
 }
 
-function submitEditButton(e) {
+function submitEditButton(e: Event) {
   e.preventDefault()
   if (editingTeamId.value === null) return
   editForm.put(route(editTeam(editingTeamId.value)).url, {
@@ -133,7 +146,7 @@ function confirmDelete() {
   })
 }
 
-function openEditDialog(team) {
+function openEditDialog(team: TeamItem) {
   editingTeamId.value = team.id
   editForm.team_name = team.team_name
   editForm.team_description = team.team_description || ''
@@ -141,12 +154,12 @@ function openEditDialog(team) {
   openEdit.value = true
 }
 
-function openDeleteDialog(teamId) {
+function openDeleteDialog(teamId: number | string) {
   deletingTeamId.value = teamId
   openDelete.value = true
 }
 
-function sortIcon(field) {
+function sortIcon(field: string) {
   if (sortField.value !== field) return '↕'
   return sortDir.value === 'asc' ? '↑' : '↓'
 }
@@ -184,7 +197,8 @@ function sortIcon(field) {
           <Input v-model="search" placeholder="Cari Team..." class="max-w-xs" />
         </div>
 
-        <div class="mt-4 rounded-lg overflow-hidden shadow-lg">
+        <div class="mt-4 rounded-lg shadow-lg">
+          <div class="overflow-x-auto rounded-lg">
           <Table class="w-full" data-table-bordered>
             <TableHeader class="bg-linear-to-r from-pink-500 to-pink-600">
               <TableRow class="hover:bg-transparent">
@@ -233,6 +247,7 @@ function sortIcon(field) {
               </TableRow>
             </TableBody>
           </Table>
+          </div>
         </div>
 
         <!-- Pagination -->

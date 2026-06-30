@@ -19,7 +19,7 @@ import { list as teamList } from '$routes/admin/team'
 import { routeUrl, isCurrentRoute } from '@tunbudi06/inertia-route-helper'
 import { ref } from 'vue'
 
-const page = usePage()
+const page = usePage<{ auth?: { user?: { username?: string; role?: string } } }>()
 const mobileMenuOpen = ref(false)
 
 const navItems = [
@@ -43,7 +43,7 @@ function toggleMobileMenu() {
   <DefaultLayout>
     <!-- Navbar -->
     <nav class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
-      <div class="container mx-auto px-4">
+      <div class="w-full px-4">
         <div class="flex h-16 items-center justify-between">
           <!-- Logo & Brand -->
           <div class="flex items-center gap-6">
@@ -153,7 +153,7 @@ function toggleMobileMenu() {
     </nav>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-6">
+    <main class="w-full px-4 py-6">
       <slot />
     </main>
   </DefaultLayout>

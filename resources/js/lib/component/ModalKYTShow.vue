@@ -7,22 +7,41 @@ import { Button } from '@/components/ui/button'
 import { assetUrl, routeUrl } from '@tunbudi06/inertia-route-helper'
 import { kytdelete } from '$routes/leader'
 import { downloadKytPptx, downloadKytImage } from '$lib/download/index.ts'
+import type { KytData as PptxKytData } from '$lib/download/KytPptx.ts'
 import { router } from '@inertiajs/vue3'
 import { toast } from 'vue-sonner'
 import { ref, onMounted } from 'vue'
 
-const props = defineProps({
-  isOpen: { type: Boolean, default: false },
-  selectedKyt: { type: Object, default: null },
-  team: { type: Object, default: null },
-})
+interface KytItem {
+  id?: number | string
+  title?: string
+  user_name?: string
+  result_path?: string
+  foto_path?: string
+  potensi?: string
+  penanganan?: string
+  created_at?: string
+  penanganans?: { result_path?: string; title?: string } | null
+  [key: string]: unknown
+}
+
+interface TeamItem {
+  team_name?: string
+  [key: string]: unknown
+}
+
+const props = defineProps<{
+  isOpen: boolean
+  selectedKyt: KytItem | null
+  team: TeamItem | null
+}>()
 
 const emit = defineEmits(['update:isOpen'])
 
 const dateparams = ref(0)
 onMounted(() => { dateparams.value = Date.now() })
 
-function deleteKyt(kytId) {
+function deleteKyt(kytId: number | string) {
   if (confirm('Are you sure you want to delete this KYT? This action cannot be undone.')) {
     router.delete(routeUrl(kytdelete({ id: kytId })), {
       onSuccess: () => {
@@ -36,11 +55,11 @@ function deleteKyt(kytId) {
   }
 }
 
-async function downloadAsPPT(kytData) {
+async function downloadAsPPT(kytData: KytItem) {
   if (!kytData) return
-  const pptx = await downloadKytPptx(kytData, props.team)
+  const pptx = await downloadKytPptx(kytData as unknown as PptxKytData, props.team)
   try {
-    await pptx.writeFile({ fileName: `KYT_${kytData.title.replace(/\s+/g, '-')}.pptx` })
+    await pptx.writeFile({ fileName: `KYT_${(kytData.title || 'kyt').replace(/\s+/g, '-')}.pptx` })
     toast.success('PowerPoint downloaded successfully!')
   } catch (error) {
     toast.error('Failed to download PowerPoint')

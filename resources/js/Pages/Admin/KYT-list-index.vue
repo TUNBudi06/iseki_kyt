@@ -24,36 +24,79 @@ import { toast } from 'vue-sonner'
 import { list as kytListRoute } from '$routes/admin/kyt'
 import { ref, computed, watch, onMounted } from 'vue'
 
-const props = defineProps({
-  kytLists: { type: Array, default: () => [] },
-  teamKyt: { type: Array, default: () => [] },
-  auth: { type: Object, default: null },
-  availableMonths: { type: Array, default: () => [] },
-  selectedMonthYear: { type: String, default: '' },
-})
+interface KytListRaw {
+  id?: number | string
+  kyt_date?: string
+  number_of_Weeks?: number
+  kyt_lists?: KytListItem[]
+}
+
+interface KytListItem {
+  id?: number | string
+  team_k_y_t_id?: number | string
+  result_path?: string
+  title?: string
+  user_name?: string
+  potensi?: string
+  penanganan?: string
+  penanganans?: {
+    result_path?: string
+    title?: string
+    foto_path?: string
+    penanganan_title?: string
+  } | null
+}
+
+interface TeamInfo {
+  id?: number | string
+  team_name?: string
+}
+
+interface TableRow {
+  no: number
+  id?: number | string
+  minggu_kyt: string
+  kyt_date?: string
+  kyt_lists: KytListItem[]
+  [teamName: string]: unknown
+}
+
+interface SelectedKyt extends KytListItem {
+  team_name: string
+}
+
+import type { KytData, Team } from '$lib/download/KytPptx.ts'
+
+const props = defineProps<{
+  kytLists: KytListRaw[]
+  teamKyt: TeamInfo[]
+  auth?: { user?: { username?: string; role?: string } } | null
+  availableMonths: { value: string; label: string }[]
+  selectedMonthYear: string
+}>()
 
 const dateparams = ref(0)
 onMounted(() => { dateparams.value = Date.now() })
 
 const isDialogOpen = ref(false)
-const selectedKyts = ref([])
+const selectedKyts = ref<SelectedKyt[]>([])
 const monthFilter = ref('')
 
 watch(() => props.selectedMonthYear, (val) => { monthFilter.value = val }, { immediate: true })
 
 // Format data for table
-const formattedData = computed(() => {
-  return (props.kytLists || []).map((item, index) => {
-    const row = {
+const formattedData = computed<TableRow[]>(() => {
+  return (props.kytLists || []).map((item: KytListRaw, index: number) => {
+    const row: TableRow = {
       no: index + 1,
       id: item.id,
-      minggu_kyt: new Date(item.kyt_date).toLocaleDateString('id-ID', { month: 'short', year: 'numeric' }) + ' Week ' + item.number_of_Weeks,
+      minggu_kyt: new Date(item.kyt_date || '').toLocaleDateString('id-ID', { month: 'short', year: 'numeric' }) + ' Week ' + item.number_of_Weeks,
       kyt_date: item.kyt_date,
       kyt_lists: item.kyt_lists || [],
     }
     for (const team of props.teamKyt || []) {
-      const teamKyt = (item.kyt_lists || []).find(t => t.team_k_y_t_id === team.id)
-      row[team.team_name] = teamKyt
+      const teamKyt = (item.kyt_lists || []).find((t: KytListItem) => t.team_k_y_t_id === team.id)
+      row[team.team_name || ''] = teamKyt
         ? (teamKyt.penanganans ? '✓' : '-')
         : '✗'
     }
@@ -66,7 +109,7 @@ const search = ref('')
 const filteredData = computed(() => {
   if (!search.value) return formattedData.value
   const q = search.value.toLowerCase()
-  return formattedData.value.filter(row =>
+  return formattedData.value.filter((row: TableRow) =>
     String(row.no).includes(q) ||
     (row.minggu_kyt || '').toLowerCase().includes(q)
   )
@@ -82,7 +125,15 @@ const paginatedData = computed(() => {
 const totalPages = computed(() => Math.max(1, Math.ceil(filteredData.value.length / pageSize)))
 
 // Month filter
-watch(monthFilter, (val) => {
+function changeMonth(direction: number) {
+  const current = monthFilter.value || props.selectedMonthYear
+  if (!current) return
+  const [year, month] = current.split('-').map(Number)
+  const d = new Date(year, month - 1 + direction, 1)
+  monthFilter.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+}
+
+watch(monthFilter, (val: string) => {
   if (val !== props.selectedMonthYear && val !== '') {
     router.get(routeUrl(kytListRoute({ query: { month_year: val } })), {}, {
       preserveState: true, preserveScroll: true,
@@ -90,45 +141,46 @@ watch(monthFilter, (val) => {
   }
 })
 
-function viewKytDetails(row) {
-  selectedKyts.value = (row.kyt_lists || []).map(kyt => ({
+function viewKytDetails(row: TableRow) {
+  selectedKyts.value = (row.kyt_lists || []).map((kyt: KytListItem) => ({
     ...kyt,
-    team_name: (props.teamKyt || []).find(t => t.id === kyt.team_k_y_t_id)?.team_name || 'Unknown Team',
+    team_name: (props.teamKyt || []).find((t: TeamInfo) => t.id === kyt.team_k_y_t_id)?.team_name || 'Unknown Team',
   }))
   isDialogOpen.value = true
 }
 
-async function downloadAsPPT(row) {
-  const pptx = await initPptxKyt(props.auth?.user?.username || 'User', row.minggu_kyt)
+async function downloadAsPPT(row: TableRow) {
+  const firstTitle = ((row.kyt_lists || []).find(k => k?.title)?.title || row.minggu_kyt).replace(/\s+/g, '_')
+  const pptx = await initPptxKyt(props.auth?.user?.username || 'User', firstTitle)
   for (const team of props.teamKyt || []) {
-    const kytData = (row.kyt_lists || []).find(kyt => kyt.team_k_y_t_id === team.id)
+    const kytData = (row.kyt_lists || []).find((kyt: KytListItem) => kyt.team_k_y_t_id === team.id)
     if (kytData) {
-      SliceAdderKyt(pptx, kytData, team)
+      SliceAdderKyt(pptx, kytData as unknown as KytData, team as unknown as Team)
       if (kytData.penanganans) {
-        PenangananSliceKyt(pptx, kytData.penanganans.penanganan_title, kytData.penanganans.foto_path)
+        PenangananSliceKyt(pptx, kytData.penanganans.penanganan_title || '', kytData.penanganans.foto_path)
       } else {
         PenangananSliceKyt(pptx, 'Penanganan Belum submit')
       }
     } else {
-      EmptySliceAdderKyt(pptx, team)
+      EmptySliceAdderKyt(pptx, team as unknown as Team)
       PenangananSliceKyt(pptx, 'KYT Tidak Diajukan')
     }
   }
   try {
-    await pptx.writeFile({ fileName: `KYT_${row.minggu_kyt.replace(/\s+/g, '-')}.pptx` })
+    await pptx.writeFile({ fileName: `KYT_${firstTitle}.pptx` })
     toast.success('PowerPoint downloaded successfully!')
   } catch (error) {
     console.error('PPT Download error:', error)
   }
 }
 
-function getTooltipText(val) {
+function getTooltipText(val: string) {
   if (val === '✓') return 'KYT submitted Dan Sudah ditangani'
   if (val === '-') return 'KYT submitted Dan Belum ditangani'
   return 'KYT BELUM DI SUBMIT'
 }
 
-function getTooltipClass(val) {
+function getTooltipClass(val: string) {
   if (val === '✓') return 'inline-block bg-green-100 rounded-full px-2 py-0.5'
   if (val === '-') return 'inline-block bg-yellow-100 rounded-full px-2 py-0.5'
   return 'inline-block bg-red-100 rounded-full px-2 py-0.5'
@@ -151,34 +203,42 @@ function getTooltipClass(val) {
         </div>
       </CardHeader>
       <CardContent>
-        <div class="flex items-center gap-4 mb-4">
-          <div class="max-w-md flex-1">
+        <div class="flex items-start gap-4 mb-4">
+          <div class="flex-1">
             <Label>Filter by Month:</Label>
-            <Popover>
-              <PopoverTrigger as-child>
-                <Button variant="outline" class="w-full justify-start text-left font-normal">
-                  {{ monthFilter || 'Select month or search...' }}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent class="w-[200px] p-0">
-                <Command>
-                  <CommandInput placeholder="Search month..." />
-                  <CommandEmpty>No months found.</CommandEmpty>
-                  <CommandList>
-                    <CommandGroup>
-                      <CommandItem
-                        v-for="item in availableMonths"
-                        :key="item.value || item"
-                        :value="item.value || item"
-                        @select="monthFilter = item.value || item"
-                      >
-                        {{ item.label || item }}
-                      </CommandItem>
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
+            <div class="flex items-center gap-2">
+              <Button variant="outline" size="icon" @click="changeMonth(-1)" title="Previous month">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+              </Button>
+              <Popover>
+                <PopoverTrigger as-child>
+                  <Button variant="outline" class="w-40 justify-start text-left font-normal">
+                    {{ monthFilter || 'Select month...' }}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent class="w-[200px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search month..." />
+                    <CommandEmpty>No months found.</CommandEmpty>
+                    <CommandList>
+                      <CommandGroup>
+                        <CommandItem
+                          v-for="item in availableMonths"
+                          :key="item.value"
+                          :value="item.value"
+                          @select="monthFilter = item.value"
+                        >
+                          {{ item.label }}
+                        </CommandItem>
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <Button variant="outline" size="icon" @click="changeMonth(1)" title="Next month">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </Button>
+            </div>
           </div>
           <div class="flex-1">
             <Label>Search:</Label>
@@ -187,6 +247,7 @@ function getTooltipClass(val) {
         </div>
 
         <TooltipProvider>
+          <div class="overflow-x-auto">
           <Table>
             <TableCaption>A list of KYT submissions by week and team.</TableCaption>
             <TableHeader>
@@ -223,6 +284,7 @@ function getTooltipClass(val) {
               </TableRow>
             </TableBody>
           </Table>
+          </div>
         </TooltipProvider>
 
         <!-- Pagination -->

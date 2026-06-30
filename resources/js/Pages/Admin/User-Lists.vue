@@ -20,11 +20,17 @@ import { list as teamList } from '$routes/admin/team'
 import { route, routeUrl } from '@tunbudi06/inertia-route-helper'
 import { ref, computed, watch } from 'vue'
 
-const props = defineProps({
-  users: { type: Array, default: () => [] },
-})
+interface UserItem {
+  id?: number | string
+  username?: string
+  role?: string
+}
 
-const data = ref([])
+const props = defineProps<{
+  users: UserItem[]
+}>()
+
+const data = ref<UserItem[]>([])
 watch(() => props.users, (val) => { data.value = val || [] }, { immediate: true })
 
 // Search/filter
@@ -32,7 +38,7 @@ const search = ref('')
 const filteredData = computed(() => {
   if (!search.value) return data.value
   const q = search.value.toLowerCase()
-  return data.value.filter(row =>
+  return data.value.filter((row: UserItem) =>
     String(row.id).includes(q) ||
     (row.username || '').toLowerCase().includes(q) ||
     (row.role || '').toLowerCase().includes(q)
@@ -61,9 +67,9 @@ function toggleSort(field) {
 }
 const sortedData = computed(() => {
   if (!sortField.value) return paginatedData.value
-  return [...paginatedData.value].sort((a, b) => {
-    let aVal = a[sortField.value]
-    let bVal = b[sortField.value]
+  return [...paginatedData.value].sort((a: UserItem, b: UserItem) => {
+    let aVal = a[sortField.value as keyof UserItem]
+    let bVal = b[sortField.value as keyof UserItem]
     if (typeof aVal === 'string') aVal = aVal.toLowerCase()
     if (typeof bVal === 'string') bVal = bVal.toLowerCase()
     if (aVal < bVal) return sortDir.value === 'asc' ? -1 : 1
@@ -86,7 +92,7 @@ const roleOptions = [
   { value: 'leader', label: 'Leader' },
 ]
 
-function submitButton(e) {
+function submitButton(e: Event) {
   e.preventDefault()
   form.post(route(addUser()).url, {
     onSuccess: () => {
@@ -98,7 +104,7 @@ function submitButton(e) {
   })
 }
 
-function submitEditButton(e) {
+function submitEditButton(e: Event) {
   e.preventDefault()
   if (editingUserId.value === null) return
   editForm.put(route(editUser(editingUserId.value)).url, {
@@ -124,7 +130,7 @@ function confirmDelete() {
   })
 }
 
-function openEditDialog(user) {
+function openEditDialog(user: UserItem) {
   editingUserId.value = user.id
   editForm.username = user.username
   editForm.password = ''
@@ -132,12 +138,12 @@ function openEditDialog(user) {
   openEdit.value = true
 }
 
-function openDeleteDialog(userId) {
+function openDeleteDialog(userId: number | string) {
   deletingUserId.value = userId
   openDelete.value = true
 }
 
-function sortIcon(field) {
+function sortIcon(field: string) {
   if (sortField.value !== field) return '↕'
   return sortDir.value === 'asc' ? '↑' : '↓'
 }
@@ -171,7 +177,8 @@ function sortIcon(field) {
           <Input v-model="search" placeholder="Cari User..." class="max-w-xs" />
         </div>
 
-        <div class="mt-4 rounded-lg overflow-hidden">
+        <div class="mt-4 rounded-lg">
+          <div class="overflow-x-auto rounded-lg">
           <Table class="w-full" data-table-bordered>
             <TableHeader class="bg-linear-to-r from-pink-500 to-pink-600">
               <TableRow class="hover:bg-transparent">
@@ -211,6 +218,7 @@ function sortIcon(field) {
               </TableRow>
             </TableBody>
           </Table>
+          </div>
         </div>
 
         <!-- Pagination -->

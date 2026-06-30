@@ -15,7 +15,7 @@ import { logout } from '$routes'
 import { routeUrl, isCurrentRoute } from '@tunbudi06/inertia-route-helper'
 import { ref } from 'vue'
 
-const page = usePage()
+const page = usePage<{ auth?: { user?: { username?: string; role?: string } } }>()
 const mobileMenuOpen = ref(false)
 
 const navItems = [
@@ -37,7 +37,7 @@ function toggleMobileMenu() {
   <DefaultLayout>
     <!-- Navbar -->
     <nav class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
-      <div class="container mx-auto px-4">
+      <div class="w-full px-4">
         <div class="flex h-16 items-center justify-between">
           <div class="flex items-center gap-6">
             <Link :href="routeUrl(leader.dashboard())" class="flex items-center gap-2 font-semibold text-lg hover:opacity-80 transition-opacity">
@@ -144,7 +144,7 @@ function toggleMobileMenu() {
     </nav>
 
     <!-- Main Content -->
-    <main class="flex-1 container mx-auto px-4 py-6">
+    <main class="flex-1 w-full px-4 py-6">
       <slot />
     </main>
   </DefaultLayout>

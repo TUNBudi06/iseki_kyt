@@ -2,20 +2,21 @@
 import { ref } from 'vue'
 
 const emit = defineEmits(['drop'])
-const fileInput = ref(null)
+const fileInput = ref<HTMLInputElement | null>(null)
 const isDragging = ref(false)
 
 function openFileDialog() {
   fileInput.value?.click()
 }
 
-function onFileSelect(e) {
-  const files = Array.from(e.target.files || [])
+function onFileSelect(e: Event) {
+  const input = e.target as HTMLInputElement
+  const files = Array.from(input.files || [])
   if (files.length) emit('drop', { acceptedFiles: files })
-  e.target.value = ''
+  input.value = ''
 }
 
-function onDrop(e) {
+function onDrop(e: DragEvent) {
   isDragging.value = false
   const files = Array.from(e.dataTransfer?.files || []).filter(f => f.type.startsWith('image/'))
   if (files.length) emit('drop', { acceptedFiles: files })

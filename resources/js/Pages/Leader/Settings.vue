@@ -8,7 +8,10 @@ import { toast } from 'vue-sonner'
 import { usePage, useForm, Head } from '@inertiajs/vue3'
 import { watch } from 'vue'
 
-const page = usePage()
+const page = usePage<{
+  auth?: { user?: { username?: string; role?: string } }
+  flash?: { success?: string; error?: string }
+}>()
 
 const form = useForm({
   new_password: '',
@@ -23,7 +26,7 @@ watch(() => page.props.flash?.error, (val) => {
   if (val) toast.error(val)
 })
 
-function handleSubmit(e) {
+function handleSubmit(e: Event) {
   e.preventDefault()
   form.post('/leader/settings/change-password', {
     onSuccess: () => {

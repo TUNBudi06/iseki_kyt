@@ -9,61 +9,107 @@ import KytPreview from '@/Components/KytPreview.vue'
 import { usePage, Link, Head } from '@inertiajs/vue3'
 import { assetUrl, routeUrl } from '@tunbudi06/inertia-route-helper'
 import leader, { kytadd, kytedit } from '$routes/leader'
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
+import { toast } from 'vue-sonner'
 
-const page = usePage()
+interface WeekRaw {
+  id?: number | string
+  date_start?: string
+  date_end?: string
+  week_number?: number
+}
 
-const props = defineProps({
-  weeksInCurrentMonth: { type: Array, default: () => [] },
-  team: { type: Object, default: null },
-  currentYear: { type: [String, Number], default: 2026 },
-  currentMonthName: { type: String, default: 'January' },
-  bgKyt: { type: String, default: '' },
+interface WeekItem {
+  id?: number | string
+  start: Date
+  end: Date
+  week_number?: number
+}
+
+interface KytEntry {
+  image_url?: string
+  title?: string
+  foto_path?: string
+  user_name?: string
+  potensi?: string
+  penanganan?: string
+  status?: boolean | number
+  id?: number | string
+  submitted_at?: string
+  kyt_date_id?: string | number
+}
+
+interface TeamData {
+  team_name?: string
+  weeklyKYT?: Record<string, KytEntry | null>
+}
+
+interface SelectedKytData extends KytEntry {
+  weekNumber?: number
+  week: WeekItem
+}
+
+const page = usePage<{ auth?: { user?: { username?: string } }; flash?: { success?: string; error?: string } }>()
+
+// Watch for flash messages
+watch(() => page.props.flash?.success, (val) => {
+  if (val) toast.success(val)
+})
+watch(() => page.props.flash?.error, (val) => {
+  if (val) toast.error(val)
 })
 
+const props = defineProps<{
+  weeksInCurrentMonth: WeekRaw[]
+  team: TeamData | null
+  currentYear: string | number
+  currentMonthName: string
+  bgKyt: string
+}>()
+
 const isDialogOpen = ref(false)
-const selectedKyt = ref(null)
+const selectedKyt = ref<SelectedKytData | null>(null)
 const dateparams = ref(0)
 
 onMounted(() => { dateparams.value = Date.now() })
 
-function openKytDialog(kytData, weekNumber, week) {
+function openKytDialog(kytData: KytEntry, weekNumber: number, week: WeekItem) {
   selectedKyt.value = { ...kytData, weekNumber, week }
   isDialogOpen.value = true
 }
 
-const weeks = computed(() => {
-  const generatedWeeks = []
+const weeks = computed<WeekItem[]>(() => {
+  const generatedWeeks: WeekItem[] = []
   for (let i = 0; i < props.weeksInCurrentMonth.length; i++) {
     const week = props.weeksInCurrentMonth[i]
     generatedWeeks.push({
       id: week.id,
-      start: new Date(week.date_start),
-      end: new Date(week.date_end),
+      start: new Date(week.date_start || ''),
+      end: new Date(week.date_end || ''),
       week_number: week.week_number || (i + 1),
     })
   }
   return generatedWeeks
 })
 
-function formatWeekRange(start, end) {
+function formatWeekRange(start: Date, end: Date) {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   return `${start.getDate()} ${months[start.getMonth()]} - ${end.getDate()} ${months[end.getMonth()]}`
 }
 
-function getMonthName(date) {
+function getMonthName(date: Date) {
   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
   return months[date.getMonth()]
 }
 
-function isNextMonth(week, monthName) {
+function isNextMonth(week: WeekItem, monthName: string) {
   return getMonthName(week.start) !== monthName
 }
 
 const totalKytThisMonth = computed(() => weeks.value.length)
 const kytSubmitted = computed(() => {
   if (!props.team?.weeklyKYT) return 0
-  return Object.values(props.team.weeklyKYT).filter(k => k !== null && k?.image_url).length
+  return Object.values(props.team.weeklyKYT).filter((k): k is KytEntry => k !== null && !!k?.image_url).length
 })
 const kytNotSubmitted = computed(() => weeks.value.length - kytSubmitted.value)
 </script>
@@ -190,7 +236,7 @@ const kytNotSubmitted = computed(() => weeks.value.length - kytSubmitted.value)
                     </div>
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
                       <Link
-                        :href="routeUrl(kytadd({ IdKytDate: team.weeklyKYT.kyt_date_id }))"
+                        :href="routeUrl(kytadd({ IdKytDate: team.weeklyKYT[week.id]?.kyt_date_id || '' }))"
                         class="opacity-0 group-hover:opacity-100 transform scale-90 group-hover:scale-100 transition-all duration-300 bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 sm:py-3 sm:px-6 rounded-lg shadow-lg text-sm sm:text-base md:text-lg flex items-center gap-2"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">

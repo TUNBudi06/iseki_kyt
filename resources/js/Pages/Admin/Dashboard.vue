@@ -7,20 +7,61 @@ import KytPreview from '@/Components/KytPreview.vue'
 import { usePage, Head } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import { assetUrl } from '@tunbudi06/inertia-route-helper'
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
+import { toast } from 'vue-sonner'
 
-const page = usePage()
+interface WeekItem {
+  id: number | string
+  date_start?: string
+  date_end?: string
+  week_number?: number
+  start: Date
+  end: Date
+}
 
-const props = defineProps({
-  weeksInCurrentMonth: { type: Array, default: () => [] },
-  teams: { type: Array, default: () => [] },
-  currentYear: { type: [String, Number], default: 2026 },
-  currentMonthName: { type: String, default: 'January' },
-  bgKyt: { type: String, default: '' },
+interface KytEntry {
+  image?: string
+  title?: string
+  desc?: string
+  submittedBy?: string
+  foto_path?: string
+  penanganan?: string
+}
+
+interface TeamItem {
+  id?: number | string
+  name?: string
+  desc?: string
+  weeklyKYT: Record<string, KytEntry | null>
+}
+
+interface SelectedKyt extends KytEntry {
+  teamName?: string
+  weekNumber?: number
+  weekStart: Date
+  weekEnd: Date
+}
+
+const page = usePage<{ auth?: { user?: { username?: string } }; flash?: { success?: string; error?: string } }>()
+
+const props = defineProps<{
+  weeksInCurrentMonth: WeekItem[]
+  teams: TeamItem[]
+  currentYear: string | number
+  currentMonthName: string
+  bgKyt: string
+}>()
+
+// Watch for flash messages
+watch(() => page.props.flash?.success, (val) => {
+  if (val) toast.success(val)
+})
+watch(() => page.props.flash?.error, (val) => {
+  if (val) toast.error(val)
 })
 
 const isDialogOpen = ref(false)
-const selectedKyt = ref(null)
+const selectedKyt = ref<SelectedKyt | null>(null)
 const dateparams = ref(0)
 
 onMounted(() => { dateparams.value = Date.now() })
@@ -38,6 +79,9 @@ const weeks = computed(() => {
       const startDay = i * 7 + 1
       const endDay = Math.min((i + 1) * 7, new Date(year, month + 1, 0).getDate())
       generatedWeeks.push({
+        id: i + 1,
+        date_start: `${year}-${String(month + 1).padStart(2, '0')}-${String(startDay).padStart(2, '0')}`,
+        date_end: `${year}-${String(month + 1).padStart(2, '0')}-${String(endDay).padStart(2, '0')}`,
         start: new Date(year, month, startDay),
         end: new Date(year, month, endDay),
         week_number: i + 1,
@@ -47,9 +91,11 @@ const weeks = computed(() => {
   }
 
   return props.weeksInCurrentMonth.map((week, i) => ({
-    id: week.id,
-    start: new Date(week.date_start),
-    end: new Date(week.date_end),
+    id: week.id ?? `fallback-${i}`,
+    date_start: week.date_start || '',
+    date_end: week.date_end || '',
+    start: new Date(week.date_start || ''),
+    end: new Date(week.date_end || ''),
     week_number: week.week_number || (i + 1),
   }))
 })
@@ -60,21 +106,25 @@ const cardWidthClass = computed(() =>
     : 'w-full sm:w-[calc(50%-0.375rem)] lg:w-[calc(20%-0.6rem)]'
 )
 
-function formatWeekRange(start, end) {
+function formatWeekRange(start: Date, end: Date) {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   return `${start.getDate()} ${months[start.getMonth()]} - ${end.getDate()} ${months[end.getMonth()]}`
 }
 
-function getMonthName(date) {
+function getMonthName(date: Date) {
   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
   return months[date.getMonth()]
 }
 
-function isNextMonth(week, monthName) {
+function isNextMonth(week: WeekItem, monthName: string) {
   return getMonthName(week.start) !== monthName
 }
 
-function openKytDialog(kytData, weekNumber, weekStart, weekEnd, teamName) {
+function kytEntry(team: TeamItem, weekId: number | string): KytEntry | undefined {
+  return team.weeklyKYT[weekId] || undefined
+}
+
+function openKytDialog(kytData: KytEntry, weekNumber: number, weekStart: Date, weekEnd: Date, teamName: string) {
   selectedKyt.value = { ...kytData, weekNumber, weekStart, weekEnd, teamName }
   isDialogOpen.value = true
 }
@@ -140,7 +190,7 @@ function openKytDialog(kytData, weekNumber, weekStart, weekEnd, teamName) {
               ]"
               role="button"
               tabindex="0"
-              @click="team.weeklyKYT[week.id] && openKytDialog(team.weeklyKYT[week.id], week.week_number || weekIndex + 1, week.start, week.end, team.name)"
+              @click="team.weeklyKYT[week.id] ? openKytDialog(team.weeklyKYT[week.id]!, week.week_number || weekIndex + 1, week.start, week.end, team.name) : undefined"
             >
               <template v-if="team.weeklyKYT[week.id]">
                 <!-- KYT Submitted -->
