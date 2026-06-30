@@ -162,6 +162,9 @@ function formattedDate(dateVal) {
   position: relative;
   width: 100%;
 }
+.kytp-root.kytp-scale {
+  overflow: hidden;
+}
 .kytp-root.kytp-native {
   max-width: 1280px;
   overflow-x: auto;
