@@ -274,19 +274,17 @@ const kytNotSubmitted = computed(() => weeks.value.length - kytSubmitted.value)
         </DialogHeader>
 
         <div v-if="selectedKyt" class="py-4 px-2 md:px-6 space-y-6">
-          <div>
-            <KytPreview
-              :scale-to-fit="true"
-              :bg-kyt="bgKyt"
-              :kyt-date="selectedKyt.week.start"
-              :kyt-team="team?.team_name || ''"
-              :kyt-title="selectedKyt.title || ''"
-              :saved-image-url="selectedKyt.foto_path ? assetUrl(selectedKyt.foto_path, { query: { t: dateparams } }) : (selectedKyt.image_url ? assetUrl(selectedKyt.image_url, { query: { t: dateparams } }) : '')"
-              :kyt-pic="selectedKyt.user_name || ''"
-              :kyt-potensi="selectedKyt.potensi || ''"
-              :kyt-penanganan="selectedKyt.penanganan || ''"
-            />
-          </div>
+          <KytPreview
+            :scale-to-fit="true"
+            :bg-kyt="bgKyt"
+            :kyt-date="selectedKyt.week.start"
+            :kyt-team="team?.team_name || ''"
+            :kyt-title="selectedKyt.title || ''"
+            :saved-image-url="selectedKyt.foto_path ? assetUrl(selectedKyt.foto_path, { query: { t: dateparams } }) : (selectedKyt.image_url ? assetUrl(selectedKyt.image_url, { query: { t: dateparams } }) : '')"
+            :kyt-pic="selectedKyt.user_name || ''"
+            :kyt-potensi="selectedKyt.potensi || ''"
+            :kyt-penanganan="selectedKyt.penanganan || ''"
+          />
 
           <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t">
             <div class="flex flex-wrap items-center gap-2">

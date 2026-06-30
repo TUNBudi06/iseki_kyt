@@ -23,11 +23,11 @@ onMounted(() => {
   if (!props.scaleToFit) return
   if (rootRef.value) {
     const w = rootRef.value.getBoundingClientRect().width
-    if (w > 0) kytpScale.value = Math.min((w * 0.88) / 1280, 0.92)
+    if (w > 0) kytpScale.value = Math.min((w * 0.82) / 1280, 0.88)
   }
   resizeObserver = new ResizeObserver((entries) => {
     const w = entries[0]?.contentRect.width
-    if (w) kytpScale.value = Math.min((w * 0.88) / 1280, 0.92)
+    if (w) kytpScale.value = Math.min((w * 0.82) / 1280, 0.88)
   })
   if (rootRef.value) resizeObserver.observe(rootRef.value)
 })
