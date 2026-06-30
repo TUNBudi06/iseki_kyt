@@ -72,7 +72,7 @@ async function downloadAsPPT(kytData: KytItem) {
 
 <template>
   <Dialog :open="isOpen" @update:open="$emit('update:isOpen', $event)">
-    <DialogContent class="md:max-w-4xl xl:max-w-6xl max-h-[90vh] overflow-y-scroll overflow-x-hidden">
+    <DialogContent class="md:max-w-4xl xl:max-w-6xl max-h-[90vh] overflow-y-auto overflow-x-hidden min-w-0">
       <DialogHeader>
         <DialogTitle class="text-2xl font-bold text-pink-600">
           KYT Details - {{ selectedKyt?.title || '' }}
@@ -99,15 +99,15 @@ async function downloadAsPPT(kytData: KytItem) {
         </div>
 
         <!-- KYT Information Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 min-w-0">
           <div class="space-y-2 md:col-span-2">
             <div class="text-sm font-semibold text-gray-500 uppercase">Title</div>
-            <div class="text-lg font-bold text-gray-900">{{ selectedKyt.title }}</div>
+            <div class="text-lg font-bold text-gray-900 break-words">{{ selectedKyt.title }}</div>
           </div>
 
           <div class="space-y-2">
             <div class="text-sm font-semibold text-gray-500 uppercase">Submitted By</div>
-            <div class="text-base font-medium text-gray-900">{{ selectedKyt.user_name }}</div>
+            <div class="text-base font-medium text-gray-900 break-words">{{ selectedKyt.user_name }}</div>
           </div>
 
           <div class="space-y-2">
@@ -117,14 +117,14 @@ async function downloadAsPPT(kytData: KytItem) {
 
           <div class="space-y-2 md:col-span-2">
             <div class="text-sm font-semibold text-gray-500 uppercase">Potensi Bahaya</div>
-            <div class="text-base text-gray-700 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg border">
+            <div class="text-base text-gray-700 whitespace-pre-wrap break-words bg-gray-50 p-4 rounded-lg border">
               {{ selectedKyt.potensi }}
             </div>
           </div>
 
           <div class="space-y-2 md:col-span-2">
             <div class="text-sm font-semibold text-gray-500 uppercase">Penanganan</div>
-            <div class="text-base text-gray-700 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg border">
+            <div class="text-base text-gray-700 whitespace-pre-wrap break-words bg-gray-50 p-4 rounded-lg border">
               {{ selectedKyt.penanganan }}
             </div>
           </div>

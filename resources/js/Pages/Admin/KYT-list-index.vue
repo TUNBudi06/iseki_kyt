@@ -311,14 +311,14 @@ function getTooltipClass(val: string) {
           <DialogDescription>View all team submissions for the selected week</DialogDescription>
         </DialogHeader>
 
-        <div class="space-y-8 py-4">
+        <div class="space-y-8 py-4 min-w-0">
           <div v-if="selectedKyts.length === 0" class="text-center py-8 text-muted-foreground">
             No KYT submissions for this week
           </div>
           <div v-for="kyt in selectedKyts" :key="kyt.id" class="border-2 border-pink-200 rounded-lg p-6 space-y-4">
             <div class="flex items-center justify-between border-b-2 border-pink-200 pb-3">
-              <h3 class="text-xl font-bold text-pink-600">{{ kyt.team_name }}</h3>
-              <span class="text-sm text-muted-foreground">Submitted by {{ kyt.user_name }}</span>
+              <h3 class="text-xl font-bold text-pink-600 break-words">{{ kyt.team_name }}</h3>
+              <span class="text-sm text-muted-foreground break-words">{{ kyt.user_name }}</span>
             </div>
 
             <div class="px-2 md:px-6">
@@ -338,19 +338,19 @@ function getTooltipClass(val: string) {
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="bg-pink-50 p-4 rounded-lg">
                 <h4 class="text-sm font-semibold text-pink-800 mb-2">Judul KYT</h4>
-                <p class="text-base font-medium">{{ kyt.title }}</p>
+                <p class="text-base font-medium break-words">{{ kyt.title }}</p>
               </div>
               <div class="bg-gray-50 p-4 rounded-lg">
                 <h4 class="text-sm font-semibold text-gray-800 mb-2">Disampaikan Oleh</h4>
-                <p class="text-base">{{ kyt.user_name }}</p>
+                <p class="text-base break-words">{{ kyt.user_name }}</p>
               </div>
               <div class="bg-blue-50 p-4 rounded-lg md:col-span-2">
                 <h4 class="text-sm font-semibold text-blue-800 mb-2">Potensi Bahaya</h4>
-                <p class="text-base whitespace-pre-line">{{ kyt.potensi }}</p>
+                <p class="text-base whitespace-pre-line break-words">{{ kyt.potensi }}</p>
               </div>
               <div class="bg-green-50 p-4 rounded-lg md:col-span-2">
                 <h4 class="text-sm font-semibold text-green-800 mb-2">Penanganan</h4>
-                <p class="text-base whitespace-pre-line">{{ kyt.penanganan }}</p>
+                <p class="text-base whitespace-pre-line break-words">{{ kyt.penanganan }}</p>
               </div>
             </div>
 
