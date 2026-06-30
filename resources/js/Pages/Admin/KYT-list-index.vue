@@ -321,7 +321,7 @@ function getTooltipClass(val: string) {
               <span class="text-sm text-muted-foreground">Submitted by {{ kyt.user_name }}</span>
             </div>
 
-            <div>
+            <div class="px-2 md:px-4">
               <KytPreview
                 :scale-to-fit="true"
                 :bg-kyt="bgKyt"

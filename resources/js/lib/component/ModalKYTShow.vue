@@ -84,7 +84,8 @@ async function downloadAsPPT(kytData: KytItem) {
 
       <div v-if="selectedKyt" class="space-y-6 py-4">
         <!-- KYT Preview -->
-        <KytPreview
+        <div class="px-2 md:px-6">
+          <KytPreview
           :scale-to-fit="true"
           :bg-kyt="bgKyt"
           :kyt-date="selectedKyt.created_at || ''"
@@ -95,6 +96,7 @@ async function downloadAsPPT(kytData: KytItem) {
           :kyt-potensi="selectedKyt.potensi || ''"
           :kyt-penanganan="selectedKyt.penanganan || ''"
         />
+        </div>
 
         <!-- KYT Information Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -273,7 +273,7 @@ const kytNotSubmitted = computed(() => weeks.value.length - kytSubmitted.value)
           </DialogDescription>
         </DialogHeader>
 
-        <div v-if="selectedKyt" class="py-4 space-y-6">
+        <div v-if="selectedKyt" class="py-4 px-2 md:px-6 space-y-6">
           <div>
             <KytPreview
               :scale-to-fit="true"

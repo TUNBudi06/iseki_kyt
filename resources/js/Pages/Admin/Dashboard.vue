@@ -269,7 +269,7 @@ function openKytDialog(kytData: KytEntry, weekNumber: number, weekStart: Date, w
           </DialogDescription>
         </DialogHeader>
 
-        <div v-if="selectedKyt" class="py-4">
+        <div v-if="selectedKyt" class="py-4 px-2 md:px-6">
           <KytPreview
             :scale-to-fit="true"
             :bg-kyt="bgKyt"
