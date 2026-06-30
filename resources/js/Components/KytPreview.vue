@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 
 const props = defineProps({
   bgKyt: { type: String, default: '' },
@@ -15,16 +15,19 @@ const props = defineProps({
 
 const elementId = defineModel('elementId')
 const rootRef = ref<HTMLElement | null>(null)
-const kytpScale = ref(1)
+const kytpScale = ref(typeof window !== 'undefined' ? Math.min((window.innerWidth - 48) / 1280, 1) : 1)
 
 let resizeObserver: ResizeObserver | null = null
 
-onMounted(() => {
+onMounted(async () => {
   if (!props.scaleToFit) return
-  if (rootRef.value) {
-    const w = rootRef.value.getBoundingClientRect().width
-    if (w > 0) kytpScale.value = Math.min(w / 1280, 1)
-  }
+  await nextTick()
+  requestAnimationFrame(() => {
+    if (rootRef.value) {
+      const w = rootRef.value.getBoundingClientRect().width
+      if (w > 0) kytpScale.value = Math.min(w / 1280, 1)
+    }
+  })
   resizeObserver = new ResizeObserver((entries) => {
     const w = entries[0]?.contentRect.width
     if (w) kytpScale.value = Math.min(w / 1280, 1)
