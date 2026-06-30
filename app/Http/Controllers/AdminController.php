@@ -198,6 +198,7 @@ class AdminController extends Controller
             'teamKyt' => $teamKyt,
             'availableMonths' => $availableMonths,
             'selectedMonthYear' => $monthYear,
+            'bgKyt' => asset('assets/img/bg-kyt.jpg'),
         ]);
     }
 

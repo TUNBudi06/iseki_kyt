@@ -69,6 +69,7 @@ const props = defineProps<{
   team: TeamData | null
   availableMonths: MonthItem[]
   selectedMonthYear: string
+  bgKyt: string
 }>()
 
 const dateparams = ref(0)
@@ -318,6 +319,6 @@ const totalPages = computed(() => Math.max(1, Math.ceil(filteredData.value.lengt
         </div>
       </CardContent>
     </Card>
-    <ModalKYTShow v-model:is-open="isViewDialogOpen" :selected-kyt="selectedKyt" :team="team" />
+    <ModalKYTShow v-model:is-open="isViewDialogOpen" :selected-kyt="selectedKyt" :team="team" :bg-kyt="bgKyt" />
   </LeaderLayout>
 </template>

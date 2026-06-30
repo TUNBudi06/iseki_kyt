@@ -253,7 +253,7 @@ function openKytDialog(kytData: KytEntry, weekNumber: number, weekStart: Date, w
 
     <!-- View KYT Dialog -->
     <Dialog v-model:open="isDialogOpen">
-      <DialogContent class="md:max-w-5xl xl:max-w-7xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
+      <DialogContent class="md:max-w-5xl xl:max-w-7xl max-h-[90vh] overflow-y-scroll overflow-x-hidden">
         <DialogHeader>
           <DialogTitle class="text-2xl font-bold text-pink-600">
             KYT Details - {{ selectedKyt?.title || '' }}
@@ -270,10 +270,16 @@ function openKytDialog(kytData: KytEntry, weekNumber: number, weekStart: Date, w
         </DialogHeader>
 
         <div v-if="selectedKyt" class="py-4">
-          <img
-            :src="assetUrl(selectedKyt.image || selectedKyt.foto_path || '', { query: { t: dateparams } })"
-            :alt="selectedKyt.title"
-            class="w-full h-auto rounded-lg border border-border"
+          <KytPreview
+            :scale-to-fit="true"
+            :bg-kyt="bgKyt"
+            :kyt-date="selectedKyt.weekStart"
+            :kyt-team="selectedKyt.teamName"
+            :kyt-title="selectedKyt.title"
+            :saved-image-url="selectedKyt.foto_path ? assetUrl(selectedKyt.foto_path, { query: { t: dateparams } }) : (selectedKyt.image ? assetUrl(selectedKyt.image, { query: { t: dateparams } }) : '')"
+            :kyt-pic="selectedKyt.submittedBy"
+            :kyt-potensi="selectedKyt.desc"
+            :kyt-penanganan="selectedKyt.penanganan || ''"
           />
         </div>
       </DialogContent>

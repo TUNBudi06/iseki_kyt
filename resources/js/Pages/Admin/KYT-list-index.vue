@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AdminLayout from '@/Layouts/AdminLayout.vue'
+import KytPreview from '@/Components/KytPreview.vue'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
@@ -63,6 +64,7 @@ interface TableRow {
 
 interface SelectedKyt extends KytListItem {
   team_name: string
+  kyt_date?: string
 }
 
 import type { KytData, Team } from '$lib/download/KytPptx.ts'
@@ -73,6 +75,7 @@ const props = defineProps<{
   auth?: { user?: { username?: string; role?: string } } | null
   availableMonths: { value: string; label: string }[]
   selectedMonthYear: string
+  bgKyt: string
 }>()
 
 const dateparams = ref(0)
@@ -145,6 +148,7 @@ function viewKytDetails(row: TableRow) {
   selectedKyts.value = (row.kyt_lists || []).map((kyt: KytListItem) => ({
     ...kyt,
     team_name: (props.teamKyt || []).find((t: TeamInfo) => t.id === kyt.team_k_y_t_id)?.team_name || 'Unknown Team',
+    kyt_date: row.kyt_date,
   }))
   isDialogOpen.value = true
 }
@@ -301,7 +305,7 @@ function getTooltipClass(val: string) {
 
     <!-- View KYT Details Dialog -->
     <Dialog v-model:open="isDialogOpen">
-      <DialogContent class="md:max-w-7xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
+      <DialogContent class="md:max-w-7xl max-h-[90vh] overflow-y-scroll overflow-x-hidden">
         <DialogHeader>
           <DialogTitle class="text-2xl font-bold text-pink-600">KYT Submissions</DialogTitle>
           <DialogDescription>View all team submissions for the selected week</DialogDescription>
@@ -317,8 +321,18 @@ function getTooltipClass(val: string) {
               <span class="text-sm text-muted-foreground">Submitted by {{ kyt.user_name }}</span>
             </div>
 
-            <div class="rounded-lg overflow-auto shadow-lg bg-gray-100">
-              <img :src="assetUrl(kyt.result_path, { query: { t: dateparams } })" :alt="kyt.title" class="w-full h-auto object-contain" />
+            <div>
+              <KytPreview
+                :scale-to-fit="true"
+                :bg-kyt="bgKyt"
+                :kyt-date="kyt.kyt_date || ''"
+                :kyt-team="kyt.team_name"
+                :kyt-title="kyt.title || ''"
+                :saved-image-url="kyt.foto_path ? assetUrl(kyt.foto_path, { query: { t: dateparams } }) : (kyt.result_path ? assetUrl(kyt.result_path, { query: { t: dateparams } }) : '')"
+                :kyt-pic="kyt.user_name || ''"
+                :kyt-potensi="kyt.potensi || ''"
+                :kyt-penanganan="kyt.penanganan || ''"
+              />
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -263,7 +263,7 @@ const kytNotSubmitted = computed(() => weeks.value.length - kytSubmitted.value)
 
     <!-- KYT Detail Dialog -->
     <Dialog v-model:open="isDialogOpen">
-      <DialogContent class="md:max-w-5xl xl:max-w-7xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
+      <DialogContent class="md:max-w-5xl xl:max-w-7xl max-h-[90vh] overflow-y-scroll overflow-x-hidden">
         <DialogHeader>
           <DialogTitle class="text-2xl font-bold text-pink-600">
             Preview KYT - Minggu {{ selectedKyt?.weekNumber }}
@@ -275,10 +275,16 @@ const kytNotSubmitted = computed(() => weeks.value.length - kytSubmitted.value)
 
         <div v-if="selectedKyt" class="py-4 space-y-6">
           <div>
-            <img
-              :src="assetUrl(selectedKyt.image_url || selectedKyt.foto_path || '', { query: { t: dateparams } })"
-              :alt="selectedKyt.title"
-              class="w-full h-auto rounded-lg border border-border"
+            <KytPreview
+              :scale-to-fit="true"
+              :bg-kyt="bgKyt"
+              :kyt-date="selectedKyt.week.start"
+              :kyt-team="team?.team_name || ''"
+              :kyt-title="selectedKyt.title || ''"
+              :saved-image-url="selectedKyt.foto_path ? assetUrl(selectedKyt.foto_path, { query: { t: dateparams } }) : (selectedKyt.image_url ? assetUrl(selectedKyt.image_url, { query: { t: dateparams } }) : '')"
+              :kyt-pic="selectedKyt.user_name || ''"
+              :kyt-potensi="selectedKyt.potensi || ''"
+              :kyt-penanganan="selectedKyt.penanganan || ''"
             />
           </div>
 

@@ -103,10 +103,10 @@ async function submitKyt() {
   exporting.value = true
   try {
     const innerEl = previewContainerEl.value?.parentElement
-    const origZoom = innerEl?.style.zoom || ''
-    if (innerEl) innerEl.style.zoom = ''
+    const origTransform = innerEl?.style.transform || ''
+    if (innerEl) innerEl.style.transform = ''
     const previewFile = await editor.value?.generatePreview(previewContainerEl.value)
-    if (innerEl) innerEl.style.zoom = origZoom
+    if (innerEl) innerEl.style.transform = origTransform
     if (!previewFile) {
       exporting.value = false
       return

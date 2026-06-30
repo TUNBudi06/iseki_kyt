@@ -4,6 +4,7 @@ import {
 } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import KytPreview from '@/Components/KytPreview.vue'
 import { assetUrl, routeUrl } from '@tunbudi06/inertia-route-helper'
 import { kytdelete } from '$routes/leader'
 import { downloadKytPptx, downloadKytImage } from '$lib/download/index.ts'
@@ -34,6 +35,7 @@ const props = defineProps<{
   isOpen: boolean
   selectedKyt: KytItem | null
   team: TeamItem | null
+  bgKyt: string
 }>()
 
 const emit = defineEmits(['update:isOpen'])
@@ -70,7 +72,7 @@ async function downloadAsPPT(kytData: KytItem) {
 
 <template>
   <Dialog :open="isOpen" @update:open="$emit('update:isOpen', $event)">
-    <DialogContent class="md:max-w-4xl xl:max-w-6xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
+    <DialogContent class="md:max-w-4xl xl:max-w-6xl max-h-[90vh] overflow-y-scroll overflow-x-hidden">
       <DialogHeader>
         <DialogTitle class="text-2xl font-bold text-pink-600">
           KYT Details - {{ selectedKyt?.title || '' }}
@@ -81,14 +83,18 @@ async function downloadAsPPT(kytData: KytItem) {
       </DialogHeader>
 
       <div v-if="selectedKyt" class="space-y-6 py-4">
-        <!-- KYT Result Image -->
-        <div class="rounded-lg overflow-hidden shadow-lg bg-gray-100">
-          <img
-            :src="assetUrl(selectedKyt.result_path, { query: { t: dateparams } })"
-            :alt="selectedKyt.title"
-            class="w-full h-auto object-contain"
-          />
-        </div>
+        <!-- KYT Preview -->
+        <KytPreview
+          :scale-to-fit="true"
+          :bg-kyt="bgKyt"
+          :kyt-date="selectedKyt.created_at || ''"
+          :kyt-team="team?.team_name || ''"
+          :kyt-title="selectedKyt.title || ''"
+          :saved-image-url="selectedKyt.foto_path ? assetUrl(selectedKyt.foto_path, { query: { t: dateparams } }) : (selectedKyt.result_path ? assetUrl(selectedKyt.result_path, { query: { t: dateparams } }) : '')"
+          :kyt-pic="selectedKyt.user_name || ''"
+          :kyt-potensi="selectedKyt.potensi || ''"
+          :kyt-penanganan="selectedKyt.penanganan || ''"
+        />
 
         <!-- KYT Information Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
