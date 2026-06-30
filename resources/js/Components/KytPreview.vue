@@ -23,11 +23,11 @@ onMounted(() => {
   if (!props.scaleToFit) return
   if (rootRef.value) {
     const w = rootRef.value.getBoundingClientRect().width
-    if (w > 0) kytpScale.value = Math.min(w / 1280, 1)
+    if (w > 0) kytpScale.value = Math.min((w * 0.88) / 1280, 0.92)
   }
   resizeObserver = new ResizeObserver((entries) => {
     const w = entries[0]?.contentRect.width
-    if (w) kytpScale.value = Math.min(w / 1280, 1)
+    if (w) kytpScale.value = Math.min((w * 0.88) / 1280, 0.92)
   })
   if (rootRef.value) resizeObserver.observe(rootRef.value)
 })
@@ -52,7 +52,7 @@ function formattedDate(dateVal) {
     ref="rootRef"
     class="kytp-root"
     :class="scaleToFit ? 'kytp-scale' : 'kytp-native'"
-    :style="scaleToFit ? { height: (720 * kytpScale) + 'px' } : {}"
+    :style="scaleToFit ? { height: (720 * kytpScale) + 'px', display: 'flex', justifyContent: 'center' } : {}"
   >
     <div class="kytp-inner" :style="scaleToFit ? { transform: 'scale(' + kytpScale + ')', transformOrigin: 'top left', width: '1280px', height: '720px' } : {}">
       <div
