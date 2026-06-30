@@ -1,58 +1,126 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Iseki KYT - Kiken Yochi Training Management
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A web application for managing **Kiken Yochi Training (KYT)** — a workplace safety hazard prediction training system. Built with Laravel, Inertia.js, Vue 3, and Tailwind CSS.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Core
+- **Role-based dashboards** — Admin and Leader panels with tailored views
+- **KYT Submission workflow** — Create, edit, review, and track weekly KYT reports
+- **Penanganan (Treatment) tracking** — Document hazard treatments with images
+- **Monthly filtering** — Navigate months with prev/next buttons or dropdown selector
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Canvas Editor
+- **Fabric.js-powered image editor** — Draw highlights, circles, crop, undo/redo
+- **Reusable component** — Shared `CanvasEditor.vue` across create/edit/treatment pages
+- **Keyboard shortcuts** — Ctrl+Z (undo), Ctrl+Y (redo), Delete (remove object)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Export
+- **PowerPoint export** — Auto-generates `.pptx` with KYT slides per team
+- **Image export** — Download KYT preview as PNG (filename uses KYT title)
 
-## Learning Laravel
+## Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+| Layer | Technology |
+|-------|-----------|
+| **Backend** | Laravel 12 (PHP 8.x) |
+| **Frontend** | Vue 3 + TypeScript 6 |
+| **Rendering** | Inertia.js v3 (client) + Inertia Laravel v2 (server) |
+| **Styling** | Tailwind CSS v4 + shadcn-vue + Reka UI |
+| **Canvas** | Fabric.js |
+| **Build** | Vite 7 + vue-tsc |
+| **PPT** | PptxGenJS |
+| **Routing** | Wayfinder (auto-generated route helpers) |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Setup
 
-## Laravel Sponsors
+```bash
+# Backend
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# Frontend
+npm install
+npm run build
 
-### Premium Partners
+# Dev server
+npm run dev
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+**Important:** Add to `.env`:
+```
+INERTIA_USE_SCRIPT_ELEMENT_FOR_INITIAL_PAGE=true
+```
 
-## Contributing
+## Architecture
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Directory Structure
 
-## Code of Conduct
+```
+app/
+├── Http/
+│   ├── Controllers/
+│   │   ├── MainController.php      # Login/logout
+│   │   ├── AdminController.php     # Admin CRUD
+│   │   └── LeaderController.php    # Leader KYT management
+│   └── Middleware/
+│       ├── LoginCheckMiddleware.php
+│       └── hasLoginMiddleware.php
+resources/js/
+├── Components/
+│   ├── CanvasEditor.vue           # Reusable fabric.js editor
+│   ├── DropZone.vue               # File upload component
+│   ├── KytPreview.vue             # KYT preview renderer
+│   └── ui/                        # shadcn-vue components
+├── Layouts/
+│   ├── AdminLayout.vue            # Admin navigation shell
+│   ├── LeaderLayout.vue           # Leader navigation shell
+│   ├── DefaultLayout.vue          # Base layout (toaster + tooltips)
+│   └── LoginLayout.vue            # Minimal layout for login
+├── Pages/
+│   ├── Admin/
+│   │   ├── Dashboard.vue          # Weekly KYT grid per team
+│   │   ├── KYT-list-index.vue     # Tabular KYT listing + PPT download
+│   │   ├── Settings.vue           # Password change
+│   │   ├── Team-Lists.vue         # Team CRUD
+│   │   └── User-Lists.vue         # User CRUD
+│   ├── Auth/
+│   │   └── LoginPage.vue          # Login form
+│   ├── Leader/
+│   │   ├── Dashboard.vue          # Team's weekly KYT grid
+│   │   ├── KytHistory.vue         # Historical KYT listing
+│   │   ├── Settings.vue           # Password change
+│   │   ├── editor-KYT-create.vue  # Create KYT with canvas editor
+│   │   ├── editor-KYT-edit.vue    # Edit KYT with canvas editor
+│   │   └── penanganan/            # Treatment create/edit editors
+│   └── kyt_pages.vue              # Public KYT display page
+└── lib/
+    ├── component/
+    │   └── ModalKYTShow.vue       # KYT detail dialog
+    └── download/
+        ├── KytPptx.ts             # PowerPoint generation
+        ├── KytImage.ts            # PNG image export
+        └── index.ts               # Export barrel
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Login Flow
 
-## Security Vulnerabilities
+1. User submits credentials via `LoginPage.vue`
+2. `MainController::login()` validates and authenticates
+3. Redirects to `admin.home` or `leader.dashboard` based on role
+4. Flash message `"Login successful!"` displays as toast on destination page
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Color System
+
+Uses OKLCH color space with pink hue (350°) as primary:
+
+```css
+--primary: oklch(0.55 0.18 350);   /* Vibrant pink */
+--ring:    oklch(0.55 0.18 350);   /* Focus ring */
+--border:  oklch(0.88 0.04 350);   /* Pink-tinted borders */
+```
 
 ## License
 
