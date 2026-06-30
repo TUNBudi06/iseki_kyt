@@ -253,7 +253,7 @@ function openKytDialog(kytData: KytEntry, weekNumber: number, weekStart: Date, w
 
     <!-- View KYT Dialog -->
     <Dialog v-model:open="isDialogOpen">
-      <DialogContent class="sm:max-w-none md:max-w-3xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
+      <DialogContent class="sm:max-w-none md:max-w-5xl xl:max-w-7xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle class="text-2xl font-bold text-pink-600">
             KYT Details - {{ selectedKyt?.title || '' }}
