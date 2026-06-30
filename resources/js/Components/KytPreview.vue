@@ -15,7 +15,7 @@ const props = defineProps({
 
 const elementId = defineModel('elementId')
 const rootRef = ref<HTMLElement | null>(null)
-const kytpScale = ref(typeof window !== 'undefined' ? Math.min((window.innerWidth - 48) * 0.8 / 1280, 0.85) : 0.8)
+const kytpScale = ref(typeof window !== 'undefined' ? Math.min((window.innerWidth - 48) / 1280, 1) : 1)
 
 let resizeObserver: ResizeObserver | null = null
 
@@ -25,12 +25,12 @@ onMounted(async () => {
   requestAnimationFrame(() => {
     if (rootRef.value) {
       const w = rootRef.value.getBoundingClientRect().width
-      if (w > 0) kytpScale.value = Math.min((w * 0.8) / 1280, 0.85)
+      if (w > 0) kytpScale.value = Math.min(w / 1280, 1)
     }
   })
   resizeObserver = new ResizeObserver((entries) => {
     const w = entries[0]?.contentRect.width
-    if (w) kytpScale.value = Math.min((w * 0.8) / 1280, 0.85)
+    if (w) kytpScale.value = Math.min(w / 1280, 1)
   })
   if (rootRef.value) resizeObserver.observe(rootRef.value)
 })
@@ -57,7 +57,7 @@ function formattedDate(dateVal) {
     :class="scaleToFit ? 'kytp-scale' : 'kytp-native'"
     :style="scaleToFit ? { height: (720 * kytpScale) + 'px' } : {}"
   >
-    <div class="kytp-inner" :style="scaleToFit ? { transform: 'scale(' + kytpScale + ')', transformOrigin: 'top left', width: '1280px', height: '720px' } : {}">
+    <div class="kytp-inner" :style="scaleToFit ? { zoom: kytpScale, width: '1280px', height: '720px' } : {}">
       <div
         class="kytp-content"
         :ref="(el) => { if (el && elementId !== undefined) elementId = el }"
@@ -161,9 +161,6 @@ function formattedDate(dateVal) {
 .kytp-root {
   position: relative;
   width: 100%;
-}
-.kytp-root.kytp-scale {
-  overflow: hidden;
 }
 .kytp-root.kytp-native {
   max-width: 1280px;
