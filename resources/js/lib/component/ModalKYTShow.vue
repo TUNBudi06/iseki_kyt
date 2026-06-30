@@ -72,7 +72,7 @@ async function downloadAsPPT(kytData: KytItem) {
 
 <template>
   <Dialog :open="isOpen" @update:open="$emit('update:isOpen', $event)">
-    <DialogContent class="md:max-w-4xl xl:max-w-6xl max-h-[90vh] overflow-y-auto overflow-x-hidden min-w-0">
+    <DialogContent class="md:max-w-4xl xl:max-w-6xl max-h-[90vh] overflow-y-auto">
       <DialogHeader>
         <DialogTitle class="text-2xl font-bold text-pink-600">
           KYT Details - {{ selectedKyt?.title || '' }}
