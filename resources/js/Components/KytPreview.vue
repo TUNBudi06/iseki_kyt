@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watchEffect, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
   bgKyt: { type: String, default: '' },
@@ -14,31 +14,26 @@ const props = defineProps({
 })
 
 const elementId = defineModel('elementId')
+const rootRef = ref<HTMLElement | null>(null)
+const kytpScale = ref(1)
 
-const NATIVE_W = 1280
-const NATIVE_H = 720
+let resizeObserver: ResizeObserver | null = null
 
-const containerEl = ref(null)
-const scale = ref(1)
-
-let observer = null
-
-watchEffect(() => {
-  if (!props.scaleToFit || !containerEl.value) {
-    observer?.disconnect()
-    observer = null
-    return
+onMounted(() => {
+  if (!props.scaleToFit) return
+  if (rootRef.value) {
+    const w = rootRef.value.getBoundingClientRect().width
+    if (w > 0) kytpScale.value = Math.min(w / 1280, 1)
   }
-
-  observer = new ResizeObserver((entries) => {
-    const w = entries[0].contentRect.width
-    scale.value = Math.min(w / NATIVE_W, 1)
+  resizeObserver = new ResizeObserver((entries) => {
+    const w = entries[0]?.contentRect.width
+    if (w) kytpScale.value = Math.min(w / 1280, 1)
   })
-  observer.observe(containerEl.value)
+  if (rootRef.value) resizeObserver.observe(rootRef.value)
 })
 
 onUnmounted(() => {
-  observer?.disconnect()
+  resizeObserver?.disconnect()
 })
 
 function formattedDate(dateVal) {
@@ -54,18 +49,14 @@ function formattedDate(dateVal) {
 
 <template>
   <div
-    ref="containerEl"
+    ref="rootRef"
     class="kytp-root"
     :class="scaleToFit ? 'kytp-scale' : 'kytp-native'"
+    :style="scaleToFit ? { height: (720 * kytpScale) + 'px' } : {}"
   >
-    <div class="kytp-inner">
+    <div class="kytp-inner" :style="scaleToFit ? { zoom: kytpScale, width: '1280px', height: '720px' } : {}">
       <div
         class="kytp-content"
-        :style="{
-          width: NATIVE_W + 'px',
-          height: NATIVE_H + 'px',
-          transform: 'scale(' + scale + ')',
-        }"
         :ref="(el) => { if (el && elementId !== undefined) elementId = el }"
       >
         <!-- Background KYT Image -->
@@ -166,25 +157,24 @@ function formattedDate(dateVal) {
 <style scoped>
 .kytp-root {
   position: relative;
-}
-.kytp-root.kytp-native {
-  width: 1280px;
+  width: 100%;
 }
 .kytp-root.kytp-scale {
-  width: 100%;
-  overflow: hidden;
-  aspect-ratio: 1280 / 720;
-}
-.kytp-root.kytp-scale .kytp-inner {
-  position: absolute;
-  inset: 0;
   overflow: hidden;
 }
-.kytp-root.kytp-native .kytp-inner {
-  /* normal flow */
+.kytp-root.kytp-native {
+  max-width: 1280px;
+  overflow-x: auto;
+}
+.kytp-root .kytp-inner {
+  position: relative;
+  width: 1280px;
+  height: 720px;
+  overflow: hidden;
 }
 .kytp-content {
   position: relative;
-  transform-origin: top left;
+  width: 1280px;
+  height: 720px;
 }
 </style>

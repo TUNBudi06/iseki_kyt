@@ -301,7 +301,7 @@ function getTooltipClass(val: string) {
 
     <!-- View KYT Details Dialog -->
     <Dialog v-model:open="isDialogOpen">
-      <DialogContent class="md:max-w-7xl max-h-[90vh] overflow-y-auto">
+      <DialogContent class="md:max-w-7xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
         <DialogHeader>
           <DialogTitle class="text-2xl font-bold text-pink-600">KYT Submissions</DialogTitle>
           <DialogDescription>View all team submissions for the selected week</DialogDescription>
@@ -345,7 +345,7 @@ function getTooltipClass(val: string) {
                 <h3 class="text-xl font-bold text-yellow-600">Penanganan:</h3>
               </div>
               <div class="rounded-lg overflow-auto shadow-lg bg-gray-100">
-                <img :src="assetUrl(kyt.penanganans.result_path, { query: { t: dateparams } })" :alt="kyt.penanganans.title" class="w-300 h-170 object-contain" />
+                <img :src="assetUrl(kyt.penanganans.result_path, { query: { t: dateparams } })" :alt="kyt.penanganans.title" class="w-full h-auto" />
               </div>
             </template>
             <template v-else>

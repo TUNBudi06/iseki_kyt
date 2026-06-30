@@ -6,7 +6,7 @@
         @vite(['resources/js/app.ts'])
         @inertiaHead
     </head>
-    <body class="{{ app()->isLocal() ? 'debug-screens' : '' }}">
+    <body class="{{ app()->isLocal() ? 'debug-screens' : '' }}" style="overflow-x: hidden; width: 100%;">
         @inertia
     </body>
 </html>

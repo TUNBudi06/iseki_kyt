@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -28,7 +28,25 @@ interface KytData {
 const props = defineProps<{ kyt: KytData | null }>()
 
 const editor = ref<InstanceType<typeof CanvasEditor> | null>(null)
+const previewContainerEl = ref<HTMLElement | null>(null)
+const wrapperRef = ref<HTMLElement | null>(null)
 const penangananUrlImage = ref('')
+const exporting = ref(false)
+const previewScale = ref(1)
+
+let resizeObserver: ResizeObserver | null = null
+
+onMounted(() => {
+  resizeObserver = new ResizeObserver((entries) => {
+    const w = entries[0]?.contentRect.width
+    if (w) previewScale.value = Math.min(w / 1208, 1)
+  })
+  if (wrapperRef.value) resizeObserver.observe(wrapperRef.value)
+})
+
+onUnmounted(() => {
+  resizeObserver?.disconnect()
+})
 
 const form = useForm({
   title: '',
@@ -37,27 +55,79 @@ const form = useForm({
   result_path: null as File | null,
 })
 
+function onCanvasExported(blob: Blob) {
+  if (penangananUrlImage.value) URL.revokeObjectURL(penangananUrlImage.value)
+  penangananUrlImage.value = URL.createObjectURL(blob)
+  form.foto_path = new File([blob], `penanganan-${Date.now()}.png`, { type: 'image/png' })
+  toast.success('Hasil editing berhasil di-load ke preview')
+}
+
 async function handleExport() {
-  const blob = await editor.value?.exportCanvas()
-  if (blob) {
-    penangananUrlImage.value = URL.createObjectURL(blob)
-    form.foto_path = new File([blob], `penanganan-${Date.now()}.png`, { type: 'image/png' })
+  if (!form.title) {
+    toast.error('Isi judul penanganan terlebih dahulu')
+    return
+  }
+  exporting.value = true
+  try {
+    const blob = await editor.value?.exportCanvas()
+    if (blob) {
+      if (penangananUrlImage.value) URL.revokeObjectURL(penangananUrlImage.value)
+      penangananUrlImage.value = URL.createObjectURL(blob)
+      form.foto_path = new File([blob], `penanganan-${Date.now()}.png`, { type: 'image/png' })
+      toast.success('Hasil editing berhasil di-load ke preview')
+    } else {
+      toast.error('Gagal mengekspor canvas. Upload gambar terlebih dahulu.')
+    }
+  } catch (e) {
+    toast.error('Gagal mengekspor gambar')
+    console.error(e)
+  } finally {
+    exporting.value = false
   }
 }
 
 async function submitForm(e: Event) {
   e.preventDefault()
-  const previewFile = await editor.value?.generatePreview()
-  if (!previewFile) return
-  form.result_path = previewFile
-  form.submit(route(penangananstore()).url, {
-    preserveScroll: true,
-    onSuccess: () => toast.success('Penanganan berhasil ditambahkan!'),
-    onError: (err) => {
-      const msg = Object.values(err).flat().join(', ')
-      toast.error(msg || 'Gagal menambahkan penanganan')
-    },
-  })
+  if (!form.title) {
+    toast.error('Judul penanganan wajib diisi')
+    return
+  }
+  
+  form.kyt_list_id = Number(props.kyt?.id) || 0
+  
+  if (!form.foto_path) {
+    await handleExport()
+    if (!form.foto_path) return
+  }
+  
+  exporting.value = true
+  try {
+    const el = previewContainerEl.value
+    const origTransform = el?.style.transform || ''
+    if (el) el.style.transform = ''
+    const previewFile = await editor.value?.generatePreview(previewContainerEl.value)
+    if (el) el.style.transform = origTransform
+    if (!previewFile) {
+      exporting.value = false
+      return
+    }
+    form.result_path = previewFile
+    form.post(route(penangananstore()).url, {
+      preserveScroll: true,
+      onSuccess: () => {
+        toast.success('Penanganan berhasil ditambahkan!')
+        exporting.value = false
+      },
+      onError: (err) => {
+        const msg = Object.values(err).flat().join(', ')
+        toast.error(msg || 'Gagal menambahkan penanganan')
+        exporting.value = false
+      },
+    })
+  } catch (e) {
+    toast.error('Gagal menambahkan penanganan')
+    exporting.value = false
+  }
 }
 </script>
 
@@ -111,7 +181,7 @@ async function submitForm(e: Event) {
       <!-- Canvas Editor -->
       <Card>
         <CardContent class="p-4">
-          <CanvasEditor ref="editor" :canvas-width="1200" :canvas-height="600" />
+          <CanvasEditor ref="editor" :canvas-width="1200" :canvas-height="600" @exported="onCanvasExported" />
         </CardContent>
       </Card>
 
@@ -125,24 +195,26 @@ async function submitForm(e: Event) {
           </CardDescription>
         </CardHeader>
         <CardContent class="p-4">
-          <div class="overflow-x-auto">
-            <div ref="editor.previewContainerEl" class="relative mx-auto" :style="{ width: '1200px', height: '600px', background: '#FFC0CB', border: '4px solid black', padding: '8px' }">
-              <template v-if="penangananUrlImage">
-                <div class="absolute top-0 left-0 w-full flex items-center justify-center pt-2" style="max-width: 1200px;">
-                  <span class="font-bold text-2xl leading-tight text-center text-black uppercase">{{ form.title }}</span>
-                </div>
-                <div class="absolute inset-0 left-0 top-16" :style="{ width: '1200px', height: '600px' }">
-                  <img :src="penangananUrlImage" alt="Hasil editing" class="rounded shadow-lg w-full h-full" />
-                </div>
-              </template>
-              <template v-else>
+          <div ref="wrapperRef" class="w-full overflow-hidden" :style="{ height: (608 * previewScale) + 'px' }">
+            <div ref="previewContainerEl" class="flex flex-col origin-top-left" :style="{ width: '1200px', height: '600px', background: '#FFC0CB', border: '4px solid black', transform: 'scale(' + previewScale + ')' }">
+              <div class="flex items-center justify-center py-2 flex-shrink-0" :style="{ height: '50px' }">
                 <span class="font-bold text-2xl leading-tight text-center text-black uppercase">{{ form.title || 'Masukkan judul untuk preview' }}</span>
+              </div>
+              <template v-if="penangananUrlImage">
+                <div class="flex-1 min-h-0">
+                  <img :src="penangananUrlImage" alt="Hasil editing" class="w-full h-full" />
+                </div>
               </template>
             </div>
           </div>
-          <div class="mt-4">
-            <Button @click="submitForm" class="w-full" :disabled="form.processing || !form.title">
-              {{ form.processing ? 'Menyimpan...' : 'Simpan Penanganan' }}
+          <div class="flex flex-col sm:flex-row gap-2 mt-4">
+            <Button @click="handleExport" variant="outline" class="flex-1" :disabled="exporting">
+              <template v-if="exporting">⏳ Mengekspor...</template>
+              <template v-else>💾 Lihat Hasil</template>
+            </Button>
+            <Button @click="submitForm" class="flex-1" :disabled="exporting || !form.title">
+              <template v-if="exporting">⏳ Menyimpan...</template>
+              <template v-else>{{ form.processing ? 'Menyimpan...' : 'Simpan Penanganan' }}</template>
             </Button>
           </div>
         </CardContent>

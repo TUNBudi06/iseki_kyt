@@ -121,7 +121,7 @@ const kytNotSubmitted = computed(() => weeks.value.length - kytSubmitted.value)
   </Head>
 
   <LeaderLayout>
-    <div class="space-y-6">
+    <div class="space-y-6 overflow-x-hidden">
       <!-- Welcome Section -->
       <div class="bg-linear-to-r from-pink-500 to-pink-600 rounded-lg p-8 text-white">
         <h1 class="text-3xl font-bold mb-2">
@@ -263,7 +263,7 @@ const kytNotSubmitted = computed(() => weeks.value.length - kytSubmitted.value)
 
     <!-- KYT Detail Dialog -->
     <Dialog v-model:open="isDialogOpen">
-      <DialogContent class="md:max-w-5xl xl:max-w-7xl max-h-[90vh] overflow-y-auto">
+      <DialogContent class="md:max-w-5xl xl:max-w-7xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
         <DialogHeader>
           <DialogTitle class="text-2xl font-bold text-pink-600">
             Preview KYT - Minggu {{ selectedKyt?.weekNumber }}
@@ -275,16 +275,10 @@ const kytNotSubmitted = computed(() => weeks.value.length - kytSubmitted.value)
 
         <div v-if="selectedKyt" class="py-4 space-y-6">
           <div>
-            <KytPreview
-              :scale-to-fit="true"
-              :bg-kyt="bgKyt"
-              :kyt-date="selectedKyt.week.start"
-              :kyt-team="team?.team_name || ''"
-              :kyt-title="selectedKyt.title || ''"
-              :saved-image-url="selectedKyt.foto_path ? assetUrl(selectedKyt.foto_path, { query: { t: dateparams } }) : (selectedKyt.image_url ? assetUrl(selectedKyt.image_url, { query: { t: dateparams } }) : '')"
-              :kyt-pic="selectedKyt.user_name || ''"
-              :kyt-potensi="selectedKyt.potensi || ''"
-              :kyt-penanganan="selectedKyt.penanganan || ''"
+            <img
+              :src="assetUrl(selectedKyt.image_url || selectedKyt.foto_path || '', { query: { t: dateparams } })"
+              :alt="selectedKyt.title"
+              class="w-full h-auto rounded-lg border border-border"
             />
           </div>
 

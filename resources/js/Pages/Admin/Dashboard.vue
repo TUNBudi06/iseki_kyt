@@ -100,10 +100,10 @@ const weeks = computed(() => {
   }))
 })
 
-const cardWidthClass = computed(() =>
+const gridColsClass = computed(() =>
   weeks.value.length === 4
-    ? 'w-full sm:w-[calc(50%-0.375rem)] lg:w-[calc(25%-0.75rem)]'
-    : 'w-full sm:w-[calc(50%-0.375rem)] lg:w-[calc(20%-0.6rem)]'
+    ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
+    : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-5'
 )
 
 function formatWeekRange(start: Date, end: Date) {
@@ -136,7 +136,7 @@ function openKytDialog(kytData: KytEntry, weekNumber: number, weekStart: Date, w
   </Head>
 
   <AdminLayout>
-    <div class="space-y-4 md:space-y-6 px-2 sm:px-0">
+    <div class="space-y-4 md:space-y-6 px-2 sm:px-0 overflow-x-hidden">
       <div class="text-center">
         <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">
           List KYT {{ currentMonthName }} {{ currentYear }}
@@ -179,13 +179,12 @@ function openKytDialog(kytData: KytEntry, weekNumber: number, weekStart: Date, w
           </div>
         </CardHeader>
         <CardContent class="pt-4 md:pt-6 p-3 md:p-6">
-          <div class="flex flex-wrap gap-2 md:gap-3 justify-center">
+          <div class="grid gap-2 md:gap-3 justify-center" :class="gridColsClass">
             <div
               v-for="(week, weekIndex) in weeks"
               :key="weekIndex"
               :class="[
                 'rounded-xl md:rounded-2xl relative aspect-4/3 overflow-hidden group cursor-pointer transition-all hover:scale-105 hover:shadow-2xl border-2 border-transparent hover:border-pink-600',
-                cardWidthClass,
                 isNextMonth(week, currentMonthName) ? 'ring-2 ring-blue-400' : '',
               ]"
               role="button"
@@ -254,7 +253,7 @@ function openKytDialog(kytData: KytEntry, weekNumber: number, weekStart: Date, w
 
     <!-- View KYT Dialog -->
     <Dialog v-model:open="isDialogOpen">
-      <DialogContent class="md:max-w-4xl xl:max-w-6xl max-h-[90vh] overflow-y-auto">
+      <DialogContent class="md:max-w-5xl xl:max-w-7xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
         <DialogHeader>
           <DialogTitle class="text-2xl font-bold text-pink-600">
             KYT Details - {{ selectedKyt?.title || '' }}
@@ -271,16 +270,10 @@ function openKytDialog(kytData: KytEntry, weekNumber: number, weekStart: Date, w
         </DialogHeader>
 
         <div v-if="selectedKyt" class="py-4">
-          <KytPreview
-            :scale-to-fit="true"
-            :bg-kyt="bgKyt"
-            :kyt-date="selectedKyt.weekStart"
-            :kyt-team="selectedKyt.teamName"
-            :kyt-title="selectedKyt.title"
-            :saved-image-url="selectedKyt.foto_path ? assetUrl(selectedKyt.foto_path, { query: { t: dateparams } }) : (selectedKyt.image ? assetUrl(selectedKyt.image, { query: { t: dateparams } }) : '')"
-            :kyt-pic="selectedKyt.submittedBy"
-            :kyt-potensi="selectedKyt.desc"
-            :kyt-penanganan="selectedKyt.penanganan || ''"
+          <img
+            :src="assetUrl(selectedKyt.image || selectedKyt.foto_path || '', { query: { t: dateparams } })"
+            :alt="selectedKyt.title"
+            class="w-full h-auto rounded-lg border border-border"
           />
         </div>
       </DialogContent>

@@ -70,7 +70,7 @@ async function downloadAsPPT(kytData: KytItem) {
 
 <template>
   <Dialog :open="isOpen" @update:open="$emit('update:isOpen', $event)">
-    <DialogContent class="md:max-w-4xl xl:max-w-6xl max-h-[90vh] overflow-y-auto">
+    <DialogContent class="md:max-w-4xl xl:max-w-6xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
       <DialogHeader>
         <DialogTitle class="text-2xl font-bold text-pink-600">
           KYT Details - {{ selectedKyt?.title || '' }}
@@ -158,7 +158,7 @@ async function downloadAsPPT(kytData: KytItem) {
               <img
                 :src="assetUrl(selectedKyt.penanganans.result_path, { query: { t: dateparams } })"
                 alt="Penanganan KYT"
-                class="w-300 h-170 object-fit"
+                class="w-full h-auto"
               />
             </div>
           </div>

@@ -23,7 +23,9 @@ const props = defineProps<{
 }>()
 
 const editor = ref<InstanceType<typeof CanvasEditor> | null>(null)
+const previewContainerEl = ref<HTMLElement | null>(null)
 const savedImageUrl = ref('')
+const exporting = ref(false)
 const kytTitle = ref('')
 const kytPic = ref('')
 const kytPotensi = ref('')
@@ -49,27 +51,79 @@ function syncForm() {
   form.penanganan = kytPenanganan.value
 }
 
+function onCanvasExported(blob: Blob) {
+  if (savedImageUrl.value) URL.revokeObjectURL(savedImageUrl.value)
+  savedImageUrl.value = URL.createObjectURL(blob)
+  form.foto_path = new File([blob], `kyt-${Date.now()}.png`, { type: 'image/png' })
+  toast.success('Hasil editing berhasil di-load ke preview')
+}
+
 async function handleExport() {
-  const blob = await editor.value?.exportCanvas()
-  if (blob) {
-    savedImageUrl.value = URL.createObjectURL(blob)
-    form.foto_path = new File([blob], `kyt-${Date.now()}.png`, { type: 'image/png' })
+  if (!kytTitle.value) {
+    toast.error('Isi judul KYT terlebih dahulu')
+    return
+  }
+  exporting.value = true
+  try {
+    const blob = await editor.value?.exportCanvas()
+    if (blob) {
+      // Revoke old URL to prevent memory leak
+      if (savedImageUrl.value) URL.revokeObjectURL(savedImageUrl.value)
+      savedImageUrl.value = URL.createObjectURL(blob)
+      form.foto_path = new File([blob], `kyt-${Date.now()}.png`, { type: 'image/png' })
+      toast.success('Hasil editing berhasil di-load ke preview')
+    } else {
+      toast.error('Gagal mengekspor canvas. Upload gambar terlebih dahulu.')
+    }
+  } catch (e) {
+    toast.error('Gagal mengekspor gambar')
+    console.error(e)
+  } finally {
+    exporting.value = false
   }
 }
 
 async function submitKyt() {
   syncForm()
-  const previewFile = await editor.value?.generatePreview()
-  if (!previewFile) return
-  form.result_path = previewFile
-  form.post(routeUrl(kytstore()), {
-    preserveScroll: true,
-    onSuccess: () => toast.success('KYT berhasil disimpan!'),
-    onError: (errors) => {
-      const msg = Object.values(errors).flat().join(', ')
-      toast.error(msg || 'Gagal menyimpan KYT')
-    },
-  })
+  if (!kytTitle.value) {
+    toast.error('Judul KYT wajib diisi')
+    return
+  }
+  
+  // Export canvas image first if not already done
+  if (!form.foto_path) {
+    await handleExport()
+    if (!form.foto_path) return
+  }
+  
+  exporting.value = true
+  try {
+    const innerEl = previewContainerEl.value?.parentElement
+    const origZoom = innerEl?.style.zoom || ''
+    if (innerEl) innerEl.style.zoom = ''
+    const previewFile = await editor.value?.generatePreview(previewContainerEl.value)
+    if (innerEl) innerEl.style.zoom = origZoom
+    if (!previewFile) {
+      exporting.value = false
+      return
+    }
+    form.result_path = previewFile
+    form.post(routeUrl(kytstore()), {
+      preserveScroll: true,
+      onSuccess: () => {
+        toast.success('KYT berhasil disimpan!')
+        exporting.value = false
+      },
+      onError: (errors) => {
+        const msg = Object.values(errors).flat().join(', ')
+        toast.error(msg || 'Gagal menyimpan KYT')
+        exporting.value = false
+      },
+    })
+  } catch (e) {
+    toast.error('Gagal menyimpan KYT')
+    exporting.value = false
+  }
 }
 </script>
 
@@ -127,7 +181,7 @@ async function submitKyt() {
       <!-- Canvas Editor -->
       <Card>
         <CardContent class="p-4">
-          <CanvasEditor ref="editor" :canvas-width="680" :canvas-height="500" />
+          <CanvasEditor ref="editor" :canvas-width="680" :canvas-height="500" @exported="onCanvasExported" />
         </CardContent>
       </Card>
 
@@ -136,13 +190,15 @@ async function submitKyt() {
         <CardHeader>
           <CardTitle>Kiken Yochi Training - Preview</CardTitle>
           <CardDescription>
-            <template v-if="savedImageUrl">Hasil gambar yang telah disimpan</template>
-            <template v-else>Klik "💾 Lihat Hasil" untuk melihat hasil</template>
+            <template v-if="savedImageUrl">Hasil editing dari canvas (simpan untuk finalisasi)</template>
+            <template v-else>Klik "💾 Lihat Hasil" untuk melihat hasil editing dari canvas</template>
           </CardDescription>
         </CardHeader>
-        <CardContent class="p-4">
+        <CardContent class="p-4 space-y-4">
+          <!-- Full KYT template preview -->
           <div class="overflow-x-auto">
             <KytPreview
+              v-model:element-id="previewContainerEl"
               :scale-to-fit="true"
               :bg-kyt="bgKyt"
               :kyt-date="kytDate"
@@ -154,10 +210,15 @@ async function submitKyt() {
               :kyt-penanganan="kytPenanganan"
             />
           </div>
-          <div class="flex flex-col sm:flex-row gap-2 mt-4">
-            <Button @click="handleExport" variant="outline" class="flex-1">💾 Lihat Hasil</Button>
-            <Button @click="submitKyt" class="flex-1" :disabled="form.processing || !kytTitle">
-              {{ form.processing ? 'Menyimpan...' : 'Simpan KYT' }}
+
+          <div class="flex flex-col sm:flex-row gap-2">
+            <Button @click="handleExport" variant="outline" class="flex-1" :disabled="exporting">
+              <template v-if="exporting">⏳ Mengekspor...</template>
+              <template v-else>💾 Refresh Hasil</template>
+            </Button>
+            <Button @click="submitKyt" class="flex-1" :disabled="exporting || !kytTitle">
+              <template v-if="exporting">⏳ Menyimpan...</template>
+              <template v-else>{{ form.processing ? 'Menyimpan...' : 'Simpan KYT' }}</template>
             </Button>
           </div>
         </CardContent>
