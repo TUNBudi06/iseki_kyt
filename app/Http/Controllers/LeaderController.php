@@ -121,6 +121,7 @@ class LeaderController extends Controller
             ] : null,
             'availableMonths' => $availableMonths,
             'selectedMonthYear' => $monthYear,
+            'bgKyt' => asset('assets/img/bg-kyt.jpg'),
         ]);
     }
 
