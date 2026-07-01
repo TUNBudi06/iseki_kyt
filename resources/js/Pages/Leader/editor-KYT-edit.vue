@@ -4,13 +4,13 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import LeaderLayout from '@/Layouts/LeaderLayout.vue'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useForm, Head } from '@inertiajs/vue3'
+import { Label } from '@/Components/ui/label'
+import { useForm, router, Head } from '@inertiajs/vue3'
 import KytPreview from '@/Components/KytPreview.vue'
 import DropZone from '@/Components/DropZone.vue'
 import CanvasEditor from '@/Components/CanvasEditor.vue'
-import { kytupdate } from '$routes/leader'
-import { routeUrl } from '@tunbudi06/inertia-route-helper'
+import { kyt, kytupdate } from '$routes/leader'
+import {assetUrl, routeUrl} from '@tunbudi06/inertia-route-helper'
 import { toast } from 'vue-sonner'
 import { maxChartTitleLength } from './KytParameter.ts'
 
@@ -34,7 +34,7 @@ const props = defineProps<{
 
 const editor = ref<InstanceType<typeof CanvasEditor> | null>(null)
 const previewContainerEl = ref<HTMLElement | null>(null)
-const savedImageUrl = ref('')
+const savedImageUrl = ref(props.kytData?.result_path ? assetUrl(props.kytData.foto_path as string) : '')
 const exporting = ref(false)
 const kytTitle = ref(props.kytData?.title || '')
 const kytPic = ref(props.kytData?.user_name || '')
@@ -57,8 +57,12 @@ function syncForm() {
   form.penanganan = kytPenanganan.value
 }
 
+function revokeIfBlob(url: string) {
+  if (url.startsWith('blob:')) URL.revokeObjectURL(url)
+}
+
 function onCanvasExported(blob: Blob) {
-  if (savedImageUrl.value) URL.revokeObjectURL(savedImageUrl.value)
+  revokeIfBlob(savedImageUrl.value)
   savedImageUrl.value = URL.createObjectURL(blob)
   form.foto_path = new File([blob], `kyt-${Date.now()}.png`, { type: 'image/png' })
   toast.success('Hasil editing berhasil di-load ke preview')
@@ -73,7 +77,7 @@ async function handleExport() {
   try {
     const blob = await editor.value?.exportCanvas()
     if (blob) {
-      if (savedImageUrl.value) URL.revokeObjectURL(savedImageUrl.value)
+      revokeIfBlob(savedImageUrl.value)
       savedImageUrl.value = URL.createObjectURL(blob)
       form.foto_path = new File([blob], `kyt-${Date.now()}.png`, { type: 'image/png' })
       toast.success('Hasil editing berhasil di-load ke preview')
@@ -94,12 +98,12 @@ async function submitKyt() {
     toast.error('Judul KYT wajib diisi')
     return
   }
-  
+
   if (!form.foto_path) {
     await handleExport()
     if (!form.foto_path) return
   }
-  
+
   exporting.value = true
   try {
     const innerEl = previewContainerEl.value?.parentElement
@@ -112,11 +116,12 @@ async function submitKyt() {
       return
     }
     form.result_path = previewFile
-    form.post(routeUrl(kytupdate({ id: props.kytData?.id })), {
+    form.post(routeUrl(kytupdate({ id: props.kytData?.id as string })), {
       preserveScroll: true,
       onSuccess: () => {
         toast.success('KYT berhasil diperbarui!')
         exporting.value = false
+        router.visit(routeUrl(kyt()))
       },
       onError: (errors) => {
         const msg = Object.values(errors).flat().join(', ')
@@ -216,7 +221,7 @@ async function submitKyt() {
             </Button>
             <Button @click="submitKyt" class="flex-1" :disabled="exporting || !kytTitle">
               <template v-if="exporting">⏳ Menyimpan...</template>
-              <template v-else>{{ form.processing ? 'Menyimpan...' : 'Update KYT' }}</template>
+              <template v-else>{{ form?.processing ? 'Menyimpan...' : 'Update KYT' }}</template>
             </Button>
           </div>
         </CardContent>

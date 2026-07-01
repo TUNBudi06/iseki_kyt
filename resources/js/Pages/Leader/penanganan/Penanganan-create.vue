@@ -196,8 +196,8 @@ async function submitForm(e: Event) {
         </CardHeader>
         <CardContent class="p-4">
           <div ref="wrapperRef" class="w-full overflow-hidden" :style="{ height: (608 * previewScale) + 'px' }">
-            <div ref="previewContainerEl" class="flex flex-col origin-top-left" :style="{ width: '1200px', height: '600px', background: '#FFC0CB', border: '4px solid black', transform: 'scale(' + previewScale + ')' }">
-              <div class="flex items-center justify-center py-2 flex-shrink-0" :style="{ height: '50px' }">
+            <div ref="previewContainerEl" class="flex flex-col origin-top-left" :class="penangananUrlImage ? '' : 'justify-center'" :style="{ width: '1200px', height: '600px', background: '#FFC0CB', border: '4px solid black', transform: 'scale(' + previewScale + ')' }">
+              <div class="flex items-center justify-center py-2 flex-shrink-0" :class="penangananUrlImage ? '' : 'h-full'" :style="penangananUrlImage ? { height: '50px' } : {}">
                 <span class="font-bold text-2xl leading-tight text-center text-black uppercase">{{ form.title || 'Masukkan judul untuk preview' }}</span>
               </div>
               <template v-if="penangananUrlImage">
