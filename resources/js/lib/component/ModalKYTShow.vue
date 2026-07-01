@@ -2,7 +2,7 @@
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
 } from '@/components/ui/dialog'
-import { Badge } from '@/components/ui/badge'
+import { Badge } from '@/Components/ui/badge'
 import { Button } from '@/components/ui/button'
 import KytPreview from '@/Components/KytPreview.vue'
 import { assetUrl, routeUrl } from '@tunbudi06/inertia-route-helper'
@@ -72,7 +72,7 @@ async function downloadAsPPT(kytData: KytItem) {
 
 <template>
   <Dialog :open="isOpen" @update:open="$emit('update:isOpen', $event)">
-    <DialogContent class="sm:max-w-none md:max-w-4xl xl:max-w-6xl max-h-[90vh] overflow-y-auto">
+    <DialogContent class="sm:max-w-lg md:max-w-2xl lg:max-w-3xl xl:max-w-4xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
       <DialogHeader>
         <DialogTitle class="text-2xl font-bold text-pink-600">
           KYT Details - {{ selectedKyt?.title || '' }}
@@ -82,9 +82,9 @@ async function downloadAsPPT(kytData: KytItem) {
         </DialogDescription>
       </DialogHeader>
 
-      <div v-if="selectedKyt" class="space-y-6 py-4">
+      <div v-if="selectedKyt" class="space-y-6 py-4 min-w-0 overflow-x-hidden">
         <!-- KYT Preview -->
-        <div class="px-2 md:px-6">
+        <div class="px-2 md:px-6 min-w-0">
           <KytPreview
           :scale-to-fit="true"
           :bg-kyt="bgKyt"
@@ -146,7 +146,7 @@ async function downloadAsPPT(kytData: KytItem) {
         </div>
 
         <!-- Original Photo -->
-        <div v-if="selectedKyt.foto_path" class="space-y-3 px-2 md:px-6">
+        <div v-if="selectedKyt.foto_path" class="space-y-3 px-2 md:px-6 min-w-0">
           <div class="text-sm font-semibold text-gray-500 uppercase">Original Photo</div>
           <div class="rounded-lg overflow-hidden shadow-md bg-gray-100">
             <img
@@ -159,7 +159,7 @@ async function downloadAsPPT(kytData: KytItem) {
 
         <!-- Penanganan Section -->
         <template v-if="selectedKyt.penanganans">
-          <div class="space-y-3 px-2 md:px-6">
+          <div class="space-y-3 px-2 md:px-6 min-w-0">
             <div class="text-sm font-semibold text-gray-500 uppercase">Penanganan</div>
             <div class="text-sm font-bold">Hasil Penanganan yang dilakukan:</div>
             <div class="rounded-lg overflow-hidden shadow-md bg-gray-100">
@@ -171,13 +171,13 @@ async function downloadAsPPT(kytData: KytItem) {
             </div>
           </div>
         </template>
-        <div v-else class="space-y-2 px-2 md:px-6">
+        <div v-else class="space-y-2 px-2 md:px-6 min-w-0">
           <div class="text-lg font-semibold text-gray-500 uppercase">Belum ada penanganan</div>
         </div>
 
         <!-- Action Buttons -->
-        <div class="flex justify-between items-center gap-3 pt-4 border-t">
-          <div class="flex gap-2">
+        <div class="flex flex-wrap justify-between items-center gap-3 pt-4 border-t min-w-0">
+          <div class="flex flex-wrap gap-2">
             <Button variant="outline" class="flex items-center gap-2 bg-blue-50 hover:bg-blue-100" @click="downloadKytImage(selectedKyt, dateparams)">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />

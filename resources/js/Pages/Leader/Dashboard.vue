@@ -263,7 +263,7 @@ const kytNotSubmitted = computed(() => weeks.value.length - kytSubmitted.value)
 
     <!-- KYT Detail Dialog -->
     <Dialog v-model:open="isDialogOpen">
-      <DialogContent class="sm:max-w-none md:max-w-5xl xl:max-w-7xl max-h-[90vh] overflow-y-auto">
+      <DialogContent class="sm:max-w-lg md:max-w-2xl lg:max-w-3xl xl:max-w-4xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
         <DialogHeader>
           <DialogTitle class="text-2xl font-bold text-pink-600">
             Preview KYT - Minggu {{ selectedKyt?.weekNumber }}
@@ -273,7 +273,7 @@ const kytNotSubmitted = computed(() => weeks.value.length - kytSubmitted.value)
           </DialogDescription>
         </DialogHeader>
 
-        <div v-if="selectedKyt" class="py-4 px-2 md:px-6 space-y-6">
+        <div v-if="selectedKyt" class="py-4 px-2 md:px-6 space-y-6 min-w-0 overflow-x-hidden">
           <KytPreview
             :scale-to-fit="true"
             :bg-kyt="bgKyt"
