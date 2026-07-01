@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { EL, elPxStyle } from '$lib/kytDimensions.ts'
 
 const props = defineProps({
   bgKyt: { type: String, default: '' },
@@ -62,38 +63,29 @@ function formattedDate(dateVal) {
         class="kytp-content"
         :ref="(el) => { if (el && elementId !== undefined) elementId = el }"
       >
-        <!-- Background KYT Image -->
         <img
           :src="bgKyt"
           alt="KYT Background"
-          class="rounded-lg border border-border object-contain w-full h-full"
+          class="absolute inset-0 w-full h-full rounded-lg border border-border object-contain"
         />
 
-        <!-- Team Name -->
-        <div v-if="kytTeam" class="absolute left-187.5 top-0 w-132.5 h-2.5 text-center">
-          <span
-            class="font-bold text-3xl leading-tight"
-            style="color: #404040; text-shadow: 2.5px 2.5px 3px rgba(0, 0, 0, 0.4);"
-          >
+        <div v-if="kytTeam" :style="elPxStyle(EL.team)" class="absolute text-center" style="color: #404040; text-shadow: 2.5px 2.5px 3px rgba(0, 0, 0, 0.4);">
+          <span class="font-bold leading-tight">
             {{ kytTeam }}
           </span>
         </div>
 
-        <!-- Title -->
-        <div v-if="kytTitle" class="absolute left-12.5 top-20 w-170 h-12.5 flex items-center justify-center">
-          <span
-            class="font-bold text-xl tracking-tight leading-tight text-center text-black uppercase"
-          >
+        <div v-if="kytTitle" :style="elPxStyle(EL.title)" class="absolute flex items-center justify-center">
+          <span class="font-bold leading-tight text-center text-black uppercase">
             {{ kytTitle }}
           </span>
         </div>
 
-        <!-- Saved Image or Placeholder -->
-        <div v-if="savedImageUrl" class="absolute left-12.5 top-33.25 w-170 h-125.5">
+        <div v-if="savedImageUrl" :style="elPxStyle(EL.image)" class="absolute">
           <img
             :src="savedImageUrl"
             alt="Hasil editing KYT"
-            class="rounded shadow-lg object-contain w-full h-full"
+            class="w-full h-full rounded shadow-lg object-contain"
           />
         </div>
         <div v-else class="absolute inset-0 flex items-center justify-center">
@@ -103,51 +95,44 @@ function formattedDate(dateVal) {
           </div>
         </div>
 
-        <!-- Date -->
-        <div class="absolute right-16.5 bottom-2 w-120 h-15 text-right">
-          <span
-            class="font-bold text-5xl leading-tight"
-            style="color: #2F5597; text-shadow: 2.5px 2.5px 3px rgba(0, 0, 0, 0.4);"
-          >
+        <div :style="elPxStyle(EL.date)" class="absolute text-right" style="color: #2F5597; text-shadow: 2.5px 2.5px 3px rgba(0, 0, 0, 0.4);">
+          <span class="font-bold leading-tight">
             {{ formattedDate(kytDate) }}
           </span>
         </div>
 
-        <!-- PIC Label and Value -->
         <template v-if="kytPic">
-          <div class="absolute left-200 top-25 w-107.5 h-8.75">
-            <span class="font-bold text-3xl leading-tight" style="color: #FF0000;">
+          <div :style="elPxStyle(EL.picLabel)" class="absolute" style="color: #FF0000;">
+            <span class="font-bold leading-tight">
               DISAMPAIKAN OLEH :
             </span>
           </div>
-          <div class="absolute left-200 top-32.25 w-107.5 h-10">
-            <span class="text-3xl leading-tight text-black">{{ kytPic }}</span>
+          <div :style="elPxStyle(EL.picValue)" class="absolute" style="color: #000000;">
+            <span class="font-bold leading-tight">{{ kytPic }}</span>
           </div>
         </template>
 
-        <!-- Potensi Bahaya -->
         <template v-if="kytPotensi">
-          <div class="absolute left-200 top-45 w-107.5 h-8.75">
-            <span class="font-bold text-3xl leading-tight" style="color: #FF0000;">
+          <div :style="elPxStyle(EL.potLabel)" class="absolute" style="color: #FF0000;">
+            <span class="font-bold leading-tight">
               POTENSI BAHAYA :
             </span>
           </div>
-          <div class="absolute left-200 top-53.25 w-107.5 h-39.5 overflow-hidden">
-            <p class="text-2xl leading-snug text-black whitespace-pre-wrap break-words">
+          <div :style="elPxStyle(EL.potValue)" class="absolute overflow-hidden">
+            <p class="leading-snug text-black whitespace-pre-wrap break-words">
               {{ kytPotensi }}
             </p>
           </div>
         </template>
 
-        <!-- Penanganan -->
         <template v-if="kytPenanganan">
-          <div class="absolute left-200 top-95 w-107.5 h-8.75">
-            <span class="font-bold text-3xl leading-tight" style="color: #FF0000;">
+          <div :style="elPxStyle(EL.penLabel)" class="absolute" style="color: #FF0000;">
+            <span class="font-bold leading-tight">
               PENANGANAN :
             </span>
           </div>
-          <div class="absolute left-200 top-103.25 w-107.5 h-50.5 overflow-hidden">
-            <p class="text-2xl leading-snug text-black whitespace-pre-wrap break-words">
+          <div :style="elPxStyle(EL.penValue)" class="absolute overflow-hidden">
+            <p class="leading-snug text-black whitespace-pre-wrap break-words">
               {{ kytPenanganan }}
             </p>
           </div>
