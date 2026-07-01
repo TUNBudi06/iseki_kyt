@@ -305,7 +305,7 @@ function getTooltipClass(val: string) {
 
     <!-- View KYT Details Dialog -->
     <Dialog v-model:open="isDialogOpen">
-      <DialogContent class="sm:max-w-lg md:max-w-2xl lg:max-w-3xl xl:max-w-4xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
+      <DialogContent class="sm:max-w-none md:max-w-7xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
         <DialogHeader>
           <DialogTitle class="text-2xl font-bold text-pink-600">KYT Submissions</DialogTitle>
           <DialogDescription>View all team submissions for the selected week</DialogDescription>
