@@ -26,7 +26,7 @@ class KYTList extends Model
 
     public function teamKYT()
     {
-        return $this->belongsTo(TeamKYT::class, 'team_k_y_t_id', 'id');
+        return $this->belongsTo(TeamKYT::class, 'team_k_y_t_id', 'id')->withTrashed();
     }
 
 

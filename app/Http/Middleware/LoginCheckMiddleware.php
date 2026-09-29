@@ -23,6 +23,8 @@ class LoginCheckMiddleware
             if (auth()->user()->role == 'leader') {
                 return redirect()->route('leader.dashboard');
             }
+
+            abort(403);
         }
 
         return $next($request);

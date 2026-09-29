@@ -7,6 +7,7 @@ use App\Models\KytDateList;
 use App\Models\KYTList;
 use App\Models\TeamKYT;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -75,7 +76,6 @@ class AdminController extends Controller
             'password' => 'required|string|min:8',
             'role' => 'required|in:admin,leader',
         ]);
-        debugbar()->info($data);
         $user = new User;
         $user->username = $data['username'];
         $user->password = $data['password'];
@@ -128,7 +128,7 @@ class AdminController extends Controller
     public function teamAdd(Request $request)
     {
         $data = $request->validate([
-            'team_name' => 'required|string|max:255|unique:team_k_y_t_s,team_name',
+            'team_name' => ['required', 'string', 'max:255', 'regex:/^[\w\s\-\&,.]+$/', 'unique:team_k_y_t_s,team_name'],
             'team_description' => 'nullable|string|max:500',
             'user_id' => 'required|exists:users,id',
         ]);
@@ -143,7 +143,7 @@ class AdminController extends Controller
         $team = TeamKYT::findOrFail($id);
 
         $data = $request->validate([
-            'team_name' => 'required|string|max:255|unique:team_k_y_t_s,team_name,'.$id,
+            'team_name' => ['required', 'string', 'max:255', 'regex:/^[\w\s\-\&,.]+$/', 'unique:team_k_y_t_s,team_name,'.$id],
             'team_description' => 'nullable|string|max:500',
             'user_id' => 'required|exists:users,id',
         ]);
@@ -169,7 +169,15 @@ class AdminController extends Controller
     {
         // Get month-year from request or default to current month
         $monthYear = $request->input('month_year', now()->format('Y-m'));
-        [$year, $month] = explode('-', $monthYear);
+
+        try {
+            $parsedMonth = Carbon::createFromFormat('Y-m', $monthYear)->startOfMonth();
+        } catch (\Exception $e) {
+            $parsedMonth = now()->startOfMonth();
+            $monthYear = $parsedMonth->format('Y-m');
+        }
+        $year = $parsedMonth->year;
+        $month = $parsedMonth->month;
 
         // Get all available month-year combinations from KytDateList
         $availableMonths = KytDateList::selectRaw('DISTINCT DATE_FORMAT(kyt_date, "%Y-%m") as month_year, YEAR(kyt_date) as year, MONTH(kyt_date) as month')
@@ -213,7 +221,7 @@ class AdminController extends Controller
         $user = auth()->user();
 
         $data = $request->validate([
-            'new_password' => 'required|string|confirmed',
+            'new_password' => 'required|string|min:8|confirmed',
         ], [
             'new_password.required' => 'New password is required.',
             'new_password.min' => 'New password must be at least 8 characters.',

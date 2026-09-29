@@ -35,6 +35,11 @@ interface KytListRaw {
 interface KytListItem {
   id?: number | string
   team_k_y_t_id?: number | string
+  team_k_y_t?: {
+    id?: number | string
+    team_name?: string
+    deleted_at?: string | null
+  } | null
   result_path?: string
   title?: string
   user_name?: string
@@ -145,11 +150,16 @@ watch(monthFilter, (val: string) => {
 })
 
 function viewKytDetails(row: TableRow) {
-  selectedKyts.value = (row.kyt_lists || []).map((kyt: KytListItem) => ({
-    ...kyt,
-    team_name: (props.teamKyt || []).find((t: TeamInfo) => t.id === kyt.team_k_y_t_id)?.team_name || 'Unknown Team',
-    kyt_date: row.kyt_date,
-  }))
+  selectedKyts.value = (row.kyt_lists || []).map((kyt: KytListItem) => {
+    const teamName = kyt.team_k_y_t?.team_name
+      || (props.teamKyt || []).find((t: TeamInfo) => t.id === kyt.team_k_y_t_id)?.team_name
+      || 'Unknown Team'
+    return {
+      ...kyt,
+      team_name: kyt.team_k_y_t?.deleted_at ? `${teamName} (Tim dihapus)` : teamName,
+      kyt_date: row.kyt_date,
+    }
+  })
   isDialogOpen.value = true
 }
 

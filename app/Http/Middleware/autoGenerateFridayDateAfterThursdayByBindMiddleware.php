@@ -8,6 +8,7 @@ use Carbon\CarbonInterface;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class autoGenerateFridayDateAfterThursdayByBindMiddleware
@@ -20,7 +21,7 @@ class autoGenerateFridayDateAfterThursdayByBindMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $kytDate = KytDateList::latest()->first();
+        $kytDate = KytDateList::latest('kyt_date')->first();
 
         if (!$kytDate) {
             // If no data exists, generate current month
@@ -35,6 +36,14 @@ class autoGenerateFridayDateAfterThursdayByBindMiddleware
 
             // Generate next month based on CURRENT date, not last Friday
             $months = $this->getCurrentAndNextMonth();
+
+            $generatedCacheKey = 'kyt_months_generated_'
+                .$months['current']['year'].'-'.$months['current']['month'].'_'
+                .$months['next']['year'].'-'.$months['next']['month'];
+
+            if (Cache::has($generatedCacheKey)) {
+                return $next($request);
+            }
 
             // Check if CURRENT month already has data
             $currentMonthHasData = KytDateList::whereYear('kyt_date', $months['current']['year'])
@@ -53,6 +62,8 @@ class autoGenerateFridayDateAfterThursdayByBindMiddleware
             if (!$nextMonthHasData) {
                 $this->generateMonthFridays($months['next']['month'], $months['next']['year']);
             }
+
+            Cache::put($generatedCacheKey, true, now()->addHour());
         }
 
         return $next($request);
@@ -66,14 +77,13 @@ class autoGenerateFridayDateAfterThursdayByBindMiddleware
         $allFridays = $this->getHowManyFridayInMonth($month, $year);
 
         foreach ($allFridays as $index => $friday) {
-            // Check if this Friday already exists
-            $exists = KytDateList::where('kyt_date', $friday['date_end'])->exists();
-
-            if (!$exists) {
-                KytDateList::create([
-                    'kyt_date' => $friday['date_end'],
-                    'number_of_Weeks' => $index + 1,
-                ]);
+            try {
+                KytDateList::firstOrCreate(
+                    ['kyt_date' => $friday['date_end']],
+                    ['number_of_Weeks' => $index + 1]
+                );
+            } catch (\Illuminate\Database\QueryException $e) {
+                // Another concurrent request already inserted this Friday - safe to ignore.
             }
         }
     }

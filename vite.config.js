@@ -4,6 +4,7 @@ import laravel from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
 import path from 'path';
 import {wayfinder} from "@laravel/vite-plugin-wayfinder";
+import { webfontDownload } from 'vite-plugin-webfont-dl';
 
 export default defineConfig({
     base: '/iseki_kyt/public/build',
@@ -38,6 +39,7 @@ export default defineConfig({
         }),
         vue(),
         tailwindcss(),
+        webfontDownload(['https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap']),
     ],
     resolve: {
         alias: {

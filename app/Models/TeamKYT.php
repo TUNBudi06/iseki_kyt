@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TeamKYT extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'team_k_y_t_s';
 
     protected $fillable = [

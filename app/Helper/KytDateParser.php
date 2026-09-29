@@ -23,7 +23,6 @@ trait KytDateParser
                 ];
             }
         }
-        debugbar()->log($fridays);
         Cache::put('fridays_count_' . $month . '_' . $year, $fridays);
         return $fridays;
     }

@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        @vite(['resources/js/app.ts'])
+        @vite(['resources/js/app.ts', 'webfonts.css'])
         @inertiaHead
     </head>
     <body class="{{ app()->isLocal() ? 'debug-screens' : '' }}" style="overflow-x: hidden; width: 100%;">
