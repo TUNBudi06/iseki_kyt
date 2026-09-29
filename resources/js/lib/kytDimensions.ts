@@ -24,9 +24,9 @@ export const EL: Record<string, ElPos> = {
   picLabel:    { xMm: 158.75,yMm: 19.84, wMm: 85.33,  hMm: 6.95,  fontSizePt: 21 },
   picValue:    { xMm: 158.75,yMm: 25.60, wMm: 85.33,  hMm: 7.94,  fontSizePt: 19 },
   potLabel:    { xMm: 158.75,yMm: 35.72, wMm: 85.33,  hMm: 6.95,  fontSizePt: 21 },
-  potValue:    { xMm: 158.75,yMm: 42.27, wMm: 85.33,  hMm: 31.35, fontSizePt: 14 },
+  potValue:    { xMm: 158.75,yMm: 42.27, wMm: 85.33,  hMm: 31.35, fontSizePt: 15 },
   penLabel:    { xMm: 158.75,yMm: 75.41, wMm: 85.33,  hMm: 6.95,  fontSizePt: 21 },
-  penValue:    { xMm: 158.75,yMm: 81.95, wMm: 85.33,  hMm: 40.08, fontSizePt: 14 },
+  penValue:    { xMm: 158.75,yMm: 81.95, wMm: 85.33,  hMm: 40.08, fontSizePt: 15 },
 }
 
 export function mmToIn(mm: number): number {
@@ -44,9 +44,9 @@ export const PptEL: Record<string, ElPosIn> = {
   picLabel:    { xMm: 158.75,yMm: 19.84, wMm: 85.33,  hMm: 6.95,  fontSizePt: 16 },
   picValue:    { xMm: 158.75,yMm: 25.60, wMm: 85.33,  hMm: 7.94,  fontSizePt: 14 },
   potLabel:    { xMm: 158.75,yMm: 35.72, wMm: 85.33,  hMm: 6.95,  fontSizePt: 16 },
-  potValue:    { xMm: 158.75,yMm: 42.27, wMm: 85.33,  hMm: 31.35, fontSizePt: 9 },
+  potValue:    { xMm: 158.75,yMm: 42.27, wMm: 85.33,  hMm: 31.35, fontSizePt: 13 },
   penLabel:    { xMm: 158.75,yMm: 75.41, wMm: 85.33,  hMm: 6.95,  fontSizePt: 16 },
-  penValue:    { xMm: 158.75,yMm: 81.95, wMm: 85.33,  hMm: 40.08, fontSizePt: 9 },
+  penValue:    { xMm: 158.75,yMm: 81.95, wMm: 85.33,  hMm: 40.08, fontSizePt: 13 },
 }
 
 export function elInStyle(el: ElPosIn): Record<string, number | string> {

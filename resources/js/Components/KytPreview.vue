@@ -119,7 +119,7 @@ function formattedDate(dateVal) {
             </span>
           </div>
           <div :style="elPxStyle(EL.potValue)" class="absolute overflow-hidden">
-            <p class="leading-snug text-black whitespace-pre-wrap break-words">
+            <p class="leading-snug text-black font-bold whitespace-pre-wrap break-words">
               {{ kytPotensi }}
             </p>
           </div>
@@ -132,7 +132,7 @@ function formattedDate(dateVal) {
             </span>
           </div>
           <div :style="elPxStyle(EL.penValue)" class="absolute overflow-hidden">
-            <p class="leading-snug text-black whitespace-pre-wrap break-words">
+            <p class="leading-snug text-black font-bold whitespace-pre-wrap break-words">
               {{ kytPenanganan }}
             </p>
           </div>
