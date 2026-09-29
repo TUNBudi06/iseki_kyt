@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\AdminController::list
- * @see app/Http/Controllers/AdminController.php:62
+ * @see app/Http/Controllers/AdminController.php:63
  * @route '/admin/user/list'
  */
 export const list = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ list.definition = {
 
 /**
 * @see \App\Http\Controllers\AdminController::list
- * @see app/Http/Controllers/AdminController.php:62
+ * @see app/Http/Controllers/AdminController.php:63
  * @route '/admin/user/list'
  */
 list.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ list.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AdminController::list
- * @see app/Http/Controllers/AdminController.php:62
+ * @see app/Http/Controllers/AdminController.php:63
  * @route '/admin/user/list'
  */
 list.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -34,7 +34,7 @@ list.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\AdminController::list
- * @see app/Http/Controllers/AdminController.php:62
+ * @see app/Http/Controllers/AdminController.php:63
  * @route '/admin/user/list'
  */
 list.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -44,7 +44,7 @@ list.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\AdminController::add
- * @see app/Http/Controllers/AdminController.php:71
+ * @see app/Http/Controllers/AdminController.php:72
  * @route '/admin/user/add'
  */
 export const add = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -59,7 +59,7 @@ add.definition = {
 
 /**
 * @see \App\Http\Controllers\AdminController::add
- * @see app/Http/Controllers/AdminController.php:71
+ * @see app/Http/Controllers/AdminController.php:72
  * @route '/admin/user/add'
  */
 add.url = (options?: RouteQueryOptions) => {
@@ -68,7 +68,7 @@ add.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\AdminController::add
- * @see app/Http/Controllers/AdminController.php:71
+ * @see app/Http/Controllers/AdminController.php:72
  * @route '/admin/user/add'
  */
 add.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
